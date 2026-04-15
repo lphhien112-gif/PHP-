@@ -1,0 +1,285 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+.container {
+    width: 90%;
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+.topbar {
+    background: #111827;
+    color: white;
+    padding: 16px 0;
+}
+
+.topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 24px;
+    font-size: 14px;
+}
+
+.nav a:hover {
+    opacity: 0.85;
+}
+
+.hero {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    padding: 80px 0;
+}
+
+.hero-content {
+    max-width: 760px;
+}
+
+.hero-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.18);
+    padding: 8px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.hero h1 {
+    font-size: 52px;
+    margin: 0 0 16px;
+}
+
+.hero p {
+    font-size: 18px;
+    line-height: 1.7;
+    margin: 0 0 24px;
+}
+
+.btn {
+    display: inline-block;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: white;
+    color: #4f46e5;
+}
+
+.btn-dark {
+    background: #111827;
+    color: white;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.features-section,
+.dashboard-section {
+    padding: 50px 0 70px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 28px;
+    font-size: 34px;
+}
+
+.feature-grid,
+.stats-grid,
+.product-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.feature-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.feature-card h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    color: white;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.stat-card span {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.stat-card strong {
+    font-size: 34px;
+}
+
+.stat-blue {
+    background: #2563eb;
+}
+
+.stat-green {
+    background: #16a34a;
+}
+
+.stat-purple {
+    background: #7c3aed;
+}
+
+.filter-bar {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 180px;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.filter-bar input,
+.filter-bar select,
+.filter-bar button {
+    height: 46px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0 12px;
+    background: white;
+    font-size: 14px;
+}
+
+.product-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.product-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.product-category {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.status-badge {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.status-available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-low {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-out {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.product-card h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 24px;
+}
+
+.product-brand {
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.product-info {
+    margin-bottom: 18px;
+    line-height: 1.7;
+}
+
+.empty-box {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.footer {
+    background: #111827;
+    color: white;
+    text-align: center;
+    padding: 18px 0;
+    margin-top: 40px;
+}
+
+@media (max-width: 900px) {
+    .feature-grid,
+    .stats-grid,
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-bar {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .topbar-inner {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .nav a {
+        margin: 0 10px;
+    }
+}
