@@ -7,92 +7,107 @@ use EventHub\Helpers\Validator;
 use EventHub\Support\Logger;
 
 /**
- * EventController - Xử lý các request liên quan đến sự kiện
- * EventHub - Mini Event Booking App
+ * EventController - Xử lý các request liên quan đến suất chiếu phim
+ * CineHub - Mini Movie Booking App
  */
 class EventController
 {
     private Logger $logger;
 
     /**
-     * Dữ liệu mẫu: Danh sách sự kiện
+     * Dữ liệu mẫu: Danh sách suất chiếu phim
      * Trong thực tế sẽ được lưu trữ trong database
      */
     private array $events = [
         [
             'id'          => 1,
-            'title'       => 'Tech Summit 2026',
-            'description' => 'Hội nghị công nghệ thường niên với sự tham gia của 50+ diễn giả hàng đầu Việt Nam và quốc tế.',
+            'title'       => 'Stellar Frontier',
+            'description' => 'Hành trình xuyên không gian đầy kịch tính khi một phi hành gia phát hiện cánh cổng dẫn đến vũ trụ song song. Liệu anh có tìm được đường về?',
             'date'        => '2026-05-15',
-            'time'        => '08:00',
-            'location'    => 'Trung tâm Hội nghị Quốc gia, Hà Nội',
-            'category'    => 'Technology',
-            'price'       => 500000,
-            'capacity'    => 500,
-            'booked'      => 320,
+            'time'        => '19:30',
+            'location'    => 'CGV Vincom Center, Quận 1, TP.HCM',
+            'category'    => 'Sci-Fi',
+            'price'       => 120000,
+            'capacity'    => 120,
+            'booked'      => 85,
             'status'      => 'Open',
-            'image'       => 'tech-summit.jpg',
-            'tags'        => ['AI', 'Cloud', 'DevOps'],
+            'image'       => 'stellar-frontier.png',
+            'tags'        => ['IMAX', '3D', 'Sci-Fi'],
+            'duration'    => '148 phút',
+            'rating'      => '8.5',
+            'director'    => 'Christopher Nolan',
         ],
         [
             'id'          => 2,
-            'title'       => 'Music Festival Saigon',
-            'description' => 'Lễ hội âm nhạc ngoài trời quy mô lớn với các nghệ sĩ nổi tiếng trong và ngoài nước biểu diễn.',
-            'date'        => '2026-05-22',
-            'time'        => '18:00',
-            'location'    => 'Công viên bờ sông, TP.HCM',
-            'category'    => 'Music',
-            'price'       => 350000,
-            'capacity'    => 2000,
-            'booked'      => 1980,
+            'title'       => 'Love in Saigon',
+            'description' => 'Câu chuyện tình yêu lãng mạn giữa Sài Gòn cổ kính, khi hai người xa lạ tình cờ gặp nhau trong một con hẻm nhỏ và thay đổi cuộc đời nhau mãi mãi.',
+            'date'        => '2026-05-20',
+            'time'        => '20:00',
+            'location'    => 'Lotte Cinema Thủ Đức, TP.HCM',
+            'category'    => 'Romance',
+            'price'       => 95000,
+            'capacity'    => 80,
+            'booked'      => 80,
             'status'      => 'Full',
-            'image'       => 'music-festival.jpg',
-            'tags'        => ['Live Music', 'Outdoor', 'Festival'],
+            'image'       => 'love-saigon.png',
+            'tags'        => ['Romance', 'Việt Nam', 'Drama'],
+            'duration'    => '115 phút',
+            'rating'      => '7.8',
+            'director'    => 'Victor Vũ',
         ],
         [
             'id'          => 3,
-            'title'       => 'Digital Art Workshop',
-            'description' => 'Workshop thực hành thiết kế đồ họa kỹ thuật số và NFT Art dành cho người mới bắt đầu.',
-            'date'        => '2026-06-01',
-            'time'        => '09:00',
-            'location'    => 'Creative Hub, Quận 1, TP.HCM',
-            'category'    => 'Art',
-            'price'       => 200000,
-            'capacity'    => 30,
-            'booked'      => 12,
+            'title'       => 'The Hollow',
+            'description' => 'Một gia đình chuyển đến biệt thự cổ giữa rừng sâu, nơi những bóng ma từ quá khứ bắt đầu thức dậy. Không ai rời đi được sau khi trời tối.',
+            'date'        => '2026-05-25',
+            'time'        => '21:30',
+            'location'    => 'Galaxy Cinema Nguyễn Du, TP.HCM',
+            'category'    => 'Horror',
+            'price'       => 110000,
+            'capacity'    => 100,
+            'booked'      => 42,
             'status'      => 'Open',
-            'image'       => 'art-workshop.jpg',
-            'tags'        => ['Design', 'NFT', 'Creative'],
+            'image'       => 'the-hollow.png',
+            'tags'        => ['Horror', 'Thriller', '18+'],
+            'duration'    => '125 phút',
+            'rating'      => '7.2',
+            'director'    => 'James Wan',
         ],
         [
             'id'          => 4,
-            'title'       => 'Business Startup Bootcamp',
-            'description' => 'Chương trình đào tạo khởi nghiệp 2 ngày với mentoring 1-1 từ các founder thành công.',
-            'date'        => '2026-06-10',
-            'time'        => '08:30',
-            'location'    => 'WeWork Bến Thành, TP.HCM',
-            'category'    => 'Business',
-            'price'       => 1500000,
-            'capacity'    => 50,
-            'booked'      => 45,
+            'title'       => 'Dragon Kingdom',
+            'description' => 'Bộ phim hoạt hình kể về cô bé Linh cưỡi rồng vàng phiêu lưu qua những ngọn núi bay, giải cứu vương quốc kỳ diệu khỏi bóng tối.',
+            'date'        => '2026-06-01',
+            'time'        => '10:00',
+            'location'    => 'BHD Star Phạm Hùng, Hà Nội',
+            'category'    => 'Animation',
+            'price'       => 85000,
+            'capacity'    => 150,
+            'booked'      => 67,
             'status'      => 'Open',
-            'image'       => 'startup-bootcamp.jpg',
-            'tags'        => ['Startup', 'Mentoring', 'Business'],
+            'image'       => 'dragon-kingdom.png',
+            'tags'        => ['Animation', 'Family', 'Fantasy'],
+            'duration'    => '98 phút',
+            'rating'      => '8.9',
+            'director'    => 'Hayao Miyazaki',
         ],
         [
             'id'          => 5,
-            'title'       => 'Photography Masterclass',
-            'description' => 'Lớp học nhiếp ảnh nâng cao với thực hành chụp hình street photography tại Hà Nội.',
-            'date'        => '2026-06-20',
-            'time'        => '07:00',
-            'location'    => 'Phố cổ Hà Nội',
-            'category'    => 'Photography',
-            'price'       => 450000,
-            'capacity'    => 20,
-            'booked'      => 8,
+            'title'       => 'Shadow Warrior',
+            'description' => 'Chiến binh cuối cùng của triều đại cổ đại phải đối mặt với kẻ thù hùng mạnh nhất. Hai thanh kiếm, một sứ mệnh, và trận chiến dưới mưa huyền thoại.',
+            'date'        => '2026-06-10',
+            'time'        => '18:00',
+            'location'    => 'CGV Aeon Mall Tân Phú, TP.HCM',
+            'category'    => 'Action',
+            'price'       => 130000,
+            'capacity'    => 200,
+            'booked'      => 195,
             'status'      => 'Open',
-            'image'       => 'photography.jpg',
-            'tags'        => ['Photography', 'Street', 'Masterclass'],
+            'image'       => 'shadow-warrior.png',
+            'tags'        => ['Action', 'Martial Arts', 'Epic'],
+            'duration'    => '152 phút',
+            'rating'      => '9.1',
+            'director'    => 'Ngô Thanh Vân',
         ],
     ];
 
@@ -102,14 +117,14 @@ class EventController
     }
 
     /**
-     * GET /events - Lấy danh sách tất cả sự kiện
+     * GET /events - Lấy danh sách tất cả suất chiếu
      * Trả về: 200 OK
      */
     public function index(): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // HEAD /events - Kiểm tra endpoint tồn tại, không trả body
+        // HEAD /events
         if ($method === 'HEAD') {
             $this->logger->info('HEAD /events - Kiểm tra endpoint');
             ResponseHelper::head(200, [
@@ -118,7 +133,7 @@ class EventController
             ]);
         }
 
-        // OPTIONS /events - Thông báo các method được phép
+        // OPTIONS /events
         if ($method === 'OPTIONS') {
             $this->logger->info('OPTIONS /events - Liệt kê methods');
             ResponseHelper::options(['GET', 'POST', 'HEAD', 'OPTIONS']);
@@ -159,17 +174,17 @@ class EventController
             return $event;
         }, $events);
 
-        $this->logger->info('GET /events - Lấy danh sách sự kiện thành công', [
+        $this->logger->info('GET /events - Lấy danh sách phim thành công', [
             'total'    => count($events),
             'category' => $category,
             'status'   => $status,
         ]);
 
-        ResponseHelper::success($events, 'Lấy danh sách sự kiện thành công. Tổng: ' . count($events) . ' sự kiện.');
+        ResponseHelper::success($events, 'Lấy danh sách phim thành công. Tổng: ' . count($events) . ' phim.');
     }
 
     /**
-     * GET /events/{id} - Lấy chi tiết 1 sự kiện
+     * GET /events/{id} - Lấy chi tiết 1 suất chiếu
      * Trả về: 200 OK hoặc 404 Not Found
      */
     public function show(int $id): void
@@ -193,18 +208,18 @@ class EventController
         $event = $this->findEvent($id);
 
         if (!$event) {
-            $this->logger->warning("404 - Không tìm thấy sự kiện ID={$id}");
-            ResponseHelper::error("Không tìm thấy sự kiện với ID={$id}.", 404);
+            $this->logger->warning("404 - Không tìm thấy phim ID={$id}");
+            ResponseHelper::error("Không tìm thấy phim với ID={$id}.", 404);
         }
 
         $event['seats_left'] = $event['capacity'] - $event['booked'];
 
-        $this->logger->info("GET /events/{$id} - Lấy chi tiết sự kiện thành công");
-        ResponseHelper::success($event, "Chi tiết sự kiện '{$event['title']}'.");
+        $this->logger->info("GET /events/{$id} - Lấy chi tiết phim thành công");
+        ResponseHelper::success($event, "Chi tiết phim '{$event['title']}'.");
     }
 
     /**
-     * POST /bookings - Đặt vé sự kiện
+     * POST /bookings - Đặt vé xem phim
      * Trả về: 201 Created, 415, 422
      */
     public function book(): void
@@ -268,24 +283,24 @@ class EventController
         $eventId  = (int) $body['event_id'];
         $quantity = (int) $body['ticket_quantity'];
 
-        // Kiểm tra sự kiện tồn tại
+        // Kiểm tra phim tồn tại
         $event = $this->findEvent($eventId);
         if (!$event) {
-            $this->logger->warning("422 - Sự kiện không tồn tại: event_id={$eventId}");
-            ResponseHelper::error("Sự kiện với ID={$eventId} không tồn tại.", 422, [
+            $this->logger->warning("422 - Phim không tồn tại: event_id={$eventId}");
+            ResponseHelper::error("Suất chiếu với ID={$eventId} không tồn tại.", 422, [
                 'field' => 'event_id',
             ]);
         }
 
-        // Kiểm tra sự kiện còn chỗ
+        // Kiểm tra còn chỗ
         $seatsLeft = $event['capacity'] - $event['booked'];
         if ($event['status'] === 'Full' || $quantity > $seatsLeft) {
-            $this->logger->warning("422 - Sự kiện '{$event['title']}' đã hết chỗ hoặc không đủ chỗ", [
+            $this->logger->warning("422 - Phim '{$event['title']}' hết chỗ", [
                 'requested' => $quantity,
                 'available' => $seatsLeft,
             ]);
             ResponseHelper::error(
-                "Sự kiện '{$event['title']}' không đủ chỗ. Yêu cầu: {$quantity} vé, còn lại: {$seatsLeft} chỗ.",
+                "Suất chiếu '{$event['title']}' không đủ ghế. Yêu cầu: {$quantity} vé, còn lại: {$seatsLeft} ghế.",
                 422,
                 ['seats_available' => $seatsLeft, 'seats_requested' => $quantity]
             );
@@ -293,12 +308,11 @@ class EventController
 
         // Tạo booking thành công
         $booking = [
-            'booking_id'      => 'BK-' . strtoupper(substr(md5(uniqid()), 0, 8)),
+            'booking_id'      => 'TK-' . strtoupper(substr(md5(uniqid()), 0, 8)),
             'event_id'        => $eventId,
-            'event_title'     => $event['title'],
-            'event_date'      => $event['date'],
-            'event_time'      => $event['time'],
-            'event_location'  => $event['location'],
+            'movie_title'     => $event['title'],
+            'showtime'        => $event['date'] . ' ' . $event['time'],
+            'cinema'          => $event['location'],
             'full_name'       => htmlspecialchars(trim($body['full_name'])),
             'email'           => strtolower(trim($body['email'])),
             'phone'           => trim($body['phone']),
@@ -310,16 +324,16 @@ class EventController
 
         $this->logger->info('201 - Đặt vé thành công', [
             'booking_id' => $booking['booking_id'],
-            'event'      => $event['title'],
+            'movie'      => $event['title'],
             'attendee'   => $booking['full_name'],
             'tickets'    => $quantity,
         ]);
 
-        ResponseHelper::success($booking, "Đặt vé thành công! Mã đặt chỗ: {$booking['booking_id']}", 201);
+        ResponseHelper::success($booking, "Đặt vé thành công! Mã vé: {$booking['booking_id']}", 201);
     }
 
     /**
-     * Tìm sự kiện theo ID
+     * Tìm phim theo ID
      */
     private function findEvent(int $id): ?array
     {

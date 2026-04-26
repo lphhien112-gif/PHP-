@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="EventHub - Nền tảng đặt vé sự kiện hàng đầu. Khám phá và đặt vé nhanh chóng.">
-<title>EventHub — Mini Event Booking</title>
+<meta name="description" content="CineHub - Đặt vé xem phim online. Xem lịch chiếu và đặt vé nhanh chóng.">
+<title>CineHub — Đặt Vé Xem Phim</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
@@ -12,43 +12,40 @@
 <body>
 <div class="glow"></div>
 
-<!-- NAV -->
 <nav>
-  <div class="logo">⚡ EventHub</div>
+  <div class="logo">🎬 <span>CineHub</span></div>
   <div class="nav-r">
-    <a href="#events" class="active">Sự kiện</a>
+    <a href="#events" class="active">Phim</a>
     <a href="#api-section">API</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-badge"><span class="dot"></span> PHP Lab02 — REST API</div>
-  <h1>Khám phá sự kiện.<br><em>Đặt vé tức thì.</em></h1>
-  <p>Nền tảng đặt vé mini với REST API — GET, POST, HEAD, OPTIONS.</p>
+  <div class="hero-badge"><span class="dot"></span> Đang chiếu — Tháng 5/2026</div>
+  <h1>Chọn phim yêu thích.<br><em>Đặt vé ngay.</em></h1>
+  <p>Trải nghiệm điện ảnh đỉnh cao với hệ thống đặt vé thông minh.</p>
   <div class="stats" id="stats">
-    <div class="stat"><strong id="s-total">—</strong><span>Sự kiện</span></div>
-    <div class="stat"><strong id="s-open">—</strong><span>Đang mở</span></div>
-    <div class="stat"><strong id="s-seats">—</strong><span>Chỗ trống</span></div>
+    <div class="stat"><strong id="s-total">—</strong><span>Phim</span></div>
+    <div class="stat"><strong id="s-open">—</strong><span>Đang chiếu</span></div>
+    <div class="stat"><strong id="s-seats">—</strong><span>Ghế trống</span></div>
   </div>
 </section>
 
-<!-- FILTER TABS -->
 <div class="container">
   <div class="tabs" id="filters">
     <button class="tab active" data-cat="">Tất cả</button>
-    <button class="tab" data-cat="Technology">🖥 Công nghệ</button>
-    <button class="tab" data-cat="Music">🎵 Âm nhạc</button>
-    <button class="tab" data-cat="Art">🎨 Nghệ thuật</button>
-    <button class="tab" data-cat="Business">💼 Kinh doanh</button>
-    <button class="tab" data-cat="Photography">📷 Nhiếp ảnh</button>
+    <button class="tab" data-cat="Sci-Fi">🚀 Sci-Fi</button>
+    <button class="tab" data-cat="Romance">💕 Tình cảm</button>
+    <button class="tab" data-cat="Horror">👻 Kinh dị</button>
+    <button class="tab" data-cat="Animation">🐉 Hoạt hình</button>
+    <button class="tab" data-cat="Action">⚔️ Hành động</button>
   </div>
-
-  <!-- EVENTS GRID -->
   <div class="events" id="events">
-    <div class="skeleton" style="height:340px"></div>
-    <div class="skeleton" style="height:340px"></div>
-    <div class="skeleton" style="height:340px"></div>
+    <div class="skeleton" style="height:400px"></div>
+    <div class="skeleton" style="height:400px"></div>
+    <div class="skeleton" style="height:400px"></div>
+    <div class="skeleton" style="height:400px"></div>
+    <div class="skeleton" style="height:400px"></div>
   </div>
 </div>
 
@@ -56,14 +53,14 @@
 <div class="modal-bg" id="modal-bg">
   <div class="modal">
     <div class="modal-head">
-      <h2 id="modal-title">Đặt vé</h2>
+      <h2 id="modal-title">🎫 Đặt vé</h2>
       <button class="modal-close" id="modal-close">&times;</button>
     </div>
     <div class="modal-body">
       <form id="booking-form">
         <input type="hidden" id="f-event-id">
         <div class="form-group">
-          <label>Sự kiện</label>
+          <label>Phim</label>
           <input type="text" id="f-event-name" readonly style="opacity:.6">
         </div>
         <div class="form-group">
@@ -82,7 +79,7 @@
           <label>Số vé *</label>
           <input type="number" id="f-qty" min="1" max="10" value="1" required>
         </div>
-        <button type="submit" class="btn-submit" id="btn-submit">🎫 Đặt vé ngay</button>
+        <button type="submit" class="btn-submit" id="btn-submit">🎬 Đặt vé ngay</button>
         <div class="form-msg" id="form-msg"></div>
       </form>
     </div>
@@ -92,25 +89,25 @@
 <!-- API SECTION -->
 <div class="container" id="api-section">
   <div class="api-sec">
-    <h2 class="sec-title">API Playground</h2>
+    <h2 class="sec-title">🔧 API Playground</h2>
     <p class="sec-sub">Click endpoint để thử trực tiếp</p>
     <div class="api-grid">
       <div class="api-card" onclick="callApi('GET','/events')">
         <span class="method get">GET</span>
         <div class="ep">/events</div>
-        <div class="desc">Danh sách sự kiện + filter</div>
+        <div class="desc">Danh sách phim đang chiếu</div>
         <div class="api-tags"><span>200</span><span>405</span></div>
       </div>
       <div class="api-card" onclick="callApi('GET','/events/1')">
         <span class="method get">GET</span>
         <div class="ep">/events/{id}</div>
-        <div class="desc">Chi tiết sự kiện</div>
+        <div class="desc">Chi tiết phim</div>
         <div class="api-tags"><span>200</span><span>404</span></div>
       </div>
-      <div class="api-card" onclick="callApi('POST','/bookings',{event_id:1,full_name:'Test User',email:'test@mail.com',phone:'0901234567',ticket_quantity:1})">
+      <div class="api-card" onclick="callApi('POST','/bookings',{event_id:1,full_name:'Test',email:'t@t.com',phone:'0901234567',ticket_quantity:1})">
         <span class="method post">POST</span>
         <div class="ep">/bookings</div>
-        <div class="desc">Đặt vé sự kiện</div>
+        <div class="desc">Đặt vé xem phim</div>
         <div class="api-tags"><span>201</span><span>415</span><span>422</span></div>
       </div>
       <div class="api-card" onclick="callApi('HEAD','/events')">
@@ -137,71 +134,66 @@
         <div class="term-dots"><i style="background:#e05050"></i><i style="background:#f0a050"></i><i style="background:#40d080"></i></div>
         <span>Response</span>
       </div>
-      <pre class="term-body" id="term"><span class="hl">$</span> Click một endpoint ở trên để thử...</pre>
+      <pre class="term-body" id="term"><span class="hl">$</span> Click một endpoint ở trên...</pre>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
-
-<!-- FOOTER -->
-<footer>⚡ <strong>EventHub</strong> — PHP Lab02 &nbsp;|&nbsp; GET · POST · HEAD · OPTIONS</footer>
+<footer>🎬 <strong>CineHub</strong> — PHP Lab02 &nbsp;|&nbsp; GET · POST · HEAD · OPTIONS</footer>
 
 <script>
 const BASE=(()=>{const p=window.location.pathname,i=p.indexOf('/public');return i!==-1?p.substring(0,i+7):''})();
-const icons={Technology:'💻',Music:'🎵',Art:'🎨',Business:'💼',Photography:'📸'};
-const colors={Technology:['#1a1a3e','#2d1b69'],Music:['#1a2e1a','#1b4332'],Art:['#2e1a2a','#4a1942'],Business:['#1a2e3e','#1b4069'],Photography:['#2e2a1a','#4a3b19']};
 let allEvents=[];
 
-// Load events
 async function loadEvents(cat=''){
   const url=BASE+'/events'+(cat?'?category='+cat:'');
   try{
-    const r=await fetch(url);
-    const d=await r.json();
+    const r=await fetch(url);const d=await r.json();
     if(d.success){renderEvents(d.data);if(!cat)updateStats(d.data)}
-  }catch(e){document.getElementById('events').innerHTML='<p style="color:var(--red)">Lỗi kết nối API</p>'}
+  }catch(e){document.getElementById('events').innerHTML='<p style="color:var(--red);grid-column:1/-1;text-align:center">⚠ Không kết nối được API. Hãy bật Apache trong XAMPP.</p>'}
 }
 
-function updateStats(events){
-  allEvents=events;
-  document.getElementById('s-total').textContent=events.length;
-  document.getElementById('s-open').textContent=events.filter(e=>e.status==='Open').length;
-  document.getElementById('s-seats').textContent=events.reduce((s,e)=>s+(e.seats_left||0),0);
+function updateStats(ev){
+  allEvents=ev;
+  document.getElementById('s-total').textContent=ev.length;
+  document.getElementById('s-open').textContent=ev.filter(e=>e.status==='Open').length;
+  document.getElementById('s-seats').textContent=ev.reduce((s,e)=>s+(e.seats_left||0),0);
 }
 
 function renderEvents(events){
   const g=document.getElementById('events');
-  if(!events.length){g.innerHTML='<p style="text-align:center;color:var(--text2);grid-column:1/-1">Không có sự kiện nào.</p>';return}
+  if(!events.length){g.innerHTML='<p style="text-align:center;color:var(--text2);grid-column:1/-1">Không có phim nào.</p>';return}
   g.innerHTML=events.map(e=>{
     const left=e.seats_left||e.capacity-e.booked;
     const isFull=e.status==='Full'||left<=0;
-    const c=colors[e.category]||['#1a1a2e','#16213e'];
+    const imgSrc='assets/images/'+e.image;
     return `<div class="event-card">
-      <span class="status-badge ${isFull?'full':'open'}">${isFull?'Hết chỗ':'Còn chỗ'}</span>
+      <span class="status-badge ${isFull?'full':'open'}">${isFull?'Hết vé':'Đang bán'}</span>
       <span class="card-cat">${e.category}</span>
-      <div class="card-img" style="background:linear-gradient(135deg,${c[0]},${c[1]})">${icons[e.category]||'📌'}</div>
+      <div class="card-img">
+        <img src="${imgSrc}" alt="${e.title}" loading="lazy">
+        <div class="card-rating"><span class="star">⭐</span> ${e.rating||'—'}</div>
+      </div>
       <div class="card-body">
         <h3>${e.title}</h3>
         <div class="card-meta">
           <span>📅 ${e.date}</span><span>⏰ ${e.time}</span>
+          ${e.duration?'<span>🕐 '+e.duration+'</span>':''}
         </div>
-        <p style="font-size:.84rem;color:var(--text2);margin-bottom:0">${e.description.substring(0,80)}...</p>
       </div>
       <div class="card-footer">
         <div>
-          <div class="price">${(e.price).toLocaleString('vi')}₫</div>
-          <div class="seats ${left<=5&&!isFull?'low':''} ${isFull?'full':''}">${isFull?'Đã hết':'Còn '+left+' chỗ'}</div>
+          <div class="price">${e.price.toLocaleString('vi')}₫</div>
+          <div class="seats ${left<=10&&!isFull?'low':''} ${isFull?'full':''}">${isFull?'Hết vé':'Còn '+left+' ghế'}</div>
         </div>
         <button class="btn-book" ${isFull?'disabled':''} onclick="openBooking(${e.id},'${e.title.replace(/'/g,"\\'")}')">
-          ${isFull?'Hết':'Đặt vé'}
+          ${isFull?'Hết':'Mua vé'}
         </button>
       </div>
     </div>`}).join('');
 }
 
-// Filter tabs
 document.getElementById('filters').addEventListener('click',e=>{
   if(!e.target.classList.contains('tab'))return;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -209,13 +201,11 @@ document.getElementById('filters').addEventListener('click',e=>{
   loadEvents(e.target.dataset.cat);
 });
 
-// Booking modal
 function openBooking(id,title){
   document.getElementById('f-event-id').value=id;
   document.getElementById('f-event-name').value=title;
-  document.getElementById('modal-title').textContent='Đặt vé — '+title;
+  document.getElementById('modal-title').textContent='🎫 Đặt vé — '+title;
   document.getElementById('form-msg').className='form-msg';
-  document.getElementById('form-msg').textContent='';
   document.getElementById('modal-bg').classList.add('show');
 }
 document.getElementById('modal-close').onclick=()=>document.getElementById('modal-bg').classList.remove('show');
@@ -227,65 +217,34 @@ document.getElementById('booking-form').addEventListener('submit',async e=>{
   const btn=document.getElementById('btn-submit');
   btn.textContent='⏳ Đang xử lý...';btn.disabled=true;
   try{
-    const r=await fetch(BASE+'/bookings',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        event_id:+document.getElementById('f-event-id').value,
-        full_name:document.getElementById('f-name').value,
-        email:document.getElementById('f-email').value,
-        phone:document.getElementById('f-phone').value,
-        ticket_quantity:+document.getElementById('f-qty').value
-      })
+    const r=await fetch(BASE+'/bookings',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({event_id:+document.getElementById('f-event-id').value,full_name:document.getElementById('f-name').value,email:document.getElementById('f-email').value,phone:document.getElementById('f-phone').value,ticket_quantity:+document.getElementById('f-qty').value})
     });
     const d=await r.json();
-    if(d.success){
-      msg.className='form-msg ok';
-      msg.textContent='✅ '+d.message;
-      showToast('Đặt vé thành công! Mã: '+d.data.booking_id,'ok');
-      setTimeout(()=>{document.getElementById('modal-bg').classList.remove('show');loadEvents()},2000);
-    }else{
-      msg.className='form-msg err';
-      msg.textContent='❌ '+d.error.message;
-    }
+    if(d.success){msg.className='form-msg ok';msg.textContent='✅ '+d.message;showToast('Đặt vé thành công! Mã: '+d.data.booking_id,'ok');setTimeout(()=>{document.getElementById('modal-bg').classList.remove('show');loadEvents()},2000)}
+    else{msg.className='form-msg err';msg.textContent='❌ '+d.error.message}
   }catch(err){msg.className='form-msg err';msg.textContent='Lỗi kết nối'}
-  btn.textContent='🎫 Đặt vé ngay';btn.disabled=false;
+  btn.textContent='🎬 Đặt vé ngay';btn.disabled=false;
 });
 
-// API Playground
 async function callApi(method,endpoint,body){
   const term=document.getElementById('term');
   const url=BASE+endpoint;
-  term.innerHTML=`<span class="hl">$</span> curl -X ${method} ${location.origin}${url}\n${body?'-H "Content-Type: application/json"\n-d \''+JSON.stringify(body,null,2)+"'\n":''}\n<span class="warn">⏳ Sending...</span>`;
+  term.innerHTML=`<span class="hl">$</span> curl -X ${method} ${location.origin}${url}\n${body?'-d \''+JSON.stringify(body)+"'\n":''}\n<span class="warn">⏳ Sending...</span>`;
   const t0=performance.now();
   try{
     const opts={method};
     if(body){opts.headers={'Content-Type':'application/json'};opts.body=JSON.stringify(body)}
-    const r=await fetch(url,opts);
-    const ms=Math.round(performance.now()-t0);
+    const r=await fetch(url,opts);const ms=Math.round(performance.now()-t0);
     let text='';
-    if(method==='HEAD'){
-      text=`Status: ${r.status}\n`;
-      r.headers.forEach((v,k)=>{text+=`${k}: ${v}\n`});
-    }else if(method==='OPTIONS'){
-      text=`Status: ${r.status}\n`;
-      r.headers.forEach((v,k)=>{text+=`${k}: ${v}\n`});
-    }else{
-      const d=await r.json();
-      text=JSON.stringify(d,null,2);
-    }
+    if(method==='HEAD'||method==='OPTIONS'){text=`Status: ${r.status}\n`;r.headers.forEach((v,k)=>{text+=`${k}: ${v}\n`})}
+    else{const d=await r.json();text=JSON.stringify(d,null,2)}
     term.innerHTML=`<span class="hl">$</span> ${method} ${endpoint}  <span class="ok">[${r.status}] ${ms}ms</span>\n\n${text}`;
   }catch(err){term.innerHTML=`<span class="hl">$</span> ${method} ${endpoint}  <span style="color:var(--red)">[ERROR]</span>\n\n${err.message}`}
-  term.scrollTop=term.scrollHeight;
 }
 
-// Toast
-function showToast(msg,type){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast '+type+' show';
-  setTimeout(()=>t.classList.remove('show'),4000);
-}
+function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.classList.remove('show'),4000)}
 
-// Init
 loadEvents();
 </script>
 </body>
