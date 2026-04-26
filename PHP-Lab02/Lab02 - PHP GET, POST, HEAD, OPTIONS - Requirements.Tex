@@ -1,0 +1,152 @@
+\documentclass[12pt,a4paper]{article}
+
+% --- Cấu hình Tiếng Việt và Font ---
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% --- Các gói hỗ trợ định dạng ---
+\usepackage{hyperref}
+\usepackage{enumitem} % Để tùy chỉnh khoảng cách danh sách
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    total={160mm,247mm},
+    left=25mm,
+    top=25mm,
+}
+
+% --- Thông tin tài liệu ---
+\title{\textbf{ĐỀ BÀI THỰC HÀNH}\\ \Large{Lab02 : PHP GET, POST, HEAD, OPTIONS}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Câu 1: Xây dựng ứng dụng}
+
+Hãy thực hiện lại toàn bộ theo bài Lab02 hướng dẫn này trên một ứng dụng khác có mức độ tương đương với \textit{Mini Workshop Registration App}.
+
+\textbf{Sinh viên được tự chọn một trong các hướng như:}
+\begin{itemize}[noitemsep]
+    \item Mini Course Enrollment App
+    \item Mini Event Booking App
+    \item Mini Clinic Appointment Registration App
+    \item Mini Equipment Reservation App
+    \item Mini Training Session Registration App
+\end{itemize}
+
+\textbf{Yêu cầu thực hiện đầy đủ các bước:}
+\begin{itemize}[noitemsep]
+    \item Kiểm tra môi trường PHP, Composer, Git.
+    \item Mở project bằng VS Code.
+    \item Tạo cấu trúc dự án có các thư mục cơ bản như: \texttt{public/}, \texttt{src/}, \texttt{views/}, \texttt{config/}, \texttt{storage/logs/}.
+    \item Tạo \texttt{composer.json}.
+    \item Cấu hình PSR-4 autoload.
+    \item Chạy lệnh \texttt{composer dump-autoload}.
+    \item Tạo \texttt{.env} và \texttt{.env.example}.
+    \item Tạo file config đọc biến môi trường.
+    \item Tạo dữ liệu mẫu bằng array PHP.
+    \item Tạo controller / helper / support class phù hợp.
+    \item Tạo file bootstrap tại \texttt{public/index.php}.
+    \item Chạy chương trình bằng lệnh: \texttt{php -S localhost:8000 -t public}
+    \item Quản lý source code bằng Git và đưa project lên GitHub.
+\end{itemize}
+
+\textbf{Ứng dụng mới phải có:}
+\begin{itemize}[noitemsep]
+    \item 1 trang chủ.
+    \item 1 endpoint lấy danh sách dữ liệu bằng GET.
+    \item 1 endpoint xử lý tạo mới / đăng ký / đặt chỗ bằng POST.
+    \item 1 trường hợp xử lý sai method.
+    \item 1 trường hợp xử lý sai Content-Type.
+    \item 1 trường hợp xử lý dữ liệu không hợp lệ.
+    \item Trả về đúng status code HTTP cho các tình huống cơ bản.
+\end{itemize}
+
+\textbf{Tối thiểu ứng dụng phải xử lý được các tình huống sau:}
+\begin{itemize}[noitemsep]
+    \item \texttt{200 OK} cho lấy dữ liệu thành công.
+    \item \texttt{201 Created} cho tạo mới / đăng ký thành công.
+    \item \texttt{404 Not Found} khi sai đường dẫn.
+    \item \texttt{405 Method Not Allowed} khi gọi sai method.
+    \item \texttt{415 Unsupported Media Type} khi gửi sai kiểu dữ liệu.
+    \item \texttt{422 Unprocessable Content} khi dữ liệu gửi lên không hợp lệ về mặt nghiệp vụ.
+\end{itemize}
+
+\textbf{Lưu ý quan trọng:} Sinh viên phải đổi toàn bộ tên project, tên dữ liệu, tên class, tên hàm, nội dung hiển thị, endpoint, commit message cho phù hợp với bài toán mới đã chọn.
+
+\textit{Ví dụ:} Nếu chọn \textbf{Mini Clinic Appointment Registration App}, hệ thống có thể quản lý:
+\begin{itemize}[noitemsep]
+    \item Danh sách lịch khám (tên bác sĩ, ngày khám, số chỗ còn lại, trạng thái: Open / Full).
+    \item API đăng ký lịch khám.
+    \item Kiểm tra dữ liệu đăng ký: thiếu tên bệnh nhân, sai kiểu dữ liệu, chọn lịch không tồn tại, số lượng vượt quá giới hạn cho phép.
+\end{itemize}
+
+\vspace{5mm}
+\hrule
+\vspace{5mm}
+
+\section*{Câu 2: Problem Solving}
+
+Một hệ thống đăng ký / đặt chỗ / ghi danh thực tế không chỉ cần hiển thị dữ liệu và nhận request thành công, mà còn phải xử lý nhiều vấn đề phát sinh trong vận hành và phát triển hệ thống. Dựa trên ứng dụng mà em đã xây dựng ở Câu 1, hãy phân tích và đề xuất hướng giải quyết cho các vấn đề sau:
+
+\begin{enumerate}
+    \item Nếu project tiếp tục phát triển nhưng vẫn lưu dữ liệu bằng array PHP trong file, hệ thống sẽ gặp những hạn chế gì về:
+    \begin{itemize}[noitemsep]
+        \item Cập nhật dữ liệu.
+        \item Tìm kiếm.
+        \item Mở rộng số lượng bản ghi.
+        \item Đồng bộ khi nhiều người cùng sử dụng.
+    \end{itemize}
+
+    \item Trong bài Lab02, endpoint POST mới chỉ kiểm tra một số điều kiện cơ bản. Nếu đưa vào sử dụng thực tế, em nghĩ cần bổ sung thêm những kiểm tra nào để dữ liệu đáng tin cậy hơn?
+    \textit{(Ví dụ: kiểm tra định dạng email, kiểm tra trùng đăng ký, kiểm tra số lượng vượt quá số chỗ còn lại, kiểm tra dữ liệu rỗng hoặc sai kiểu...)}
+
+    \item Vì sao hệ thống cần phân biệt rõ các mã lỗi như \texttt{404}, \texttt{405}, \texttt{415}, \texttt{422} thay vì chỉ luôn trả về \texttt{200} hoặc \texttt{500}? Hãy giải thích lợi ích của việc trả đúng status code đối với:
+    \begin{itemize}[noitemsep]
+        \item Frontend.
+        \item Người dùng.
+        \item Debugging.
+        \item Mở rộng API về sau.
+    \end{itemize}
+
+    \item Nếu hệ thống cần chạy ở môi trường thật, theo em vì sao phải tách: \texttt{config}, \texttt{.env}, \texttt{source code}, \texttt{log lỗi} thành các phần riêng thay vì viết tất cả vào một file PHP duy nhất?
+
+    \item Nếu phát triển tiếp ở các tuần sau, theo em nên ưu tiên mở rộng phần nào trước trong hệ thống em chọn:
+    \begin{itemize}[noitemsep]
+        \item Kết nối database.
+        \item Thêm/sửa/xóa dữ liệu.
+        \item Đăng nhập / phân quyền.
+        \item Router tốt hơn.
+        \item Validation tốt hơn.
+        \item Logging / monitoring.
+    \end{itemize}
+    Hãy giải thích lý do.
+\end{enumerate}
+
+\textbf{Yêu cầu trả lời:} Trình bày ngắn gọn nhưng có lập luận, gắn trực tiếp với ứng dụng đã chọn ở Câu 1, không trả lời chung chung theo lý thuyết và nên có ví dụ minh hoạ ngắn từ chính bài làm.
+
+\vspace{5mm}
+\hrule
+\vspace{5mm}
+
+\section*{Ghi chú Nộp bài}
+\begin{itemize}
+    \item \textbf{Bài thực hành:} PHP Lab01 \textit{(Theo nguyên văn đề bài)}
+    \item \textbf{Tiêu đề Email:} \texttt{MSSV\_HoTenSinhVien\_PHP\_Lab02}
+    \item \textbf{Gửi mail về:} \href{mailto:tuantran261083course@gmail.com}{tuantran261083course@gmail.com}
+    \item \textbf{Nội dung Email:} 
+    \begin{itemize}[noitemsep]
+        \item Ghi rõ đã làm đầy đủ hay thiếu bài gì, chức năng gì.
+        \item Ghi rõ có làm thêm được gì hay không (khuyến khích làm thêm để cộng điểm).
+        \item Nếu nộp trễ cần ghi rõ lý do.
+    \end{itemize}
+    \item \textbf{Deadline:} 27/04/2026
+    \item \textbf{File nộp:} File PDF có tên \texttt{MSSV\_HoTenSinhVien\_PHP\_Lab02.pdf} chụp hình kết quả chạy và diễn giải nội dung trả lời câu hỏi (không cần gửi code).
+\end{itemize}
+
+\end{document}

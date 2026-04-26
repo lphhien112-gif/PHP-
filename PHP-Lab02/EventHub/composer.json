@@ -1,0 +1,19 @@
+{
+    "name": "eventhub/mini-event-booking",
+    "description": "Mini Event Booking App - PHP Lab02",
+    "type": "project",
+    "require": {
+        "php": ">=8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "EventHub\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Student",
+            "email": "student@example.com"
+        }
+    ]
+}

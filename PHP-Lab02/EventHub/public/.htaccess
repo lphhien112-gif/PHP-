@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Nếu file hoặc thư mục tồn tại thật → phục vụ trực tiếp (CSS, JS, images...)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Chuyển tất cả request còn lại về index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
