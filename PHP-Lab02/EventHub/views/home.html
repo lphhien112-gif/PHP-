@@ -1,607 +1,292 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="EventHub - Nền tảng đặt vé sự kiện hàng đầu Việt Nam. Khám phá, đặt vé nhanh chóng.">
-    <title>EventHub — Mini Event Booking App</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        /* ============ RESET & TOKENS ============ */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg-primary: #0a0a0f;
-            --bg-card: rgba(255,255,255,0.04);
-            --bg-card-hover: rgba(255,255,255,0.08);
-            --text-primary: #f0f0f5;
-            --text-secondary: #8b8b9e;
-            --accent: #6c5ce7;
-            --accent-glow: rgba(108,92,231,0.35);
-            --accent-light: #a29bfe;
-            --success: #00cec9;
-            --warning: #fdcb6e;
-            --danger: #e17055;
-            --gradient-hero: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 40%, #16213e 100%);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow-card: 0 8px 32px rgba(0,0,0,0.3);
-            --transition: 0.3s cubic-bezier(.4,0,.2,1);
-            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: var(--font);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.7;
-            overflow-x: hidden;
-        }
-
-        /* ============ ANIMATED BG ============ */
-        .bg-glow {
-            position: fixed; inset: 0; z-index: -1; pointer-events: none;
-        }
-        .bg-glow::before, .bg-glow::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.25;
-            animation: float 12s ease-in-out infinite alternate;
-        }
-        .bg-glow::before {
-            width: 500px; height: 500px;
-            background: var(--accent);
-            top: -100px; left: -100px;
-        }
-        .bg-glow::after {
-            width: 400px; height: 400px;
-            background: #00cec9;
-            bottom: -50px; right: -50px;
-            animation-delay: -6s;
-        }
-        @keyframes float {
-            to { transform: translate(60px, 40px) scale(1.15); }
-        }
-
-        /* ============ NAV ============ */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            backdrop-filter: blur(20px) saturate(1.4);
-            background: rgba(10,10,15,0.72);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 0 40px;
-            height: 64px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .nav-logo {
-            font-size: 1.35rem; font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-light), var(--success));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-        .nav-links { display: flex; gap: 28px; list-style: none; }
-        .nav-links a {
-            color: var(--text-secondary); text-decoration: none;
-            font-size: 0.9rem; font-weight: 500;
-            transition: color var(--transition);
-        }
-        .nav-links a:hover { color: var(--text-primary); }
-
-        /* ============ HERO ============ */
-        .hero {
-            min-height: 100vh;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            text-align: center;
-            background: var(--gradient-hero);
-            padding: 120px 24px 80px;
-            position: relative;
-        }
-        .hero-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(108,92,231,0.15);
-            border: 1px solid rgba(108,92,231,0.3);
-            border-radius: 100px; padding: 6px 18px;
-            font-size: 0.8rem; font-weight: 600; color: var(--accent-light);
-            margin-bottom: 28px;
-            animation: fadeUp 0.6s ease-out;
-        }
-        .hero-badge .dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--success);
-            animation: pulse 2s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-        .hero h1 {
-            font-size: clamp(2.4rem, 6vw, 4.5rem);
-            font-weight: 900; letter-spacing: -2px;
-            line-height: 1.1; margin-bottom: 20px;
-            animation: fadeUp 0.6s ease-out 0.1s both;
-        }
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--accent-light), var(--success));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero p {
-            font-size: 1.15rem; color: var(--text-secondary);
-            max-width: 560px; margin: 0 auto 36px;
-            animation: fadeUp 0.6s ease-out 0.2s both;
-        }
-        .hero-actions {
-            display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
-            animation: fadeUp 0.6s ease-out 0.3s both;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ============ BUTTONS ============ */
-        .btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 14px 30px; border-radius: 100px;
-            font-family: var(--font); font-size: 0.95rem; font-weight: 600;
-            text-decoration: none; cursor: pointer;
-            border: none; transition: all var(--transition);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), #5f3dc4);
-            color: #fff;
-            box-shadow: 0 4px 24px var(--accent-glow);
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px var(--accent-glow);
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid rgba(255,255,255,0.15);
-            color: var(--text-primary);
-        }
-        .btn-outline:hover {
-            border-color: var(--accent-light);
-            color: var(--accent-light);
-            transform: translateY(-2px);
-        }
-
-        /* ============ SECTION ============ */
-        section { padding: 100px 24px; }
-        .section-header {
-            text-align: center; margin-bottom: 60px;
-        }
-        .section-header h2 {
-            font-size: 2.2rem; font-weight: 800; letter-spacing: -1px;
-            margin-bottom: 12px;
-        }
-        .section-header p {
-            color: var(--text-secondary); font-size: 1.05rem; max-width: 500px; margin: 0 auto;
-        }
-
-        /* ============ FEATURES ============ */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px; max-width: 1100px; margin: 0 auto;
-        }
-        .feature-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: var(--radius);
-            padding: 36px 28px;
-            transition: all var(--transition);
-            position: relative; overflow: hidden;
-        }
-        .feature-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--success));
-            transform: scaleX(0); transform-origin: left;
-            transition: transform var(--transition);
-        }
-        .feature-card:hover {
-            background: var(--bg-card-hover);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-card);
-        }
-        .feature-card:hover::before { transform: scaleX(1); }
-        .feature-icon {
-            width: 52px; height: 52px; border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; margin-bottom: 20px;
-        }
-        .feature-icon.purple { background: rgba(108,92,231,0.15); }
-        .feature-icon.teal   { background: rgba(0,206,201,0.15); }
-        .feature-icon.orange { background: rgba(225,112,85,0.15); }
-        .feature-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
-        .feature-card p  { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; }
-
-        /* ============ API PLAYGROUND ============ */
-        .api-section { background: rgba(255,255,255,0.02); }
-        .api-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px; max-width: 1100px; margin: 0 auto;
-        }
-        .api-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: var(--radius);
-            padding: 28px; cursor: pointer;
-            transition: all var(--transition);
-        }
-        .api-card:hover {
-            background: var(--bg-card-hover);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-card);
-        }
-        .api-method {
-            display: inline-block;
-            padding: 4px 12px; border-radius: 6px;
-            font-size: 0.75rem; font-weight: 700;
-            letter-spacing: 0.5px; margin-bottom: 12px;
-        }
-        .api-method.get  { background: rgba(0,206,201,0.15); color: var(--success); }
-        .api-method.post { background: rgba(108,92,231,0.15); color: var(--accent-light); }
-        .api-method.head { background: rgba(253,203,110,0.15); color: var(--warning); }
-        .api-card .endpoint {
-            font-family: 'Courier New', monospace;
-            font-size: 1rem; font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .api-card .desc {
-            font-size: 0.88rem; color: var(--text-secondary);
-        }
-        .api-status {
-            display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap;
-        }
-        .api-status span {
-            font-size: 0.72rem; padding: 3px 10px; border-radius: 100px;
-            background: rgba(255,255,255,0.05);
-            color: var(--text-secondary); font-weight: 500;
-        }
-
-        /* ============ TRY-IT PANEL ============ */
-        .try-panel {
-            max-width: 800px; margin: 60px auto 0;
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-        .try-panel-header {
-            display: flex; align-items: center; gap: 12px;
-            padding: 16px 24px;
-            background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        .try-panel-header .dots { display: flex; gap: 6px; }
-        .try-panel-header .dot-r { width: 10px; height: 10px; border-radius: 50%; }
-        .dot-red { background: #e17055; }
-        .dot-yel { background: #fdcb6e; }
-        .dot-grn { background: #00cec9; }
-        .try-panel-header span { font-size: 0.82rem; color: var(--text-secondary); }
-        .try-panel-body { padding: 24px; }
-        .try-panel-body pre {
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            line-height: 1.8;
-            white-space: pre-wrap;
-            overflow-x: auto;
-        }
-        .try-panel-body pre .key { color: var(--accent-light); }
-        .try-panel-body pre .str { color: var(--success); }
-        .try-panel-body pre .num { color: var(--warning); }
-        .try-panel-body pre .bool { color: var(--danger); }
-
-        /* ============ LIVE RESPONSE ============ */
-        #live-response {
-            max-width: 800px; margin: 20px auto 0;
-            display: none;
-        }
-        #live-response.show { display: block; }
-        .response-box {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-        .response-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 24px;
-            background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        .response-status {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 0.85rem; font-weight: 600;
-        }
-        .response-status .code { padding: 3px 10px; border-radius: 6px; font-size: 0.78rem; }
-        .code-200 { background: rgba(0,206,201,0.15); color: var(--success); }
-        .code-201 { background: rgba(108,92,231,0.15); color: var(--accent-light); }
-        .code-404 { background: rgba(225,112,85,0.15); color: var(--danger); }
-        .code-405 { background: rgba(253,203,110,0.15); color: var(--warning); }
-        .code-422 { background: rgba(225,112,85,0.15); color: var(--danger); }
-        .response-time { font-size: 0.78rem; color: var(--text-secondary); }
-        .response-body {
-            padding: 20px 24px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.82rem; line-height: 1.7;
-            color: var(--text-secondary);
-            max-height: 400px; overflow-y: auto;
-            white-space: pre-wrap;
-        }
-
-        /* ============ FOOTER ============ */
-        footer {
-            text-align: center;
-            padding: 40px 24px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-        footer a { color: var(--accent-light); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
-
-        /* ============ RESPONSIVE ============ */
-        @media (max-width: 768px) {
-            nav { padding: 0 20px; }
-            .nav-links { display: none; }
-            section { padding: 60px 16px; }
-            .hero { padding: 100px 16px 60px; }
-        }
-
-        /* ============ SCROLLBAR ============ */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-
-        /* ============ LOADING SPINNER ============ */
-        .spinner {
-            display: inline-block; width: 16px; height: 16px;
-            border: 2px solid rgba(255,255,255,0.2);
-            border-top-color: var(--accent-light);
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="EventHub - Nền tảng đặt vé sự kiện hàng đầu. Khám phá và đặt vé nhanh chóng.">
+<title>EventHub — Mini Event Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+<div class="glow"></div>
 
-<div class="bg-glow"></div>
-
-<!-- ▸ NAV -->
+<!-- NAV -->
 <nav>
-    <div class="nav-logo">⚡ EventHub</div>
-    <ul class="nav-links">
-        <li><a href="#features">Tính năng</a></li>
-        <li><a href="#api">API</a></li>
-        <li><a href="#try">Thử ngay</a></li>
-    </ul>
+  <div class="logo">⚡ EventHub</div>
+  <div class="nav-r">
+    <a href="#events" class="active">Sự kiện</a>
+    <a href="#api-section">API</a>
+  </div>
 </nav>
 
-<!-- ▸ HERO -->
+<!-- HERO -->
 <section class="hero">
-    <div class="hero-badge">
-        <span class="dot"></span>
-        PHP Lab02 — GET, POST, HEAD, OPTIONS
-    </div>
-    <h1>Khám phá sự kiện.<br><span>Đặt vé tức thì.</span></h1>
-    <p>Nền tảng đặt vé sự kiện mini với REST API chuẩn, hỗ trợ đầy đủ HTTP methods và validation chuyên nghiệp.</p>
-    <div class="hero-actions">
-        <a href="#api" class="btn btn-primary" id="btn-explore-api">🚀 Khám phá API</a>
-        <a href="#try" class="btn btn-outline" id="btn-try-now">⚡ Thử ngay</a>
-    </div>
+  <div class="hero-badge"><span class="dot"></span> PHP Lab02 — REST API</div>
+  <h1>Khám phá sự kiện.<br><em>Đặt vé tức thì.</em></h1>
+  <p>Nền tảng đặt vé mini với REST API — GET, POST, HEAD, OPTIONS.</p>
+  <div class="stats" id="stats">
+    <div class="stat"><strong id="s-total">—</strong><span>Sự kiện</span></div>
+    <div class="stat"><strong id="s-open">—</strong><span>Đang mở</span></div>
+    <div class="stat"><strong id="s-seats">—</strong><span>Chỗ trống</span></div>
+  </div>
 </section>
 
-<!-- ▸ FEATURES -->
-<section id="features">
-    <div class="section-header">
-        <h2>Tại sao chọn EventHub?</h2>
-        <p>Được xây dựng với kiến trúc MVC, PSR-4 autoloading và xử lý HTTP chuẩn REST.</p>
-    </div>
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon purple">📡</div>
-            <h3>REST API Chuẩn</h3>
-            <p>Hỗ trợ GET, POST, HEAD, OPTIONS với status codes chuẩn: 200, 201, 404, 405, 415, 422.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon teal">🔍</div>
-            <h3>Filter & Search</h3>
-            <p>Lọc sự kiện theo category, status thông qua query parameters. Kết quả trả về JSON chuẩn.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon orange">🛡️</div>
-            <h3>Validation Chặt</h3>
-            <p>Kiểm tra email, phone, required fields, integer, positive number. Trả lỗi chi tiết từng field.</p>
-        </div>
-    </div>
-</section>
+<!-- FILTER TABS -->
+<div class="container">
+  <div class="tabs" id="filters">
+    <button class="tab active" data-cat="">Tất cả</button>
+    <button class="tab" data-cat="Technology">🖥 Công nghệ</button>
+    <button class="tab" data-cat="Music">🎵 Âm nhạc</button>
+    <button class="tab" data-cat="Art">🎨 Nghệ thuật</button>
+    <button class="tab" data-cat="Business">💼 Kinh doanh</button>
+    <button class="tab" data-cat="Photography">📷 Nhiếp ảnh</button>
+  </div>
 
-<!-- ▸ API ENDPOINTS -->
-<section id="api" class="api-section">
-    <div class="section-header">
-        <h2>API Endpoints</h2>
-        <p>Click vào bất kỳ endpoint nào để thử nghiệm trực tiếp.</p>
+  <!-- EVENTS GRID -->
+  <div class="events" id="events">
+    <div class="skeleton" style="height:340px"></div>
+    <div class="skeleton" style="height:340px"></div>
+    <div class="skeleton" style="height:340px"></div>
+  </div>
+</div>
+
+<!-- BOOKING MODAL -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="modal-title">Đặt vé</h2>
+      <button class="modal-close" id="modal-close">&times;</button>
     </div>
+    <div class="modal-body">
+      <form id="booking-form">
+        <input type="hidden" id="f-event-id">
+        <div class="form-group">
+          <label>Sự kiện</label>
+          <input type="text" id="f-event-name" readonly style="opacity:.6">
+        </div>
+        <div class="form-group">
+          <label>Họ tên *</label>
+          <input type="text" id="f-name" placeholder="Nguyen Van A" required>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="f-email" placeholder="email@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Số điện thoại *</label>
+          <input type="tel" id="f-phone" placeholder="0901234567" required>
+        </div>
+        <div class="form-group">
+          <label>Số vé *</label>
+          <input type="number" id="f-qty" min="1" max="10" value="1" required>
+        </div>
+        <button type="submit" class="btn-submit" id="btn-submit">🎫 Đặt vé ngay</button>
+        <div class="form-msg" id="form-msg"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- API SECTION -->
+<div class="container" id="api-section">
+  <div class="api-sec">
+    <h2 class="sec-title">API Playground</h2>
+    <p class="sec-sub">Click endpoint để thử trực tiếp</p>
     <div class="api-grid">
-        <div class="api-card" onclick="tryApi('GET', '/events')" id="api-get-events">
-            <span class="api-method get">GET</span>
-            <div class="endpoint">/events</div>
-            <div class="desc">Lấy danh sách tất cả sự kiện. Hỗ trợ filter theo category & status.</div>
-            <div class="api-status">
-                <span>200 OK</span>
-                <span>405 Method Not Allowed</span>
-            </div>
-        </div>
-        <div class="api-card" onclick="tryApi('GET', '/events/1')" id="api-get-event-detail">
-            <span class="api-method get">GET</span>
-            <div class="endpoint">/events/{id}</div>
-            <div class="desc">Lấy chi tiết sự kiện theo ID. Trả 404 nếu không tìm thấy.</div>
-            <div class="api-status">
-                <span>200 OK</span>
-                <span>404 Not Found</span>
-            </div>
-        </div>
-        <div class="api-card" onclick="tryBooking()" id="api-post-bookings">
-            <span class="api-method post">POST</span>
-            <div class="endpoint">/bookings</div>
-            <div class="desc">Đặt vé sự kiện. Yêu cầu JSON body với event_id, full_name, email, phone.</div>
-            <div class="api-status">
-                <span>201 Created</span>
-                <span>415 Unsupported</span>
-                <span>422 Unprocessable</span>
-            </div>
-        </div>
-        <div class="api-card" onclick="tryApi('GET', '/events?category=Technology')" id="api-filter-category">
-            <span class="api-method get">GET</span>
-            <div class="endpoint">/events?category=Technology</div>
-            <div class="desc">Lọc sự kiện theo danh mục công nghệ.</div>
-            <div class="api-status">
-                <span>200 OK</span>
-            </div>
-        </div>
+      <div class="api-card" onclick="callApi('GET','/events')">
+        <span class="method get">GET</span>
+        <div class="ep">/events</div>
+        <div class="desc">Danh sách sự kiện + filter</div>
+        <div class="api-tags"><span>200</span><span>405</span></div>
+      </div>
+      <div class="api-card" onclick="callApi('GET','/events/1')">
+        <span class="method get">GET</span>
+        <div class="ep">/events/{id}</div>
+        <div class="desc">Chi tiết sự kiện</div>
+        <div class="api-tags"><span>200</span><span>404</span></div>
+      </div>
+      <div class="api-card" onclick="callApi('POST','/bookings',{event_id:1,full_name:'Test User',email:'test@mail.com',phone:'0901234567',ticket_quantity:1})">
+        <span class="method post">POST</span>
+        <div class="ep">/bookings</div>
+        <div class="desc">Đặt vé sự kiện</div>
+        <div class="api-tags"><span>201</span><span>415</span><span>422</span></div>
+      </div>
+      <div class="api-card" onclick="callApi('HEAD','/events')">
+        <span class="method head">HEAD</span>
+        <div class="ep">/events</div>
+        <div class="desc">Kiểm tra endpoint</div>
+        <div class="api-tags"><span>200</span></div>
+      </div>
+      <div class="api-card" onclick="callApi('OPTIONS','/events')">
+        <span class="method options">OPTIONS</span>
+        <div class="ep">/events</div>
+        <div class="desc">Liệt kê methods</div>
+        <div class="api-tags"><span>204</span></div>
+      </div>
+      <div class="api-card" onclick="callApi('DELETE','/events')">
+        <span class="method" style="background:rgba(224,80,80,.12);color:#e05050">DELETE</span>
+        <div class="ep">/events</div>
+        <div class="desc">⚠ Test lỗi 405</div>
+        <div class="api-tags"><span>405</span></div>
+      </div>
     </div>
-
-    <!-- TRY-IT PANEL -->
-    <div id="try" class="try-panel">
-        <div class="try-panel-header">
-            <div class="dots">
-                <span class="dot-r dot-red"></span>
-                <span class="dot-r dot-yel"></span>
-                <span class="dot-r dot-grn"></span>
-            </div>
-            <span>Terminal — EventHub API</span>
-        </div>
-        <div class="try-panel-body">
-            <pre id="request-preview"><span class="key">$</span> <span class="str">Click một endpoint ở trên để thử...</span>
-
-<span class="key">Hoặc dùng cURL:</span>
-<span class="str">curl</span> http://localhost/PHP/PHP-Lab02/EventHub/public/events
-
-<span class="str">curl</span> http://localhost/PHP/PHP-Lab02/EventHub/public/events/1
-
-<span class="str">curl</span> -X POST http://localhost/PHP/PHP-Lab02/EventHub/public/bookings \
-  -H <span class="str">"Content-Type: application/json"</span> \
-  -d <span class="str">'{"event_id":1,"full_name":"Nguyen Van A","email":"a@test.com","phone":"0901234567","ticket_quantity":2}'</span></pre>
-        </div>
+    <div class="terminal">
+      <div class="term-head">
+        <div class="term-dots"><i style="background:#e05050"></i><i style="background:#f0a050"></i><i style="background:#40d080"></i></div>
+        <span>Response</span>
+      </div>
+      <pre class="term-body" id="term"><span class="hl">$</span> Click một endpoint ở trên để thử...</pre>
     </div>
+  </div>
+</div>
 
-    <!-- LIVE RESPONSE -->
-    <div id="live-response">
-        <div class="response-box">
-            <div class="response-header">
-                <div class="response-status">
-                    <span>Response</span>
-                    <span class="code" id="res-code">200</span>
-                </div>
-                <span class="response-time" id="res-time">—</span>
-            </div>
-            <pre class="response-body" id="res-body"></pre>
-        </div>
-    </div>
-</section>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-<!-- ▸ FOOTER -->
-<footer>
-    <p>⚡ <strong>EventHub</strong> — PHP Lab02 Project &nbsp;|&nbsp; Built with ❤️ &nbsp;|&nbsp;
-        <a href="https://github.com" target="_blank">GitHub</a>
-    </p>
-</footer>
+<!-- FOOTER -->
+<footer>⚡ <strong>EventHub</strong> — PHP Lab02 &nbsp;|&nbsp; GET · POST · HEAD · OPTIONS</footer>
 
 <script>
-    // Base URL — sẽ được inject từ PHP nếu cần, fallback tự detect
-    const BASE = (() => {
-        const path = window.location.pathname;
-        // Tìm vị trí "/public" trong URL
-        const idx = path.indexOf('/public');
-        return idx !== -1 ? path.substring(0, idx + '/public'.length) : '';
-    })();
+const BASE=(()=>{const p=window.location.pathname,i=p.indexOf('/public');return i!==-1?p.substring(0,i+7):''})();
+const icons={Technology:'💻',Music:'🎵',Art:'🎨',Business:'💼',Photography:'📸'};
+const colors={Technology:['#1a1a3e','#2d1b69'],Music:['#1a2e1a','#1b4332'],Art:['#2e1a2a','#4a1942'],Business:['#1a2e3e','#1b4069'],Photography:['#2e2a1a','#4a3b19']};
+let allEvents=[];
 
-    async function tryApi(method, endpoint) {
-        const url = BASE + endpoint;
-        updatePreview(method, url);
-        await fetchAndShow(url, { method });
+// Load events
+async function loadEvents(cat=''){
+  const url=BASE+'/events'+(cat?'?category='+cat:'');
+  try{
+    const r=await fetch(url);
+    const d=await r.json();
+    if(d.success){renderEvents(d.data);if(!cat)updateStats(d.data)}
+  }catch(e){document.getElementById('events').innerHTML='<p style="color:var(--red)">Lỗi kết nối API</p>'}
+}
+
+function updateStats(events){
+  allEvents=events;
+  document.getElementById('s-total').textContent=events.length;
+  document.getElementById('s-open').textContent=events.filter(e=>e.status==='Open').length;
+  document.getElementById('s-seats').textContent=events.reduce((s,e)=>s+(e.seats_left||0),0);
+}
+
+function renderEvents(events){
+  const g=document.getElementById('events');
+  if(!events.length){g.innerHTML='<p style="text-align:center;color:var(--text2);grid-column:1/-1">Không có sự kiện nào.</p>';return}
+  g.innerHTML=events.map(e=>{
+    const left=e.seats_left||e.capacity-e.booked;
+    const isFull=e.status==='Full'||left<=0;
+    const c=colors[e.category]||['#1a1a2e','#16213e'];
+    return `<div class="event-card">
+      <span class="status-badge ${isFull?'full':'open'}">${isFull?'Hết chỗ':'Còn chỗ'}</span>
+      <span class="card-cat">${e.category}</span>
+      <div class="card-img" style="background:linear-gradient(135deg,${c[0]},${c[1]})">${icons[e.category]||'📌'}</div>
+      <div class="card-body">
+        <h3>${e.title}</h3>
+        <div class="card-meta">
+          <span>📅 ${e.date}</span><span>⏰ ${e.time}</span>
+        </div>
+        <p style="font-size:.84rem;color:var(--text2);margin-bottom:0">${e.description.substring(0,80)}...</p>
+      </div>
+      <div class="card-footer">
+        <div>
+          <div class="price">${(e.price).toLocaleString('vi')}₫</div>
+          <div class="seats ${left<=5&&!isFull?'low':''} ${isFull?'full':''}">${isFull?'Đã hết':'Còn '+left+' chỗ'}</div>
+        </div>
+        <button class="btn-book" ${isFull?'disabled':''} onclick="openBooking(${e.id},'${e.title.replace(/'/g,"\\'")}')">
+          ${isFull?'Hết':'Đặt vé'}
+        </button>
+      </div>
+    </div>`}).join('');
+}
+
+// Filter tabs
+document.getElementById('filters').addEventListener('click',e=>{
+  if(!e.target.classList.contains('tab'))return;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
+  loadEvents(e.target.dataset.cat);
+});
+
+// Booking modal
+function openBooking(id,title){
+  document.getElementById('f-event-id').value=id;
+  document.getElementById('f-event-name').value=title;
+  document.getElementById('modal-title').textContent='Đặt vé — '+title;
+  document.getElementById('form-msg').className='form-msg';
+  document.getElementById('form-msg').textContent='';
+  document.getElementById('modal-bg').classList.add('show');
+}
+document.getElementById('modal-close').onclick=()=>document.getElementById('modal-bg').classList.remove('show');
+document.getElementById('modal-bg').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')});
+
+document.getElementById('booking-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const msg=document.getElementById('form-msg');
+  const btn=document.getElementById('btn-submit');
+  btn.textContent='⏳ Đang xử lý...';btn.disabled=true;
+  try{
+    const r=await fetch(BASE+'/bookings',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        event_id:+document.getElementById('f-event-id').value,
+        full_name:document.getElementById('f-name').value,
+        email:document.getElementById('f-email').value,
+        phone:document.getElementById('f-phone').value,
+        ticket_quantity:+document.getElementById('f-qty').value
+      })
+    });
+    const d=await r.json();
+    if(d.success){
+      msg.className='form-msg ok';
+      msg.textContent='✅ '+d.message;
+      showToast('Đặt vé thành công! Mã: '+d.data.booking_id,'ok');
+      setTimeout(()=>{document.getElementById('modal-bg').classList.remove('show');loadEvents()},2000);
+    }else{
+      msg.className='form-msg err';
+      msg.textContent='❌ '+d.error.message;
     }
+  }catch(err){msg.className='form-msg err';msg.textContent='Lỗi kết nối'}
+  btn.textContent='🎫 Đặt vé ngay';btn.disabled=false;
+});
 
-    async function tryBooking() {
-        const url = BASE + '/bookings';
-        const body = {
-            event_id: 1,
-            full_name: "Nguyen Van A",
-            email: "test@eventhub.vn",
-            phone: "0901234567",
-            ticket_quantity: 2
-        };
-        updatePreview('POST', url, body);
-        await fetchAndShow(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
+// API Playground
+async function callApi(method,endpoint,body){
+  const term=document.getElementById('term');
+  const url=BASE+endpoint;
+  term.innerHTML=`<span class="hl">$</span> curl -X ${method} ${location.origin}${url}\n${body?'-H "Content-Type: application/json"\n-d \''+JSON.stringify(body,null,2)+"'\n":''}\n<span class="warn">⏳ Sending...</span>`;
+  const t0=performance.now();
+  try{
+    const opts={method};
+    if(body){opts.headers={'Content-Type':'application/json'};opts.body=JSON.stringify(body)}
+    const r=await fetch(url,opts);
+    const ms=Math.round(performance.now()-t0);
+    let text='';
+    if(method==='HEAD'){
+      text=`Status: ${r.status}\n`;
+      r.headers.forEach((v,k)=>{text+=`${k}: ${v}\n`});
+    }else if(method==='OPTIONS'){
+      text=`Status: ${r.status}\n`;
+      r.headers.forEach((v,k)=>{text+=`${k}: ${v}\n`});
+    }else{
+      const d=await r.json();
+      text=JSON.stringify(d,null,2);
     }
+    term.innerHTML=`<span class="hl">$</span> ${method} ${endpoint}  <span class="ok">[${r.status}] ${ms}ms</span>\n\n${text}`;
+  }catch(err){term.innerHTML=`<span class="hl">$</span> ${method} ${endpoint}  <span style="color:var(--red)">[ERROR]</span>\n\n${err.message}`}
+  term.scrollTop=term.scrollHeight;
+}
 
-    function updatePreview(method, url, body) {
-        const pre = document.getElementById('request-preview');
-        let text = `<span class="key">$</span> <span class="str">curl</span> -X ${method} ${url}`;
-        if (body) {
-            text += `\n  -H <span class="str">"Content-Type: application/json"</span>`;
-            text += `\n  -d <span class="str">'${JSON.stringify(body, null, 2)}'</span>`;
-        }
-        text += `\n\n<span class="key">⏳ Đang gửi request...</span> <span class="spinner-inline"></span>`;
-        pre.innerHTML = text;
-    }
+// Toast
+function showToast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
 
-    async function fetchAndShow(url, options) {
-        const panel = document.getElementById('live-response');
-        const codeEl = document.getElementById('res-code');
-        const timeEl = document.getElementById('res-time');
-        const bodyEl = document.getElementById('res-body');
-
-        panel.classList.add('show');
-        bodyEl.textContent = 'Đang tải...';
-        codeEl.textContent = '...';
-        codeEl.className = 'code';
-
-        const t0 = performance.now();
-        try {
-            const res = await fetch(url, options);
-            const elapsed = Math.round(performance.now() - t0);
-            const data = await res.json();
-
-            codeEl.textContent = res.status;
-            codeEl.className = 'code code-' + res.status;
-            timeEl.textContent = elapsed + 'ms';
-            bodyEl.textContent = JSON.stringify(data, null, 2);
-
-            // Update preview
-            const pre = document.getElementById('request-preview');
-            pre.innerHTML = pre.innerHTML.replace(
-                /⏳ Đang gửi request.*/,
-                `<span class="str">✅ Hoàn thành — ${res.status} (${elapsed}ms)</span>`
-            );
-        } catch (err) {
-            codeEl.textContent = 'ERR';
-            codeEl.className = 'code code-404';
-            timeEl.textContent = '—';
-            bodyEl.textContent = 'Lỗi kết nối: ' + err.message + '\n\nHãy đảm bảo XAMPP Apache đang chạy.';
-        }
-
-        // Scroll to response
-        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+// Init
+loadEvents();
 </script>
-
 </body>
 </html>
