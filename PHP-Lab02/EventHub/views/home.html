@@ -3,31 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="CineHub — Hệ thống đặt vé xem phim trực tuyến. Xem lịch chiếu phim mới nhất và đặt vé nhanh chóng tại TP.HCM.">
+<meta name="description" content="CineHub — Hệ thống đặt vé xem phim trực tuyến tại TP.HCM. Xem lịch chiếu, chọn ghế và đặt vé nhanh chóng.">
 <meta name="theme-color" content="#06060c">
 <title>CineHub — Đặt Vé Xem Phim Online</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <div class="glow"></div>
 
-<!-- ============ NAVIGATION ============ -->
+<!-- ======== NAVIGATION ======== -->
 <nav>
   <div class="logo">
     <div class="logo-icon">🎬</div>
     <span>CineHub</span>
   </div>
   <div class="nav-r">
-    <a href="#movies" class="nav-link active">Phim</a>
-    <a href="#api-section" class="nav-link">API</a>
-    <a href="api-tester.html" class="nav-link cta">🧪 API Tester</a>
+    <a href="#movies" class="nav-link active">Lịch chiếu</a>
+    <a href="#promo" class="nav-link">Ưu đãi</a>
+    <a href="api-tester.html" class="nav-link cta">🧪 API Docs</a>
   </div>
 </nav>
 
-<!-- ============ HERO ============ -->
+<!-- ======== HERO ======== -->
 <section class="hero">
   <div class="hero-badge"><span class="dot"></span> Đang chiếu — Tháng 5 & 6 / 2026</div>
   <h1>Trải nghiệm điện ảnh<br><em>đỉnh cao.</em></h1>
@@ -39,7 +39,7 @@
   </div>
 </section>
 
-<!-- ============ MOVIE SECTION ============ -->
+<!-- ======== MOVIE SECTION ======== -->
 <div class="container" id="movies">
   <div class="filter-bar">
     <div class="filter-title">🎥 Phim đang chiếu</div>
@@ -65,7 +65,22 @@
   </div>
 </div>
 
-<!-- ============ BOOKING MODAL ============ -->
+<!-- ======== PROMO BANNER ======== -->
+<section class="promo-sec" id="promo">
+  <div class="container">
+    <div class="promo-card">
+      <div class="promo-content">
+        <span class="promo-tag">🎉 Ưu đãi đặc biệt</span>
+        <h2>Mua 2 vé tặng 1 bắp nước</h2>
+        <p>Áp dụng cho tất cả suất chiếu từ Thứ 2 — Thứ 5. Đặt vé online ngay để nhận ưu đãi!</p>
+        <button class="promo-btn" onclick="document.getElementById('movies').scrollIntoView({behavior:'smooth'})">Đặt vé ngay →</button>
+      </div>
+      <div class="promo-visual">🍿</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== BOOKING MODAL ======== -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal">
     <div class="modal-head">
@@ -73,16 +88,13 @@
       <button class="modal-close" id="modal-close">&times;</button>
     </div>
     <div class="modal-body">
+      <div class="modal-movie-info" id="modal-movie-info"></div>
       <form id="booking-form">
         <input type="hidden" id="f-event-id">
-        <div class="form-group">
-          <label>Phim</label>
-          <input type="text" id="f-event-name" readonly>
-        </div>
         <div class="form-row">
           <div class="form-group">
             <label>Họ tên *</label>
-            <input type="text" id="f-name" placeholder="Nguyen Van A" required>
+            <input type="text" id="f-name" placeholder="Nguyễn Văn A" required>
           </div>
           <div class="form-group">
             <label>Số vé *</label>
@@ -104,84 +116,29 @@
   </div>
 </div>
 
-<!-- ============ API SECTION ============ -->
-<div class="container" id="api-section">
-  <div class="api-sec">
-    <div class="sec-header">
-      <h2 class="sec-title">🔧 API Playground</h2>
-      <p class="sec-sub">Click endpoint để thử trực tiếp — hoặc mở <a href="api-tester.html" style="color:var(--gold)">API Tester</a> cho trải nghiệm đầy đủ</p>
-    </div>
-    <div class="api-grid">
-      <div class="api-card c-get" onclick="callApi('GET','/events')">
-        <span class="method-badge get">GET</span>
-        <div class="ep">/events</div>
-        <div class="desc">Danh sách phim đang chiếu</div>
-        <div class="api-tags"><span>200</span><span>405</span></div>
-      </div>
-      <div class="api-card c-get" onclick="callApi('GET','/events/1')">
-        <span class="method-badge get">GET</span>
-        <div class="ep">/events/{id}</div>
-        <div class="desc">Chi tiết một phim</div>
-        <div class="api-tags"><span>200</span><span>404</span></div>
-      </div>
-      <div class="api-card c-post" onclick="callApi('POST','/bookings',{event_id:1,full_name:'Demo',email:'demo@cinehub.vn',phone:'0901234567',ticket_quantity:1})">
-        <span class="method-badge post">POST</span>
-        <div class="ep">/bookings</div>
-        <div class="desc">Đặt vé xem phim</div>
-        <div class="api-tags"><span>201</span><span>415</span><span>422</span></div>
-      </div>
-      <div class="api-card c-head" onclick="callApi('HEAD','/events')">
-        <span class="method-badge head">HEAD</span>
-        <div class="ep">/events</div>
-        <div class="desc">Kiểm tra endpoint</div>
-        <div class="api-tags"><span>200</span></div>
-      </div>
-      <div class="api-card c-options" onclick="callApi('OPTIONS','/events')">
-        <span class="method-badge options">OPTIONS</span>
-        <div class="ep">/events</div>
-        <div class="desc">Liệt kê methods</div>
-        <div class="api-tags"><span>204</span></div>
-      </div>
-      <div class="api-card c-delete" onclick="callApi('DELETE','/events')">
-        <span class="method-badge delete">DELETE</span>
-        <div class="ep">/events</div>
-        <div class="desc">⚠ Test lỗi 405</div>
-        <div class="api-tags"><span>405</span></div>
-      </div>
-    </div>
-    <div class="terminal">
-      <div class="term-head">
-        <div class="term-dots"><i style="background:#e05050"></i><i style="background:#f5a623"></i><i style="background:#3dd68c"></i></div>
-        <span>Response Terminal</span>
-      </div>
-      <pre class="term-body" id="term"><span class="hl">$</span> Click một endpoint ở trên để xem response...</pre>
-    </div>
-  </div>
-</div>
-
-<!-- ============ FOOTER ============ -->
+<!-- ======== FOOTER ======== -->
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">🎬 <em>CineHub</em></div>
-    <div class="footer-desc">Hệ thống đặt vé xem phim online — PHP Lab02 RESTful API</div>
+    <div class="footer-desc">Hệ thống đặt vé xem phim trực tuyến — TP. Hồ Chí Minh</div>
     <div class="footer-links">
-      <a href="#">GET /events</a>
-      <a href="#">POST /bookings</a>
-      <a href="#">HEAD</a>
-      <a href="#">OPTIONS</a>
+      <a href="#">Điều khoản</a>
+      <a href="#">Chính sách</a>
+      <a href="#">Liên hệ</a>
+      <a href="api-tester.html">API Docs</a>
     </div>
-    <div class="footer-copy">© 2026 CineHub · Built with PHP 8 · PSR-4 Autoloading</div>
+    <div class="footer-copy">© 2026 CineHub · PHP Lab02 Project</div>
   </div>
 </footer>
 
 <div class="toast" id="toast"></div>
 
-<!-- ============ JAVASCRIPT ============ -->
+<!-- ======== JAVASCRIPT ======== -->
 <script>
 const BASE=(()=>{const p=window.location.pathname;const i=p.indexOf('/public');return i!==-1?p.substring(0,i+7):''})();
 let allEvents=[];
 
-// ─── Load Events ───
+// ── Load Events ──
 async function loadEvents(cat=''){
   const url=BASE+'/events'+(cat?'?category='+encodeURIComponent(cat):'');
   try{
@@ -192,7 +149,7 @@ async function loadEvents(cat=''){
       if(!cat){allEvents=d.data;updateStats(d.data)}
     }
   }catch(e){
-    document.getElementById('movie-grid').innerHTML='<p style="color:var(--red);grid-column:1/-1;text-align:center;padding:40px 0">⚠ Không kết nối được API.<br>Hãy bật <strong>Apache</strong> trong XAMPP Control Panel.</p>';
+    document.getElementById('movie-grid').innerHTML='<p style="color:var(--red);grid-column:1/-1;text-align:center;padding:60px 0;font-size:.95rem">⚠ Không kết nối được API.<br>Hãy bật <strong>Apache</strong> trong XAMPP Control Panel.</p>';
   }
 }
 
@@ -204,19 +161,22 @@ function updateStats(ev){
 
 function animateNum(id,target){
   const el=document.getElementById(id);
-  let c=0;const step=Math.max(1,Math.ceil(target/30));
-  const timer=setInterval(()=>{c=Math.min(c+step,target);el.textContent=c.toLocaleString('vi');if(c>=target)clearInterval(timer)},25);
+  let c=0;const step=Math.max(1,Math.ceil(target/25));
+  const timer=setInterval(()=>{c=Math.min(c+step,target);el.textContent=c.toLocaleString('vi');if(c>=target)clearInterval(timer)},30);
 }
 
-// ─── Render Cards ───
+// ── Render Movie Cards ──
 function renderEvents(events){
   const g=document.getElementById('movie-grid');
-  if(!events.length){g.innerHTML='<p style="text-align:center;color:var(--text2);grid-column:1/-1;padding:60px 0">Không có phim nào trong thể loại này.</p>';return}
+  if(!events.length){
+    g.innerHTML='<p style="text-align:center;color:var(--text2);grid-column:1/-1;padding:80px 0;font-size:.95rem">Không tìm thấy phim nào trong thể loại này.</p>';
+    return;
+  }
   g.innerHTML=events.map((e,i)=>{
-    const left=e.seats_left||e.capacity-e.booked;
+    const left=e.seats_left!=null?e.seats_left:e.capacity-e.booked;
     const isFull=e.status==='Full'||left<=0;
     const seatsClass=isFull?'out':left<=15?'low':'';
-    return `<div class="card" style="animation:fadeUp .5s ${i*.06}s ease-out both" onclick="openBooking(${e.id},'${e.title.replace(/'/g,"\\'")}')">
+    return `<div class="card" style="animation:fadeUp .45s ${i*.05}s ease-out both">
       <div class="card-poster">
         <span class="card-badge ${isFull?'full':'open'}">${isFull?'Hết vé':'Đang bán'}</span>
         <span class="card-genre">${e.category}</span>
@@ -224,7 +184,7 @@ function renderEvents(events){
         <div class="card-rating"><span class="star">⭐</span><span class="num">${e.rating||'—'}</span></div>
       </div>
       <div class="card-info">
-        <h3>${e.title}</h3>
+        <h3 title="${e.title}">${e.title}</h3>
         <div class="card-meta">
           <span>📅 ${e.date}</span>
           <span>⏰ ${e.time}</span>
@@ -237,14 +197,14 @@ function renderEvents(events){
           <div class="card-price">${e.price.toLocaleString('vi')}₫</div>
           <div class="card-seats ${seatsClass}">${isFull?'Hết vé':'Còn '+left+' ghế'}</div>
         </div>
-        <button class="btn-book" ${isFull?'disabled':''} onclick="event.stopPropagation();openBooking(${e.id},'${e.title.replace(/'/g,"\\'")}')">
+        <button class="btn-book" ${isFull?'disabled':''} onclick="event.stopPropagation();openBooking(${e.id})">
           ${isFull?'Hết':'Mua vé'}
         </button>
       </div>
     </div>`}).join('');
 }
 
-// ─── Filter Tabs ───
+// ── Filter ──
 document.getElementById('filters').addEventListener('click',e=>{
   if(!e.target.classList.contains('tab'))return;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -252,11 +212,22 @@ document.getElementById('filters').addEventListener('click',e=>{
   loadEvents(e.target.dataset.cat);
 });
 
-// ─── Booking Modal ───
-function openBooking(id,title){
+// ── Booking Modal ──
+function openBooking(id){
+  const ev=allEvents.find(e=>e.id===id);
+  if(!ev)return;
   document.getElementById('f-event-id').value=id;
-  document.getElementById('f-event-name').value=title;
-  document.getElementById('modal-title').textContent='🎫 '+title;
+  document.getElementById('modal-title').textContent='🎫 Đặt vé xem phim';
+  document.getElementById('modal-movie-info').innerHTML=`
+    <div class="mmi">
+      <img src="assets/images/${ev.image}" alt="${ev.title}">
+      <div class="mmi-detail">
+        <h3>${ev.title}</h3>
+        <p>📅 ${ev.date} &nbsp; ⏰ ${ev.time} &nbsp; 🕐 ${ev.duration||''}</p>
+        <p>📍 ${ev.location}</p>
+        <p class="mmi-price">${ev.price.toLocaleString('vi')}₫ <span>/ vé</span></p>
+      </div>
+    </div>`;
   document.getElementById('form-msg').className='form-msg';
   document.getElementById('form-msg').textContent='';
   document.getElementById('modal-bg').classList.add('show');
@@ -281,9 +252,9 @@ document.getElementById('booking-form').addEventListener('submit',async e=>{
     const d=await r.json();
     if(d.success){
       msg.className='form-msg ok';
-      msg.textContent='✅ '+d.message;
+      msg.innerHTML=`✅ ${d.message}<br>Mã vé: <strong>${d.data.booking_id}</strong> · Tổng: <strong>${d.data.total_price?.toLocaleString('vi')||''}₫</strong>`;
       showToast('🎉 Đặt vé thành công! Mã: '+d.data.booking_id,'ok');
-      setTimeout(()=>{document.getElementById('modal-bg').classList.remove('show');loadEvents()},2200);
+      setTimeout(()=>{document.getElementById('modal-bg').classList.remove('show');loadEvents()},2500);
     }else{
       msg.className='form-msg err';
       msg.textContent='❌ '+(d.error?.message||d.message||'Lỗi không xác định');
@@ -292,34 +263,14 @@ document.getElementById('booking-form').addEventListener('submit',async e=>{
   btn.textContent='🎬 Xác nhận đặt vé';btn.disabled=false;
 });
 
-// ─── API Playground ───
-async function callApi(method,endpoint,body){
-  const term=document.getElementById('term');
-  const url=BASE+endpoint;
-  term.innerHTML=`<span class="hl">$</span> curl -X ${method} ${location.origin}${url}\n${body?"-d '"+JSON.stringify(body)+"'\n":''}\n<span class="warn">⏳ Sending...</span>`;
-  const t0=performance.now();
-  try{
-    const opts={method};
-    if(body){opts.headers={'Content-Type':'application/json'};opts.body=JSON.stringify(body)}
-    const r=await fetch(url,opts);const ms=Math.round(performance.now()-t0);
-    let text='';
-    if(method==='HEAD'||method==='OPTIONS'){
-      text='Status: '+r.status+'\n';r.headers.forEach((v,k)=>{text+=k+': '+v+'\n'});
-    }else{const d=await r.json();text=JSON.stringify(d,null,2)}
-    term.innerHTML=`<span class="hl">$</span> ${method} ${endpoint}  <span class="ok">[${r.status}] ${ms}ms</span>\n\n${text}`;
-  }catch(err){
-    term.innerHTML=`<span class="hl">$</span> ${method} ${endpoint}  <span style="color:var(--red)">[ERROR]</span>\n\n${err.message}`;
-  }
-}
-
-// ─── Toast ───
+// ── Toast ──
 function showToast(msg,type){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className='toast '+type+' show';
   setTimeout(()=>t.classList.remove('show'),4500);
 }
 
-// ─── Init ───
+// ── Init ──
 loadEvents();
 </script>
 </body>
