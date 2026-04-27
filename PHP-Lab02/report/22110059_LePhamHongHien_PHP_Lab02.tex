@@ -120,11 +120,11 @@
 
 \vspace{3cm}
 
-\begin{tabular}{rl}
-\textbf{Sinh viên thực hiện:} & Lê Phạm Hồng Hiển \\[4pt]
-\textbf{MSSV:} & 22110059 \\[4pt]
-\textbf{Giảng viên hướng dẫn:} & ThS. Tuấn Trần \\[4pt]
-\textbf{Môn học:} & Lập trình Web \\[4pt]
+\begin{tabular}{ll}
+    \textbf{Giảng viên hướng dẫn:} & TS. Trần Anh Tuấn \\[4pt]
+    \textbf{Môn học:} & Lập trình Web \\[4pt]
+    \textbf{Sinh viên thực hiện:} & Lê Phạm Hồng Hiên \\[4pt]
+    \textbf{MSSV:} & 22110059 \\[4pt]
 \end{tabular}
 
 \vfill
@@ -440,6 +440,8 @@ Hiện tại \texttt{EventController::book()} kiểm tra:
     \item \textbf{Sanitize input:} Dùng \texttt{htmlspecialchars()} cho \texttt{full\_name} để chống XSS injection.
 \end{enumerate}
 
+\newpage
+
 \subsection{Câu 2.3 — Tại sao cần phân biệt rõ status code?}
 
 Thay vì luôn trả \texttt{200} hoặc \texttt{500}, việc dùng đúng mã lỗi (404, 405, 415, 422) mang lại lợi ích cụ thể:
@@ -475,6 +477,8 @@ Trong CineHub, các file được tách rõ:
 
     \item \textbf{Teamwork:} Nhiều dev làm chung, mỗi người có \texttt{.env} riêng (database local khác nhau). Source code giống nhau nhưng config khác — chỉ hoạt động khi tách file.
 \end{enumerate}
+
+\newpage
 
 \subsection{Câu 2.5 — Ưu tiên mở rộng phần nào trước?}
 
