@@ -15,6 +15,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{listingsutf8}
+\usepackage{tikz}
 \usepackage{fancyhdr}
 \usepackage{geometry}
 \geometry{
@@ -79,38 +80,59 @@
 
 % ===== TRANG BÌA =====
 \begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+    % Outer frame
+    \draw[line width=3pt, blue!70!black] 
+        ([shift={(1cm,1cm)}]current page.south west) rectangle 
+        ([shift={(-1cm,-1cm)}]current page.north east);
+    % Inner frame
+    \draw[line width=1pt, blue!70!black] 
+        ([shift={(1.25cm,1.25cm)}]current page.south west) rectangle 
+        ([shift={(-1.25cm,-1.25cm)}]current page.north east);
+\end{tikzpicture}
+
 \begin{center}
 
-\vspace*{1cm}
-\textbf{\Large TRƯỜNG ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP.HCM}\\[4pt]
-\textbf{\large KHOA CÔNG NGHỆ THÔNG TIN}\\[2cm]
+\vspace*{0.5cm}
 
-\hrule height 1pt
-\vspace{12pt}
-{\Huge \textbf{BÁO CÁO THỰC HÀNH}}\\[8pt]
-{\LARGE \textbf{Lab02: PHP GET, POST, HEAD, OPTIONS}}\\[12pt]
-\hrule height 1pt
+{\fontsize{14}{16}\selectfont \textbf{ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH}}\\[4pt]
+{\fontsize{14}{16}\selectfont \textbf{TRƯỜNG ĐẠI HỌC KHOA HỌC TỰ NHIÊN}}\\[4pt]
+{\fontsize{13}{15}\selectfont \textbf{KHOA TOÁN --- TIN HỌC}}
 
-\vspace{2cm}
+\vspace{6pt}
+{\color{blue!70!black}\rule{8cm}{1.5pt}}
 
-{\Large \textbf{Ứng dụng: CineHub — Đặt Vé Xem Phim Online}}
+\vspace{2.5cm}
 
-\vspace{2cm}
+{\fontsize{24}{28}\selectfont \textbf{BÁO CÁO THỰC HÀNH}}
 
-\begin{tabular}{ll}
-\textbf{Sinh viên:} & Lê Phạm Hồng Hiển \\
-\textbf{MSSV:} & 22110059 \\
-\textbf{Lớp:} & -- \\
-\textbf{GVHD:} & Thầy Tuấn Trần \\
-\textbf{Ngày nộp:} & 27/04/2026 \\
+\vspace{10pt}
+
+{\fontsize{16}{20}\selectfont \textbf{Lab02: PHP GET, POST, HEAD, OPTIONS}}
+
+\vspace{15pt}
+
+{\color{blue!70!black}\rule{6cm}{0.8pt}}
+
+\vspace{15pt}
+
+{\fontsize{14}{17}\selectfont \textit{Ứng dụng: \textbf{CineHub — Đặt Vé Xem Phim Online}}}
+
+\vspace{3cm}
+
+\begin{tabular}{rl}
+\textbf{Sinh viên thực hiện:} & Lê Phạm Hồng Hiển \\[4pt]
+\textbf{MSSV:} & 22110059 \\[4pt]
+\textbf{Giảng viên hướng dẫn:} & ThS. Tuấn Trần \\[4pt]
+\textbf{Môn học:} & Lập trình Web \\[4pt]
 \end{tabular}
 
-\vspace{2cm}
-
-\textbf{GitHub Repository:}\\
-\url{https://github.com/lphhien112-gif/PHP-}
-
 \vfill
+
+{\color{blue!70!black}\rule{5cm}{0.8pt}}
+
+\vspace{6pt}
+
 {\large TP. Hồ Chí Minh, Tháng 4/2026}
 
 \end{center}
