@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CineHub — API Tester</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a10;--bg2:#111118;--bg3:#181822;--border:rgba(255,255,255,.08);--text:#eef;--text2:#777;--accent:#e63946;--gold:#f5c518;--teal:#00d2c6;--green:#40d080;--orange:#f0a050;--red:#e05050;--r:12px}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{color:var(--gold);text-decoration:none}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);background:rgba(10,10,16,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10}
+.nav-logo{font-size:1.15rem;font-weight:800}
+.nav-logo em{font-style:normal;color:var(--accent)}
+.nav-links{display:flex;gap:16px;font-size:.85rem}
+.nav-links a{color:var(--text2);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+
+/* LAYOUT */
+.wrap{display:grid;grid-template-columns:260px 1fr;height:calc(100vh - 53px)}
+.sidebar{border-right:1px solid var(--border);padding:16px;overflow-y:auto;background:var(--bg2)}
+.main{display:flex;flex-direction:column;overflow:hidden}
+
+/* SIDEBAR - Quick endpoints */
+.sb-title{font-size:.72rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.ep-btn{width:100%;text-align:left;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text);font-size:.82rem;font-family:'Inter',sans-serif;cursor:pointer;margin-bottom:6px;transition:all .2s;display:flex;align-items:center;gap:8px}
+.ep-btn:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.15)}
+.ep-btn .m{font-size:.68rem;font-weight:700;padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;min-width:42px;text-align:center}
+.ep-btn .m.get{background:rgba(0,210,198,.12);color:var(--teal)}
+.ep-btn .m.post{background:rgba(230,57,70,.12);color:var(--accent)}
+.ep-btn .m.head{background:rgba(240,160,80,.12);color:var(--orange)}
+.ep-btn .m.opt{background:rgba(119,119,119,.15);color:var(--text2)}
+.ep-btn .m.del{background:rgba(224,80,80,.12);color:var(--red)}
+.ep-btn .path{font-family:'JetBrains Mono',monospace;font-size:.8rem}
+.sb-sep{height:1px;background:var(--border);margin:14px 0}
+.sb-note{font-size:.74rem;color:var(--text2);line-height:1.5}
+.sb-note code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.72rem}
+
+/* REQUEST BAR */
+.req-bar{display:flex;gap:0;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.method-sel{padding:0 14px;border:1px solid var(--border);border-right:none;border-radius:var(--r) 0 0 var(--r);background:var(--bg3);color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;cursor:pointer;appearance:none;-webkit-appearance:none;min-width:100px;text-align:center}
+.method-sel:focus{outline:none;border-color:var(--teal)}
+.url-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-left:none;border-right:none;background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.88rem}
+.url-input:focus{outline:none;border-color:rgba(255,255,255,.15)}
+.send-btn{padding:10px 24px;border:none;border-radius:0 var(--r) var(--r) 0;background:var(--accent);color:#fff;font-weight:700;font-size:.88rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap}
+.send-btn:hover{background:#cc2936}
+.send-btn:active{transform:scale(.98)}
+.send-btn.loading{opacity:.6;cursor:wait}
+
+/* BODY AREA */
+.panels{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.panel{display:flex;flex-direction:column;overflow:hidden}
+.panel:first-child{border-right:1px solid var(--border)}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg2);min-height:40px}
+.panel-head h3{font-size:.82rem;font-weight:600;color:var(--text2)}
+.panel-head .info{font-size:.75rem;color:var(--text2)}
+.status{padding:3px 10px;border-radius:50px;font-size:.75rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+.status.s2{background:rgba(64,208,128,.12);color:var(--green)}
+.status.s4{background:rgba(224,80,80,.12);color:var(--red)}
+.status.s5{background:rgba(240,160,80,.12);color:var(--orange)}
+.panel-body{flex:1;overflow-y:auto;padding:0}
+.panel-body textarea{width:100%;height:100%;background:var(--bg);color:var(--text);border:none;padding:16px;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.7;resize:none}
+.panel-body textarea:focus{outline:none}
+.panel-body pre{padding:16px;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.7;white-space:pre-wrap;word-break:break-word;color:var(--text2)}
+.panel-body pre .k{color:var(--teal)}
+.panel-body pre .s{color:var(--gold)}
+.panel-body pre .n{color:var(--accent)}
+.panel-body pre .b{color:var(--orange)}
+
+/* HEADERS TABLE */
+.headers-tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.headers-tbl td{padding:6px 16px;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.78rem}
+.headers-tbl td:first-child{color:var(--teal);font-weight:600;width:220px}
+.headers-tbl td:last-child{color:var(--text2)}
+
+/* TABS */
+.tabs{display:flex;gap:0}
+.tab-btn{padding:8px 16px;font-size:.78rem;font-weight:600;border:none;background:transparent;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .2s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* RESPONSIVE */
+@media(max-width:800px){.wrap{grid-template-columns:1fr}.sidebar{display:none}.panels{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-logo">🎬 <em>CineHub</em> API Tester</div>
+  <div class="nav-links">
+    <a href="./">← Trang chủ</a>
+    <a href="api-tester.html" class="active">API Tester</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-title">📌 Quick Endpoints</div>
+
+    <button class="ep-btn" onclick="quick('GET','/events')">
+      <span class="m get">GET</span><span class="path">/events</span>
+    </button>
+    <button class="ep-btn" onclick="quick('GET','/events/1')">
+      <span class="m get">GET</span><span class="path">/events/1</span>
+    </button>
+    <button class="ep-btn" onclick="quick('GET','/events?category=Sci-Fi')">
+      <span class="m get">GET</span><span class="path">/events?cat=Sci-Fi</span>
+    </button>
+    <button class="ep-btn" onclick="quick('GET','/events/999')">
+      <span class="m get">GET</span><span class="path">/events/999 (404)</span>
+    </button>
+
+    <div class="sb-sep"></div>
+
+    <button class="ep-btn" onclick="quick('POST','/bookings',{event_id:1,full_name:'Nguyen Van A',email:'test@cinehub.vn',phone:'0901234567',ticket_quantity:2})">
+      <span class="m post">POST</span><span class="path">/bookings ✅</span>
+    </button>
+    <button class="ep-btn" onclick="quick('POST','/bookings',{event_id:2,full_name:'Test',email:'a@b.com',phone:'0123456789',ticket_quantity:1})">
+      <span class="m post">POST</span><span class="path">/bookings (hết vé)</span>
+    </button>
+    <button class="ep-btn" onclick="quick('POST','/bookings',{event_id:1})">
+      <span class="m post">POST</span><span class="path">/bookings (422)</span>
+    </button>
+
+    <div class="sb-sep"></div>
+
+    <button class="ep-btn" onclick="quick('HEAD','/events')">
+      <span class="m head">HEAD</span><span class="path">/events</span>
+    </button>
+    <button class="ep-btn" onclick="quick('OPTIONS','/events')">
+      <span class="m opt">OPT</span><span class="path">/events</span>
+    </button>
+    <button class="ep-btn" onclick="quick('DELETE','/events')">
+      <span class="m del">DEL</span><span class="path">/events (405)</span>
+    </button>
+    <button class="ep-btn" onclick="quick('PUT','/bookings')">
+      <span class="m del">PUT</span><span class="path">/bookings (405)</span>
+    </button>
+
+    <div class="sb-sep"></div>
+    <div class="sb-note">
+      💡 Click endpoint hoặc tự nhập URL + Body ở bên phải.<br><br>
+      Status codes: <code>200</code> <code>201</code> <code>404</code> <code>405</code> <code>415</code> <code>422</code>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- Request Bar -->
+    <div class="req-bar">
+      <select class="method-sel" id="method">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="HEAD">HEAD</option>
+        <option value="OPTIONS">OPTIONS</option>
+        <option value="PUT">PUT</option>
+        <option value="DELETE">DELETE</option>
+        <option value="PATCH">PATCH</option>
+      </select>
+      <input class="url-input" id="url" type="text" placeholder="/events" value="/events">
+      <button class="send-btn" id="send-btn" onclick="sendRequest()">Send ▶</button>
+    </div>
+
+    <!-- Panels -->
+    <div class="panels">
+      <!-- LEFT: Request Body -->
+      <div class="panel">
+        <div class="panel-head">
+          <h3>📤 Request Body (JSON)</h3>
+          <span class="info">Content-Type: application/json</span>
+        </div>
+        <div class="panel-body">
+          <textarea id="req-body" placeholder='Nhập JSON body cho POST...
+
+Ví dụ:
+{
+  "event_id": 1,
+  "full_name": "Nguyen Van A",
+  "email": "test@cinehub.vn",
+  "phone": "0901234567",
+  "ticket_quantity": 2
+}'></textarea>
+        </div>
+      </div>
+
+      <!-- RIGHT: Response -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('body')">Body</button>
+            <button class="tab-btn" onclick="showTab('headers')">Headers</button>
+          </div>
+          <div>
+            <span class="status" id="res-status"></span>
+            <span class="info" id="res-time"></span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <pre id="res-body">Chưa gửi request nào.
+
+← Click endpoint bên trái hoặc nhập URL rồi bấm Send ▶</pre>
+          <table class="headers-tbl" id="res-headers" style="display:none"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE=(()=>{const p=window.location.pathname;const i=p.indexOf('/public');return i!==-1?p.substring(0,i+7):''})();
+
+function quick(method,endpoint,body){
+  document.getElementById('method').value=method;
+  document.getElementById('url').value=endpoint;
+  document.getElementById('req-body').value=body?JSON.stringify(body,null,2):'';
+  sendRequest();
+}
+
+async function sendRequest(){
+  const method=document.getElementById('method').value;
+  const rawUrl=document.getElementById('url').value.trim();
+  const bodyStr=document.getElementById('req-body').value.trim();
+  const btn=document.getElementById('send-btn');
+  const resBody=document.getElementById('res-body');
+  const resHeaders=document.getElementById('res-headers');
+  const resStatus=document.getElementById('res-status');
+  const resTime=document.getElementById('res-time');
+
+  // Build full URL
+  const url=BASE+(rawUrl.startsWith('/')?rawUrl:'/'+rawUrl);
+
+  btn.textContent='Sending...';btn.classList.add('loading');
+  resBody.innerHTML='<span style="color:var(--orange)">⏳ Sending '+method+' '+rawUrl+'...</span>';
+  resHeaders.style.display='none';
+  resBody.style.display='block';
+  resStatus.textContent='';resTime.textContent='';
+
+  const t0=performance.now();
+  try{
+    const opts={method};
+    if(bodyStr && ['POST','PUT','PATCH'].includes(method)){
+      opts.headers={'Content-Type':'application/json'};
+      opts.body=bodyStr;
+    }
+
+    const r=await fetch(url,opts);
+    const ms=Math.round(performance.now()-t0);
+
+    // Status
+    const code=r.status;
+    resStatus.textContent=code+' '+r.statusText;
+    resStatus.className='status '+(code<300?'s2':code<500?'s4':'s5');
+    resTime.textContent=ms+'ms';
+
+    // Headers
+    let hhtml='';
+    r.headers.forEach((v,k)=>{hhtml+=`<tr><td>${k}</td><td>${v}</td></tr>`});
+    resHeaders.innerHTML=hhtml;
+
+    // Body
+    if(method==='HEAD'){
+      resBody.innerHTML=highlight(JSON.stringify({note:'HEAD request — no body returned',status:code,headers:Object.fromEntries([...r.headers])},null,2));
+    }else{
+      const text=await r.text();
+      try{const json=JSON.parse(text);resBody.innerHTML=highlight(JSON.stringify(json,null,2))}
+      catch(e){resBody.textContent=text}
+    }
+  }catch(err){
+    resStatus.textContent='ERROR';resStatus.className='status s5';
+    resTime.textContent='';
+    resBody.innerHTML='<span style="color:var(--red)">❌ '+err.message+'</span>\n\nĐảm bảo Apache đang chạy trong XAMPP.';
+  }
+  btn.textContent='Send ▶';btn.classList.remove('loading');
+}
+
+function highlight(json){
+  return json
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/"([^"]+)":/g,'<span class="k">"$1"</span>:')
+    .replace(/: "([^"]*)"/g,': <span class="s">"$1"</span>')
+    .replace(/: (\d+\.?\d*)/g,': <span class="n">$1</span>')
+    .replace(/: (true|false|null)/g,': <span class="b">$1</span>');
+}
+
+function showTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('res-body').style.display=tab==='body'?'block':'none';
+  document.getElementById('res-headers').style.display=tab==='headers'?'table':'none';
+}
+
+// Ctrl+Enter to send
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')sendRequest()});
+</script>
+</body>
+</html>
