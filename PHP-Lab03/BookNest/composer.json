@@ -1,0 +1,12 @@
+{
+    "name": "booknest/mini-bookstore-routing-app",
+    "description": "Mini Bookstore Routing App - PHP Lab03",
+    "autoload": {
+        "psr-4": {
+            "BookNest\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.0"
+    }
+}
