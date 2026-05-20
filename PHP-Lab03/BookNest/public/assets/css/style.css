@@ -779,6 +779,115 @@ code {
     position: relative;
 }
 
+/* --- Server Badge --- */
+.server-badge {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 214, 143, 0.12);
+    border: 1px solid rgba(0, 214, 143, 0.3);
+    color: var(--accent-green);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    z-index: 999;
+    backdrop-filter: blur(12px);
+    animation: fadeInUp 0.5s ease-out 0.5s both;
+}
+
+.server-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 214, 143, 0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(0, 214, 143, 0); }
+}
+
+/* --- Admin Nav Link --- */
+.nav-admin-link {
+    background: rgba(99, 102, 241, 0.12) !important;
+    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    border-radius: 6px !important;
+    color: #818cf8 !important;
+    font-weight: 600 !important;
+}
+
+.nav-admin-link:hover {
+    background: rgba(99, 102, 241, 0.25) !important;
+    color: #a5b4fc !important;
+}
+
+/* --- Navbar Active State --- */
+.navbar-links a.active {
+    color: var(--text-primary) !important;
+    background: rgba(233, 69, 96, 0.12);
+    position: relative;
+}
+
+.navbar-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+}
+
+/* --- Footer Servers --- */
+.footer-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer-servers {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.footer-server {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.footer-server.active {
+    color: var(--accent-green);
+}
+
+/* --- Custom Scrollbar --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
 /* --- Responsive --- */
 @media (max-width: 768px) {
     .navbar {
