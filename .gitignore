@@ -44,3 +44,8 @@ Thumbs.db
 #  Logs
 # ============================================
 storage/logs/*.log
+
+# Screenshot tooling (puppeteer helper, not part of labs)
+.shotkit/
+node_modules/
+*.bak
