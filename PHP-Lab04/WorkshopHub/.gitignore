@@ -1,0 +1,6 @@
+# Luu y: vendor/ duoc commit kem (khong co composer global tren may cham),
+# de ung dung chay duoc ngay bang `php -S` ma khong can `composer install`.
+storage/.demo_timeout
+*.log
+.DS_Store
+Thumbs.db

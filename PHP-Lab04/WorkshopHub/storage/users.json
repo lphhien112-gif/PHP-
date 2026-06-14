@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "email": "staff@workshophub.vn",
+        "name": "Nguyen Workshop Staff",
+        "role": "staff",
+        "password_hash": "$2y$10$dEp1h0YwL6ZV.gWbKTJycOuGZHX9MBcKKv/d30ONVjC25yGXzOtBi"
+    }
+]

@@ -1,0 +1,19 @@
+{
+    "name": "workshophub/mini-workshop-registration-portal",
+    "description": "Mini Workshop Registration Portal - PHP Lab04 (Secure Forms, PRG, Anti-spam & Session Login)",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "WorkshopHub\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.0"
+    },
+    "authors": [
+        {
+            "name": "Le Pham Hong Hien",
+            "email": "22110059@student.hcmus.edu.vn"
+        }
+    ]
+}
