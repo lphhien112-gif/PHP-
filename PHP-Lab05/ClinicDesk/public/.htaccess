@@ -1,0 +1,6 @@
+# ClinicDesk - Front Controller rewrite (cho Apache/XAMPP)
+# Moi request khong tro toi file tinh deu chuyen ve index.php
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]

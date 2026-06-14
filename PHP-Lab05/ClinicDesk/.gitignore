@@ -1,0 +1,7 @@
+# ClinicDesk - PHP Lab05
+/storage/logs/*.log
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

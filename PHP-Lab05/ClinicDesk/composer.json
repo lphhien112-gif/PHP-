@@ -1,0 +1,20 @@
+{
+    "name": "clinicdesk/mini-clinic-appointment-db-app",
+    "description": "ClinicDesk - Mini Clinic Appointment DB App - PHP Lab05",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "ClinicDesk\\": "app/"
+        }
+    },
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*"
+    },
+    "authors": [
+        {
+            "name": "Le Pham Hong Hien",
+            "email": "22110059@student.hcmus.edu.vn"
+        }
+    ]
+}
