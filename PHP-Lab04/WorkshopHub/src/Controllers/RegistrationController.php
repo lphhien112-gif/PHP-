@@ -55,10 +55,13 @@ class RegistrationController
     /** GET /registrations/create — form dang ky (giu old input + errors). */
     public function create(): void
     {
+        $defaultTopic = trim($_GET['topic'] ?? '');
+
         Response::view('registrations/create', [
-            'title'    => 'Dang ky tham du Workshop',
-            'topics'   => self::TOPICS,
-            'sessions' => self::SESSIONS,
+            'title'        => 'Dang ky tham du Workshop',
+            'topics'       => self::TOPICS,
+            'sessions'     => self::SESSIONS,
+            'defaultTopic' => $defaultTopic,
         ]);
         // Sau khi render xong moi xoa old input/errors.
         old_flush();

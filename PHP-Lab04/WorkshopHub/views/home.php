@@ -1,49 +1,53 @@
 <?php
-/** Trang chu — WorkshopHub */
+/** Trang chu — WorkshopHub (Danh sach Workshop) */
+$workshops = [
+    [
+        'title' => 'Web Development',
+        'img' => '/assets/img/banners/web-development.png',
+        'desc' => 'Hoc cach xay dung ung dung web hien dai voi HTML, CSS va PHP.'
+    ],
+    [
+        'title' => 'Data Science',
+        'img' => '/assets/img/banners/data-science.png',
+        'desc' => 'Kham pha the gioi du lieu, phan tich va truc quan hoa.'
+    ],
+    [
+        'title' => 'UI/UX Design',
+        'img' => '/assets/img/banners/ui-ux-design.png',
+        'desc' => 'Thiet ke giao dien nguoi dung va trai nghiem tuyet voi.'
+    ],
+    [
+        'title' => 'Mobile App',
+        'img' => '/assets/img/banners/mobile-app.png',
+        'desc' => 'Phat trien ung dung di dong cho ca iOS va Android.'
+    ],
+    [
+        'title' => 'Cyber Security',
+        'img' => '/assets/img/banners/cyber-security.png',
+        'desc' => 'Bao mat he thong, mang va ung dung khoi cac moi de doa.'
+    ]
+];
 ?>
-<section class="hero">
-    <div class="hero-badge">PHP Lab04 &bull; Secure Forms &amp; Session</div>
-    <img class="hero-art" src="/assets/img/hero-workshop.png" alt="Workshop hero" loading="eager">
-    <h1>Cong dang ky <span class="hl">Workshop</span></h1>
-    <p class="hero-sub">
-        WorkshopHub la cong dang ky tham du workshop danh cho khach tham quan,
-        kem khu vuc dang nhap va bang dieu khien danh rieng cho nhan vien.
-        Ung dung minh hoa form bao mat, PRG, chong spam va quan ly phien dang nhap.
-    </p>
-    <div class="hero-actions">
-        <a href="/registrations/create" class="btn btn-primary">Dang ky ngay</a>
-        <a href="/registrations" class="btn btn-ghost">Xem danh sach</a>
+<div class="page-head">
+    <div>
+        <h1>Chon chu de <span style="color:var(--accent);">Workshop</span></h1>
+        <p class="muted">Danh sach cac workshop hien co. Nhan "Dang ky tham gia" de giu cho.</p>
     </div>
-</section>
+</div>
 
-<section class="features">
-    <div class="feature-card">
-        <div class="feature-icon"><img src="/assets/img/feat-secure-form.png" alt="Form bao mat" loading="lazy"></div>
-        <h3>Form bao mat</h3>
-        <p>Validation server-side day du: required, email, phone, do dai va in-list. Escape moi output bang <code>h()</code>.</p>
+<div class="workshop-grid">
+    <?php foreach ($workshops as $w): ?>
+    <div class="workshop-card">
+        <div class="workshop-banner">
+            <img src="<?= h($w['img']) ?>" alt="<?= h($w['title']) ?>" loading="lazy">
+        </div>
+        <div class="workshop-info">
+            <h3><?= h($w['title']) ?></h3>
+            <p><?= h($w['desc']) ?></p>
+            <div class="workshop-actions">
+                <a href="/workshop/details?topic=<?= urlencode($w['title']) ?>" class="btn btn-primary btn-block">Tim hieu them</a>
+            </div>
+        </div>
     </div>
-    <div class="feature-card">
-        <div class="feature-icon"><img src="/assets/img/feat-prg.png" alt="PRG Pattern" loading="lazy"></div>
-        <h3>PRG Pattern</h3>
-        <p>POST thanh cong se redirect ve route GET, tranh tao du lieu trung khi refresh trinh duyet.</p>
-    </div>
-    <div class="feature-card">
-        <div class="feature-icon"><img src="/assets/img/feat-antispam.png" alt="Chong spam" loading="lazy"></div>
-        <h3>Chong spam</h3>
-        <p>Honeypot an + rate limit bang session chan submit qua nhanh (duoi 5 giay).</p>
-    </div>
-    <div class="feature-card">
-        <div class="feature-icon"><img src="/assets/img/feat-secure-login.png" alt="Dang nhap an toan" loading="lazy"></div>
-        <h3>Dang nhap an toan</h3>
-        <p>password_hash/verify, session_regenerate_id sau login, idle timeout va logout sach.</p>
-    </div>
-</section>
-
-<section class="info-panel">
-    <h2>Cac chu de workshop</h2>
-    <div class="topic-chips">
-        <?php foreach (\WorkshopHub\Controllers\RegistrationController::TOPICS as $topic): ?>
-            <span class="chip"><?= h($topic) ?></span>
-        <?php endforeach; ?>
-    </div>
-</section>
+    <?php endforeach; ?>
+</div>

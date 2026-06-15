@@ -38,10 +38,11 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="topic">Chu de workshop <span class="req">*</span></label>
+                <?php $selectedTopic = old('topic') ?: ($defaultTopic ?? ''); ?>
                 <select id="topic" name="topic" class="<?= field_error('topic') ? 'is-invalid' : '' ?>">
                     <option value="">-- Chon chu de --</option>
                     <?php foreach ($topics as $t): ?>
-                        <option value="<?= h($t) ?>" <?= old('topic') === $t ? 'selected' : '' ?>><?= h($t) ?></option>
+                        <option value="<?= h($t) ?>" <?= $selectedTopic === $t ? 'selected' : '' ?>><?= h($t) ?></option>
                     <?php endforeach; ?>
                 </select>
                 <?php if ($e = field_error('topic')): ?><small class="err"><?= h($e) ?></small><?php endif; ?>

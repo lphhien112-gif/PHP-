@@ -17,6 +17,7 @@ $is = fn(string $p) => $currentPath === $p ? 'active' : '';
 // Breadcrumb theo route.
 $crumb = match (true) {
     $currentPath === '/'                       => 'Trang chu',
+    str_starts_with((string)$currentPath, '/workshop/details')     => 'Chi tiet Workshop',
     str_starts_with((string)$currentPath, '/registrations/create') => 'Dang ky moi',
     str_starts_with((string)$currentPath, '/registrations')        => 'Danh sach dang ky',
     str_starts_with((string)$currentPath, '/dashboard')            => 'Bang dieu khien',

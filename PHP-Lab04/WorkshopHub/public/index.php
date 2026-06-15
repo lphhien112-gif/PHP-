@@ -50,6 +50,7 @@ $dashboard    = new DashboardController();
 // 5. Khai bao routes tap trung.
 // --- Trang chu ---
 $router->get('/', [$home, 'index']);
+$router->get('/workshop/details', [$home, 'workshopDetails']);
 
 // --- Resource chinh: registration ---
 $router->get('/registrations',        [$registration, 'index']);
