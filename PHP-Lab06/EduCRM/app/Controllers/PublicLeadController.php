@@ -40,13 +40,13 @@ class PublicLeadController
         if (trim((string) ($_POST['website'] ?? '')) !== '') {
             log_app('warning', 'Honeypot triggered on public lead form from IP=' . ($_SERVER['REMOTE_ADDR'] ?? '?'));
             // Gia vo thanh cong de bot khong biet bi chan.
-            flash('success', 'Cam on ban, chung toi se lien he som!');
+            flash('success', 'Cảm ơn bạn, chúng tôi sẽ liên hệ sớm!');
             redirect('/public-leads/create');
         }
 
         // --- 2. Rate limit theo session: chong submit lien tuc ---
         if ($this->isRateLimited()) {
-            flash('error', 'Ban gui qua nhanh. Vui long thu lai sau vai phut.');
+            flash('error', 'Bạn gửi quá nhanh. Vui lòng thử lại sau vài phút.');
             set_old($_POST, []);
             redirect('/public-leads/create');
         }
@@ -65,13 +65,13 @@ class PublicLeadController
 
         if (!$result['ok']) {
             set_old($input, $result['errors']);
-            flash('error', 'Vui long kiem tra lai thong tin da nhap.');
+            flash('error', 'Vui lòng kiểm tra lại thông tin đã nhập.');
             redirect('/public-leads/create');
         }
 
         // --- 4. Thanh cong: ghi moc thoi gian (rate limit) + PRG ---
         $this->recordSubmission();
-        flash('success', 'Dang ky thanh cong! Chung toi se lien he tu van trong 24h.');
+        flash('success', 'Đăng ký thành công! Chúng tôi sẽ liên hệ tư vấn trong 24h.');
         redirect('/public-leads/create');
     }
 

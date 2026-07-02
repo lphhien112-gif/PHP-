@@ -17,41 +17,41 @@ $actionClass = function (string $a): string {
 };
 ?>
 <div class="page-head">
-    <div><h1>Nhat ky hoat dong</h1><div class="sub">Tong <?= (int)$total ?> ban ghi - ai lam gi luc nao</div></div>
+    <div><h1>Nhật ký hoạt động</h1><div class="sub">Tổng <?= (int)$total ?> bản ghi - ai làm gì lúc nào</div></div>
 </div>
 
 <div class="card">
     <form method="get" action="/audit" class="toolbar">
         <select name="user_id">
-            <option value="">-- Tat ca nguoi dung --</option>
+            <option value="">-- Tất cả người dùng --</option>
             <?php foreach ($userOptions as $u): ?>
                 <option value="<?= (int)$u['id'] ?>" <?= (string)$f_user === (string)$u['id'] ? 'selected' : '' ?>><?= e($u['username']) ?></option>
             <?php endforeach; ?>
         </select>
         <select name="action">
-            <option value="">-- Tat ca hanh dong --</option>
+            <option value="">-- Tất cả hành động --</option>
             <?php foreach ($actions as $a): ?>
                 <option value="<?= e($a) ?>" <?= $f_action === $a ? 'selected' : '' ?>><?= e($a) ?></option>
             <?php endforeach; ?>
         </select>
         <select name="entity">
-            <option value="">-- Tat ca doi tuong --</option>
+            <option value="">-- Tất cả đối tượng --</option>
             <?php foreach ($entities as $en): ?>
                 <option value="<?= e($en) ?>" <?= $f_entity === $en ? 'selected' : '' ?>><?= e($en) ?></option>
             <?php endforeach; ?>
         </select>
-        <button type="submit" class="btn btn-primary btn-sm">Loc</button>
-        <a href="/audit" class="btn btn-ghost btn-sm">Xoa loc</a>
+        <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
+        <a href="/audit" class="btn btn-ghost btn-sm">Xóa lọc</a>
     </form>
 
     <?php if (empty($rows)): ?>
-        <div class="empty"><img src="/assets/img/empty-data.png" alt="Empty" loading="lazy" style="width:180px;margin:0 auto 12px;display:block;">Chua co nhat ky nao khop dieu kien.</div>
+        <div class="empty"><img src="/assets/img/empty-data.png" alt="Empty" loading="lazy" style="width:180px;margin:0 auto 12px;display:block;">Chưa có nhật ký nào khớp điều kiện.</div>
     <?php else: ?>
     <table>
         <thead>
             <tr>
-                <th>Thoi gian</th><th>Nguoi dung</th><th>Hanh dong</th>
-                <th>Doi tuong</th><th>Mo ta</th><th>IP</th>
+                <th>Thời gian</th><th>Người dùng</th><th>Hành động</th>
+                <th>Đối tượng</th><th>Mô tả</th><th>IP</th>
             </tr>
         </thead>
         <tbody>
@@ -69,7 +69,7 @@ $actionClass = function (string $a): string {
     </table>
 
     <div class="pagination">
-        <?php if ($page > 1): ?><a href="<?= e($pageLink($page - 1)) ?>">&laquo; Truoc</a><?php endif; ?>
+        <?php if ($page > 1): ?><a href="<?= e($pageLink($page - 1)) ?>">&laquo; Trước</a><?php endif; ?>
         <?php for ($p = 1; $p <= $totalPages; $p++): ?>
             <?php if ($p === $page): ?><span class="current"><?= $p ?></span>
             <?php else: ?><a href="<?= e($pageLink($p)) ?>"><?= $p ?></a><?php endif; ?>

@@ -1,18 +1,18 @@
 <?php /** EduCRM - F2: thung rac Lead (da xoa mem). */ ?>
 <div class="page-head">
-    <div><h1>Thung rac Lead</h1><div class="sub"><?= count($rows) ?> lead da xoa mem</div></div>
-    <a href="/leads" class="btn btn-ghost">&laquo; Ve danh sach</a>
+    <div><h1>Thùng rác Lead</h1><div class="sub"><?= count($rows) ?> lead đã xóa mềm</div></div>
+    <a href="/leads" class="btn btn-ghost">&laquo; Về danh sách</a>
 </div>
 
 <div class="card">
     <?php if (empty($rows)): ?>
-        <div class="empty"><img src="/assets/img/empty-data.png" alt="Empty" loading="lazy" style="width:180px;margin:0 auto 12px;display:block;">Thung rac trong.</div>
+        <div class="empty"><img src="/assets/img/empty-data.png" alt="Empty" loading="lazy" style="width:180px;margin:0 auto 12px;display:block;">Thùng rác trống.</div>
     <?php else: ?>
     <table>
         <thead>
             <tr>
-                <th>ID</th><th>Ho ten</th><th>Email</th><th>Khoa hoc</th>
-                <th>Trang thai</th><th>Da xoa luc</th><th>Hanh dong</th>
+                <th>ID</th><th>Họ tên</th><th>Email</th><th>Khóa học</th>
+                <th>Trạng thái</th><th>Đã xóa lúc</th><th>Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -28,13 +28,13 @@
                     <form method="post" action="/leads/restore" style="margin:0;">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
-                        <button type="submit" class="btn btn-ghost btn-sm">Khoi phuc</button>
+                        <button type="submit" class="btn btn-ghost btn-sm">Khôi phục</button>
                     </form>
                     <?php if (can('force_delete')): ?>
-                    <form method="post" action="/leads/force-delete" onsubmit="return confirm('Xoa VINH VIEN lead nay? Khong the hoan tac.');" style="margin:0;">
+                    <form method="post" action="/leads/force-delete" onsubmit="return confirm('Xóa VĨNH VIỄN lead này? Không thể hoàn tác.');" style="margin:0;">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
-                        <button type="submit" class="btn btn-danger btn-sm">Xoa vinh vien</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Xóa vĩnh viễn</button>
                     </form>
                     <?php endif; ?>
                 </td>

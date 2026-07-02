@@ -36,7 +36,7 @@ class AuthController
     public function handleLogin(): void
     {
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF). Vui long thu lai.');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF). Vui lòng thử lại.');
             redirect('/login');
         }
 
@@ -59,7 +59,7 @@ class AuthController
             $this->auth->issueRememberToken((int) $result['user']['id']);
         }
 
-        flash('success', 'Xin chao ' . $result['user']['full_name'] . ', dang nhap thanh cong!');
+        flash('success', 'Xin chào ' . $result['user']['full_name'] . ', đăng nhập thành công!');
         redirect('/dashboard');
     }
 
@@ -69,7 +69,7 @@ class AuthController
         $this->auth->logout();
         // Tao session moi de mang flash thong bao.
         session_start();
-        flash('success', 'Ban da dang xuat thanh cong.');
+        flash('success', 'Bạn đã đăng xuất thành công.');
         redirect('/login');
     }
 }

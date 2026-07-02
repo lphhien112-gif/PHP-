@@ -149,48 +149,48 @@ class LeadService
 
         $name = trim((string) ($input['full_name'] ?? ''));
         if ($name === '') {
-            $errors['full_name'] = 'Vui long nhap ho ten.';
+            $errors['full_name'] = 'Vui lòng nhập họ tên.';
         } elseif (mb_strlen($name) > 120) {
-            $errors['full_name'] = 'Ho ten toi da 120 ky tu.';
+            $errors['full_name'] = 'Họ tên tối đa 120 ký tự.';
         }
 
         $email = trim((string) ($input['email'] ?? ''));
         if ($email === '') {
-            $errors['email'] = 'Vui long nhap email.';
+            $errors['email'] = 'Vui lòng nhập email.';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'Email khong dung dinh dang.';
+            $errors['email'] = 'Email không đúng định dạng.';
         } elseif (mb_strlen($email) > 150) {
-            $errors['email'] = 'Email toi da 150 ky tu.';
+            $errors['email'] = 'Email tối đa 150 ký tự.';
         }
 
         $phone = trim((string) ($input['phone'] ?? ''));
         if ($phone === '') {
-            $errors['phone'] = 'Vui long nhap so dien thoai.';
+            $errors['phone'] = 'Vui lòng nhập số điện thoại.';
         } elseif (!preg_match('/^0\d{9,10}$/', $phone)) {
-            $errors['phone'] = 'So dien thoai phai gom 10-11 chu so, bat dau bang 0.';
+            $errors['phone'] = 'Số điện thoại phải gồm 10-11 chữ số, bắt đầu bằng 0.';
         }
 
         $course = trim((string) ($input['course'] ?? ''));
         if (!in_array($course, course_names(), true)) {
-            $errors['course'] = 'Vui long chon mot khoa hoc hop le.';
+            $errors['course'] = 'Vui lòng chọn một khóa học hợp lệ.';
         }
 
         $source = trim((string) ($input['source'] ?? 'website'));
         if (!in_array($source, config('lead_sources', []), true)) {
-            $errors['source'] = 'Nguon lead khong hop le.';
+            $errors['source'] = 'Nguồn lead không hợp lệ.';
         }
 
         // status chi bat buoc o form noi bo (create/edit), public form mac dinh 'new'
         if (isset($input['status'])) {
             $status = trim((string) $input['status']);
             if (!in_array($status, config('lead_statuses', []), true)) {
-                $errors['status'] = 'Trang thai khong hop le.';
+                $errors['status'] = 'Trạng thái không hợp lệ.';
             }
         }
 
         $note = (string) ($input['note'] ?? '');
         if (mb_strlen($note) > 500) {
-            $errors['note'] = 'Ghi chu toi da 500 ky tu.';
+            $errors['note'] = 'Ghi chú tối đa 500 ký tự.';
         }
 
         return $errors;
@@ -226,7 +226,7 @@ class LeadService
         $data = $this->sanitize($input, $defaultStatus);
         try {
             $id = $this->repo->create($data);
-            $this->audit->log('create', 'lead', $id, 'Tao lead #' . $id . ' ' . $data['full_name']);
+            $this->audit->log('create', 'lead', $id, 'Tạo lead #' . $id . ' ' . $data['full_name']);
             return ['ok' => true, 'id' => $id];
         } catch (DuplicateRecordException $e) {
             return ['ok' => false, 'errors' => [$e->field() => $e->getMessage()]];
@@ -243,7 +243,7 @@ class LeadService
         $data = $this->sanitize($input, 'new');
         try {
             $this->repo->update($id, $data);
-            $this->audit->log('update', 'lead', $id, 'Cap nhat lead #' . $id);
+            $this->audit->log('update', 'lead', $id, 'Cập nhật lead #' . $id);
             return ['ok' => true];
         } catch (DuplicateRecordException $e) {
             return ['ok' => false, 'errors' => [$e->field() => $e->getMessage()]];
@@ -257,7 +257,7 @@ class LeadService
     {
         $n = $this->repo->bulkSoftDelete($ids);
         if ($n > 0) {
-            $this->audit->log('delete', 'lead', null, 'Xoa mem hang loat ' . $n . ' lead');
+            $this->audit->log('delete', 'lead', null, 'Xóa mềm hàng loạt ' . $n . ' lead');
         }
         return $n;
     }
@@ -272,7 +272,7 @@ class LeadService
         }
         $n = $this->repo->bulkUpdateStatus($ids, $status);
         if ($n > 0) {
-            $this->audit->log('update', 'lead', null, 'Doi trang thai hang loat ' . $n . ' lead -> ' . $status);
+            $this->audit->log('update', 'lead', null, 'Đổi trạng thái hàng loạt ' . $n . ' lead -> ' . $status);
         }
         return $n;
     }
@@ -281,21 +281,21 @@ class LeadService
     public function delete(int $id): void
     {
         $this->repo->softDelete($id);
-        $this->audit->log('delete', 'lead', $id, 'Xoa mem lead #' . $id);
+        $this->audit->log('delete', 'lead', $id, 'Xóa mềm lead #' . $id);
     }
 
     /** F2: khoi phuc lead da xoa mem. */
     public function restore(int $id): void
     {
         $this->repo->restore($id);
-        $this->audit->log('restore', 'lead', $id, 'Khoi phuc lead #' . $id);
+        $this->audit->log('restore', 'lead', $id, 'Khôi phục lead #' . $id);
     }
 
     /** F2: xoa VINH VIEN (chi goi khi controller da xac thuc role admin). */
     public function forceDelete(int $id): void
     {
         $this->repo->forceDelete($id);
-        $this->audit->log('delete', 'lead', $id, 'Xoa vinh vien lead #' . $id);
+        $this->audit->log('delete', 'lead', $id, 'Xóa vĩnh viễn lead #' . $id);
     }
 
     /**
@@ -311,10 +311,10 @@ class LeadService
     {
         $lead = $this->repo->find($leadId);
         if (!$lead) {
-            return ['ok' => false, 'errors' => ['lead_id' => 'Khong tim thay lead.']];
+            return ['ok' => false, 'errors' => ['lead_id' => 'Không tìm thấy lead.']];
         }
         if (in_array($lead['status'], ['converted', 'lost'], true)) {
-            return ['ok' => false, 'errors' => ['lead_id' => 'Lead nay da chuyen doi hoac da mat, khong the tao phieu.']];
+            return ['ok' => false, 'errors' => ['lead_id' => 'Lead này đã chuyển đổi hoặc đã mất, không thể tạo phiếu.']];
         }
 
         $errors = $validate($input);
@@ -333,7 +333,7 @@ class LeadService
             // converted/lost. Neu 0 dong (double-submit) -> nem de rollback,
             // tranh tao 2 phieu cho cung 1 lead.
             if (!$this->repo->markConvertedGuarded($leadId)) {
-                throw new ConvertConflictException('Lead nay vua duoc chuyen doi - khong the tao phieu lan nua.');
+                throw new ConvertConflictException('Lead này vừa được chuyển đổi - không thể tạo phiếu lần nữa.');
             }
             $db->commit();
 
@@ -341,7 +341,7 @@ class LeadService
                 'convert',
                 'lead',
                 $leadId,
-                'Chuyen lead #' . $leadId . ' thanh phieu ' . $data['order_code'] . ' (order #' . $orderId . ')'
+                'Chuyển lead #' . $leadId . ' thành phiếu ' . $data['order_code'] . ' (order #' . $orderId . ')'
             );
             return ['ok' => true, 'id' => $orderId];
         } catch (DuplicateRecordException $e) {

@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($title ?? 'Hoa don') ?> - EduCRM</title>
+    <title><?= e($title ?? 'Hóa đơn') ?> - EduCRM</title>
     <link rel="icon" type="image/png" href="/assets/img/favicon-32.png">
     <style>
         :root { --brand:#4f46e5; --ink:#111827; --muted:#6b7280; --border:#e5e7eb; }

@@ -7,14 +7,14 @@ $user = current_user();
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 // Breadcrumb don gian theo segment dau.
 $crumb = match (true) {
-    str_starts_with((string)$path, '/dashboard')     => 'Tong quan',
-    str_starts_with((string)$path, '/analytics')     => 'Thong ke',
-    str_starts_with((string)$path, '/courses')        => 'Khoa hoc',
-    str_starts_with((string)$path, '/leads/trash')    => 'Lead / Thung rac',
+    str_starts_with((string)$path, '/dashboard')     => 'Tổng quan',
+    str_starts_with((string)$path, '/analytics')     => 'Thống kê',
+    str_starts_with((string)$path, '/courses')        => 'Khóa học',
+    str_starts_with((string)$path, '/leads/trash')    => 'Lead / Thùng rác',
     str_starts_with((string)$path, '/leads')          => 'Lead',
-    str_starts_with((string)$path, '/orders/trash')   => 'Phieu hoc phi / Thung rac',
-    str_starts_with((string)$path, '/orders')         => 'Phieu hoc phi',
-    str_starts_with((string)$path, '/audit')          => 'Nhat ky hoat dong',
+    str_starts_with((string)$path, '/orders/trash')   => 'Phiếu học phí / Thùng rác',
+    str_starts_with((string)$path, '/orders')         => 'Phiếu học phí',
+    str_starts_with((string)$path, '/audit')          => 'Nhật ký hoạt động',
     default                                            => 'EduCRM',
 };
 ?><!DOCTYPE html>
@@ -31,7 +31,7 @@ $crumb = match (true) {
     <div class="app-main">
         <header class="topbar">
             <div class="topbar-inner">
-                <button class="topbar-burger" id="topbarBurger" aria-label="Mo menu" aria-controls="sidebar" type="button">
+                <button class="topbar-burger" id="topbarBurger" aria-label="Mở menu" aria-controls="sidebar" type="button">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div class="crumb">
@@ -40,7 +40,7 @@ $crumb = match (true) {
                     <span class="crumb-cur"><?= e($crumb) ?></span>
                 </div>
                 <div class="topbar-actions">
-                    <span class="topbar-hi">Xin chao, <strong><?= e($user['full_name'] ?? 'Khach') ?></strong></span>
+                    <span class="topbar-hi">Xin chào, <strong><?= e($user['full_name'] ?? 'Khách') ?></strong></span>
                 </div>
             </div>
         </header>
@@ -80,7 +80,7 @@ $crumb = match (true) {
             // Doi nhan cho nut primary (create/edit) sang "Dang luu..." (hoac data-loading).
             if (btn.classList.contains('btn-primary') && btn.tagName === 'BUTTON') {
                 btn.dataset.origLabel = btn.textContent;
-                btn.textContent = btn.getAttribute('data-loading') || 'Dang luu...';
+                btn.textContent = btn.getAttribute('data-loading') || 'Đang lưu...';
             }
             btn.classList.add('is-loading');
             // Khoa nut SAU khi submit da khoi chay -> gia tri nut van duoc gui di.

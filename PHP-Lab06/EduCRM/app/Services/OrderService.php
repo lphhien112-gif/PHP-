@@ -160,43 +160,43 @@ class OrderService
 
         $code = trim((string) ($input['order_code'] ?? ''));
         if ($code === '') {
-            $errors['order_code'] = 'Vui long nhap ma phieu.';
+            $errors['order_code'] = 'Vui lòng nhập mã phiếu.';
         } elseif (!preg_match('/^[A-Za-z0-9\-]{4,30}$/', $code)) {
-            $errors['order_code'] = 'Ma phieu chi gom chu, so va dau gach, dai 4-30 ky tu.';
+            $errors['order_code'] = 'Mã phiếu chỉ gồm chữ, số và dấu gạch, dài 4-30 ký tự.';
         }
 
         $leadId = (int) ($input['lead_id'] ?? 0);
         if ($leadId <= 0 || !$this->leads->find($leadId)) {
-            $errors['lead_id'] = 'Vui long chon hoc vien hop le.';
+            $errors['lead_id'] = 'Vui lòng chọn học viên hợp lệ.';
         }
 
         $course = trim((string) ($input['course'] ?? ''));
         if (!in_array($course, course_names(), true)) {
-            $errors['course'] = 'Vui long chon khoa hoc hop le.';
+            $errors['course'] = 'Vui lòng chọn khóa học hợp lệ.';
         }
 
         $amountRaw = (string) ($input['amount'] ?? '');
         if ($amountRaw === '' || !is_numeric($amountRaw)) {
-            $errors['amount'] = 'Hoc phi phai la so.';
+            $errors['amount'] = 'Học phí phải là số.';
         } elseif ((float) $amountRaw < 0) {
-            $errors['amount'] = 'Hoc phi khong duoc am.';
+            $errors['amount'] = 'Học phí không được âm.';
         } elseif ((float) $amountRaw > 999999999) {
-            $errors['amount'] = 'Hoc phi vuot qua gioi han cho phep.';
+            $errors['amount'] = 'Học phí vượt quá giới hạn cho phép.';
         }
 
         $status = trim((string) ($input['status'] ?? 'pending'));
         if (!in_array($status, config('order_statuses', []), true)) {
-            $errors['status'] = 'Trang thai phieu khong hop le.';
+            $errors['status'] = 'Trạng thái phiếu không hợp lệ.';
         }
 
         $paid = trim((string) ($input['paid_at'] ?? ''));
         if ($paid !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $paid)) {
-            $errors['paid_at'] = 'Ngay thanh toan khong dung dinh dang (YYYY-MM-DD).';
+            $errors['paid_at'] = 'Ngày thanh toán không đúng định dạng (YYYY-MM-DD).';
         }
 
         $note = (string) ($input['note'] ?? '');
         if (mb_strlen($note) > 500) {
-            $errors['note'] = 'Ghi chu toi da 500 ky tu.';
+            $errors['note'] = 'Ghi chú tối đa 500 ký tự.';
         }
 
         return $errors;
@@ -224,7 +224,7 @@ class OrderService
         $data = $this->sanitize($input);
         try {
             $id = $this->repo->create($data);
-            $this->audit->log('create', 'order', $id, 'Tao phieu ' . $data['order_code']);
+            $this->audit->log('create', 'order', $id, 'Tạo phiếu ' . $data['order_code']);
             return ['ok' => true, 'id' => $id];
         } catch (DuplicateRecordException $e) {
             return ['ok' => false, 'errors' => [$e->field() => $e->getMessage()]];
@@ -240,7 +240,7 @@ class OrderService
         $data = $this->sanitize($input);
         try {
             $this->repo->update($id, $data);
-            $this->audit->log('update', 'order', $id, 'Cap nhat phieu #' . $id);
+            $this->audit->log('update', 'order', $id, 'Cập nhật phiếu #' . $id);
             return ['ok' => true];
         } catch (DuplicateRecordException $e) {
             return ['ok' => false, 'errors' => [$e->field() => $e->getMessage()]];
@@ -252,7 +252,7 @@ class OrderService
     {
         $n = $this->repo->bulkSoftDelete($ids);
         if ($n > 0) {
-            $this->audit->log('delete', 'order', null, 'Xoa mem hang loat ' . $n . ' phieu');
+            $this->audit->log('delete', 'order', null, 'Xóa mềm hàng loạt ' . $n . ' phiếu');
         }
         return $n;
     }
@@ -265,7 +265,7 @@ class OrderService
         }
         $n = $this->repo->bulkUpdateStatus($ids, $status);
         if ($n > 0) {
-            $this->audit->log('update', 'order', null, 'Doi trang thai hang loat ' . $n . ' phieu -> ' . $status);
+            $this->audit->log('update', 'order', null, 'Đổi trạng thái hàng loạt ' . $n . ' phiếu -> ' . $status);
         }
         return $n;
     }
@@ -274,21 +274,21 @@ class OrderService
     public function delete(int $id): void
     {
         $this->repo->softDelete($id);
-        $this->audit->log('delete', 'order', $id, 'Xoa mem phieu #' . $id);
+        $this->audit->log('delete', 'order', $id, 'Xóa mềm phiếu #' . $id);
     }
 
     /** F2: khoi phuc phieu da xoa mem. */
     public function restore(int $id): void
     {
         $this->repo->restore($id);
-        $this->audit->log('restore', 'order', $id, 'Khoi phuc phieu #' . $id);
+        $this->audit->log('restore', 'order', $id, 'Khôi phục phiếu #' . $id);
     }
 
     /** F2: xoa VINH VIEN (chi goi khi controller da xac thuc role admin). */
     public function forceDelete(int $id): void
     {
         $this->repo->forceDelete($id);
-        $this->audit->log('delete', 'order', $id, 'Xoa vinh vien phieu #' . $id);
+        $this->audit->log('delete', 'order', $id, 'Xóa vĩnh viễn phiếu #' . $id);
     }
 
     /** Sinh goi y ma phieu moi: ORD-2026-XXXX. */

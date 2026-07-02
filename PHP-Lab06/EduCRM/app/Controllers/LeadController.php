@@ -46,18 +46,18 @@ class LeadController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF). Vui long thu lai.');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF). Vui lòng thử lại.');
             redirect('/leads/create');
         }
 
         $result = $this->leads->create($_POST, $_POST['status'] ?? 'new');
         if (!$result['ok']) {
             set_old($_POST, $result['errors']);
-            flash('error', 'Khong the tao lead. Vui long kiem tra lai.');
+            flash('error', 'Không thể tạo lead. Vui lòng kiểm tra lại.');
             redirect('/leads/create');
         }
 
-        flash('success', 'Da them lead moi thanh cong.');
+        flash('success', 'Đã thêm lead mới thành công.');
         redirect('/leads');
     }
 
@@ -68,7 +68,7 @@ class LeadController
         $id   = (int) ($_GET['id'] ?? 0);
         $lead = $this->leads->find($id);
         if (!$lead) {
-            flash('error', 'Khong tim thay lead.');
+            flash('error', 'Không tìm thấy lead.');
             redirect('/leads');
         }
         echo render('leads/edit', ['title' => 'Sua Lead', 'lead' => $lead]);
@@ -80,23 +80,23 @@ class LeadController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/leads');
         }
         $id = (int) ($_POST['id'] ?? 0);
         if (!$this->leads->find($id)) {
-            flash('error', 'Khong tim thay lead.');
+            flash('error', 'Không tìm thấy lead.');
             redirect('/leads');
         }
 
         $result = $this->leads->update($id, $_POST);
         if (!$result['ok']) {
             set_old($_POST, $result['errors']);
-            flash('error', 'Cap nhat that bai. Vui long kiem tra lai.');
+            flash('error', 'Cập nhật thất bại. Vui lòng kiểm tra lại.');
             redirect('/leads/edit?id=' . $id);
         }
 
-        flash('success', 'Cap nhat lead thanh cong.');
+        flash('success', 'Cập nhật lead thành công.');
         redirect('/leads');
     }
 
@@ -105,14 +105,14 @@ class LeadController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/leads');
         }
         // F11: soft-delete - admin + manager (server-side enforce).
         require_can('soft_delete', '/leads');
         $id = (int) ($_POST['id'] ?? 0);
         $this->leads->delete($id);
-        flash('success', 'Da chuyen lead vao thung rac.');
+        flash('success', 'Đã chuyển lead vào thùng rác.');
         redirect('/leads');
     }
 
@@ -124,7 +124,7 @@ class LeadController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/leads');
         }
 
@@ -132,25 +132,25 @@ class LeadController
         $action = (string) ($_POST['bulk_action'] ?? '');
 
         if (empty($ids)) {
-            flash('error', 'Chua chon dong nao.');
+            flash('error', 'Chưa chọn dòng nào.');
             redirect('/leads');
         }
 
         if ($action === 'delete') {
             require_can('soft_delete', '/leads'); // F11
             $n = $this->leads->bulkDelete($ids);
-            flash('success', 'Da chuyen ' . $n . ' lead vao thung rac.');
+            flash('success', 'Đã chuyển ' . $n . ' lead vào thùng rác.');
         } elseif ($action === 'status') {
             require_can('status_change', '/leads'); // F11: admin + manager
             $status = (string) ($_POST['bulk_status'] ?? '');
             $n = $this->leads->bulkStatus($ids, $status);
             if ($n > 0) {
-                flash('success', 'Da doi trang thai ' . $n . ' lead -> ' . $status . '.');
+                flash('success', 'Đã đổi trạng thái ' . $n . ' lead -> ' . $status . '.');
             } else {
-                flash('error', 'Trang thai khong hop le hoac khong co dong nao thay doi.');
+                flash('error', 'Trạng thái không hợp lệ hoặc không có dòng nào thay đổi.');
             }
         } else {
-            flash('error', 'Hanh dong hang loat khong hop le.');
+            flash('error', 'Hành động hàng loạt không hợp lệ.');
         }
         redirect('/leads');
     }
@@ -172,16 +172,16 @@ class LeadController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/leads/trash');
         }
         require_can('restore', '/leads'); // F11: admin + manager
         $id = (int) ($_POST['id'] ?? 0);
         if ($this->leads->findWithTrashed($id)) {
             $this->leads->restore($id);
-            flash('success', 'Da khoi phuc lead.');
+            flash('success', 'Đã khôi phục lead.');
         } else {
-            flash('error', 'Khong tim thay lead can khoi phuc.');
+            flash('error', 'Không tìm thấy lead cần khôi phục.');
         }
         redirect('/leads/trash');
     }
@@ -191,13 +191,13 @@ class LeadController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/leads/trash');
         }
         require_can('force_delete', '/leads'); // F11: chi admin
         $id = (int) ($_POST['id'] ?? 0);
         $this->leads->forceDelete($id);
-        flash('success', 'Da xoa vinh vien lead.');
+        flash('success', 'Đã xóa vĩnh viễn lead.');
         redirect('/leads/trash');
     }
 
@@ -208,11 +208,11 @@ class LeadController
         $id   = (int) ($_GET['id'] ?? 0);
         $lead = $this->leads->find($id);
         if (!$lead) {
-            flash('error', 'Khong tim thay lead.');
+            flash('error', 'Không tìm thấy lead.');
             redirect('/leads');
         }
         if (in_array($lead['status'], ['converted', 'lost'], true)) {
-            flash('error', 'Lead nay da chuyen doi hoac da mat, khong the tao phieu.');
+            flash('error', 'Lead này đã chuyển đổi hoặc đã mất, không thể tạo phiếu.');
             redirect('/leads');
         }
 

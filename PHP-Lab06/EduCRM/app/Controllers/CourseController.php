@@ -42,7 +42,7 @@ class CourseController
         $id     = (int) ($_GET['id'] ?? 0);
         $detail = $this->courses->detail($id);
         if (!$detail) {
-            flash('error', 'Khong tim thay khoa hoc.');
+            flash('error', 'Không tìm thấy khóa học.');
             redirect('/courses');
         }
         echo render('courses/view', [
@@ -68,18 +68,18 @@ class CourseController
         require_login();
         require_can('manage_courses', '/courses');
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF). Vui long thu lai.');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF). Vui lòng thử lại.');
             redirect('/courses/create');
         }
 
         $result = $this->courses->create($_POST);
         if (!$result['ok']) {
             set_old($_POST, $result['errors']);
-            flash('error', 'Khong the tao khoa hoc. Vui long kiem tra lai.');
+            flash('error', 'Không thể tạo khóa học. Vui lòng kiểm tra lại.');
             redirect('/courses/create');
         }
 
-        flash('success', 'Da them khoa hoc moi thanh cong.');
+        flash('success', 'Đã thêm khóa học mới thành công.');
         redirect('/courses');
     }
 
@@ -91,7 +91,7 @@ class CourseController
         $id     = (int) ($_GET['id'] ?? 0);
         $course = $this->courses->find($id);
         if (!$course) {
-            flash('error', 'Khong tim thay khoa hoc.');
+            flash('error', 'Không tìm thấy khóa học.');
             redirect('/courses');
         }
         echo render('courses/edit', ['title' => 'Sua khoa hoc', 'course' => $course]);
@@ -104,23 +104,23 @@ class CourseController
         require_login();
         require_can('manage_courses', '/courses');
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/courses');
         }
         $id = (int) ($_POST['id'] ?? 0);
         if (!$this->courses->find($id)) {
-            flash('error', 'Khong tim thay khoa hoc.');
+            flash('error', 'Không tìm thấy khóa học.');
             redirect('/courses');
         }
 
         $result = $this->courses->update($id, $_POST);
         if (!$result['ok']) {
             set_old($_POST, $result['errors']);
-            flash('error', 'Cap nhat that bai. Vui long kiem tra lai.');
+            flash('error', 'Cập nhật thất bại. Vui lòng kiểm tra lại.');
             redirect('/courses/edit?id=' . $id);
         }
 
-        flash('success', 'Cap nhat khoa hoc thanh cong.');
+        flash('success', 'Cập nhật khóa học thành công.');
         redirect('/courses');
     }
 
@@ -130,15 +130,15 @@ class CourseController
         require_login();
         require_can('manage_courses', '/courses');
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/courses');
         }
         $id = (int) ($_POST['id'] ?? 0);
         if ($this->courses->find($id)) {
             $this->courses->toggleActive($id);
-            flash('success', 'Da doi trang thai hien thi khoa hoc.');
+            flash('success', 'Đã đổi trạng thái hiển thị khóa học.');
         } else {
-            flash('error', 'Khong tim thay khoa hoc.');
+            flash('error', 'Không tìm thấy khóa học.');
         }
         redirect('/courses');
     }
@@ -149,12 +149,12 @@ class CourseController
         require_login();
         require_can('manage_courses', '/courses');
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/courses');
         }
         $id = (int) ($_POST['id'] ?? 0);
         $this->courses->delete($id);
-        flash('success', 'Da chuyen khoa hoc vao thung rac.');
+        flash('success', 'Đã chuyển khóa học vào thùng rác.');
         redirect('/courses');
     }
 
@@ -176,15 +176,15 @@ class CourseController
         require_login();
         require_can('manage_courses', '/courses');
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/courses/trash');
         }
         $id = (int) ($_POST['id'] ?? 0);
         if ($this->courses->findWithTrashed($id)) {
             $this->courses->restore($id);
-            flash('success', 'Da khoi phuc khoa hoc.');
+            flash('success', 'Đã khôi phục khóa học.');
         } else {
-            flash('error', 'Khong tim thay khoa hoc can khoi phuc.');
+            flash('error', 'Không tìm thấy khóa học cần khôi phục.');
         }
         redirect('/courses/trash');
     }
@@ -195,12 +195,12 @@ class CourseController
         require_login();
         require_can('force_delete', '/courses/trash');
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/courses/trash');
         }
         $id = (int) ($_POST['id'] ?? 0);
         $this->courses->forceDelete($id);
-        flash('success', 'Da xoa vinh vien khoa hoc.');
+        flash('success', 'Đã xóa vĩnh viễn khóa học.');
         redirect('/courses/trash');
     }
 

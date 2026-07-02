@@ -21,84 +21,84 @@ $exportLink = '/leads/export?' . http_build_query($baseParams);
 
 // F8: cac chip filter dang ap dung.
 $chips = [];
-if ($q !== '')            { $chips[] = ['Tu khoa: ' . $q, '/leads?' . http_build_query(array_merge($baseParams, ['q' => '']))]; }
-if ($status !== '')       { $chips[] = ['Trang thai: ' . $status, '/leads?' . http_build_query(array_merge($baseParams, ['status' => '']))]; }
-if ($created_from !== '') { $chips[] = ['Tu ngay: ' . $created_from, '/leads?' . http_build_query(array_merge($baseParams, ['created_from' => '']))]; }
-if ($created_to !== '')   { $chips[] = ['Den ngay: ' . $created_to, '/leads?' . http_build_query(array_merge($baseParams, ['created_to' => '']))]; }
+if ($q !== '')            { $chips[] = ['Từ khóa: ' . $q, '/leads?' . http_build_query(array_merge($baseParams, ['q' => '']))]; }
+if ($status !== '')       { $chips[] = ['Trạng thái: ' . $status, '/leads?' . http_build_query(array_merge($baseParams, ['status' => '']))]; }
+if ($created_from !== '') { $chips[] = ['Từ ngày: ' . $created_from, '/leads?' . http_build_query(array_merge($baseParams, ['created_from' => '']))]; }
+if ($created_to !== '')   { $chips[] = ['Đến ngày: ' . $created_to, '/leads?' . http_build_query(array_merge($baseParams, ['created_to' => '']))]; }
 ?>
 <div class="page-head">
-    <div><h1>Quan ly Lead</h1><div class="sub">Tong <?= (int)$total ?> lead</div></div>
+    <div><h1>Quản lý Lead</h1><div class="sub">Tổng <?= (int)$total ?> lead</div></div>
     <div class="head-actions">
-        <?php if (can('export')): ?><a href="<?= e($exportLink) ?>" class="btn btn-ghost">Xuat CSV</a><?php endif; ?>
-        <?php if (can('trash')): ?><a href="/leads/trash" class="btn btn-ghost">Thung rac</a><?php endif; ?>
-        <a href="/leads/create" class="btn btn-primary">+ Them lead</a>
+        <?php if (can('export')): ?><a href="<?= e($exportLink) ?>" class="btn btn-ghost">Xuất CSV</a><?php endif; ?>
+        <?php if (can('trash')): ?><a href="/leads/trash" class="btn btn-ghost">Thùng rác</a><?php endif; ?>
+        <a href="/leads/create" class="btn btn-primary">+ Thêm lead</a>
     </div>
 </div>
 
 <div class="card">
     <form method="get" action="/leads" class="toolbar">
-        <input type="text" name="q" class="grow" placeholder="Tim ten, email, SDT..." value="<?= e($q) ?>">
+        <input type="text" name="q" class="grow" placeholder="Tìm tên, email, SĐT..." value="<?= e($q) ?>">
         <select name="status">
-            <option value="">-- Tat ca trang thai --</option>
+            <option value="">-- Tất cả trạng thái --</option>
             <?php foreach (config('lead_statuses') as $st): ?>
                 <option value="<?= e($st) ?>" <?= $status === $st ? 'selected' : '' ?>><?= e($st) ?></option>
             <?php endforeach; ?>
         </select>
-        <label class="date-field">Tu <input type="date" name="created_from" value="<?= e($created_from) ?>"></label>
-        <label class="date-field">Den <input type="date" name="created_to" value="<?= e($created_to) ?>"></label>
-        <select name="per_page" title="So dong / trang">
+        <label class="date-field">Từ <input type="date" name="created_from" value="<?= e($created_from) ?>"></label>
+        <label class="date-field">Đến <input type="date" name="created_to" value="<?= e($created_to) ?>"></label>
+        <select name="per_page" title="Số dòng / trang">
             <?php foreach ($perPageOptions as $opt): ?>
                 <option value="<?= (int)$opt ?>" <?= (int)$perPage === (int)$opt ? 'selected' : '' ?>><?= (int)$opt ?>/trang</option>
             <?php endforeach; ?>
         </select>
-        <button type="submit" class="btn btn-primary btn-sm">Loc</button>
-        <a href="/leads" class="btn btn-ghost btn-sm">Xoa loc</a>
+        <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
+        <a href="/leads" class="btn btn-ghost btn-sm">Xóa lọc</a>
     </form>
 
     <?php if (!empty($chips)): ?>
     <div class="filter-chips">
-        <span class="muted">Dang loc:</span>
+        <span class="muted">Đang lọc:</span>
         <?php foreach ($chips as $c): ?>
             <a class="chip" href="<?= e($c[1]) ?>"><?= e($c[0]) ?> <span class="chip-x">&times;</span></a>
         <?php endforeach; ?>
-        <a class="chip chip-clear" href="/leads">Xoa tat ca</a>
+        <a class="chip chip-clear" href="/leads">Xóa tất cả</a>
     </div>
     <?php endif; ?>
 
     <?php if (empty($rows)): ?>
-        <div class="empty"><img src="/assets/img/empty-data.png" alt="Empty" style="width:200px;margin:0 auto 12px;display:block;">Khong co lead nao khop dieu kien.</div>
+        <div class="empty"><img src="/assets/img/empty-data.png" alt="Empty" style="width:200px;margin:0 auto 12px;display:block;">Không có lead nào khớp điều kiện.</div>
     <?php else: ?>
     <?php $bulkAllowed = can('soft_delete') || can('status_change'); ?>
     <form method="post" action="/leads/bulk" id="bulkForm" onsubmit="return eduConfirmBulk(this);">
         <?= csrf_field() ?>
         <?php if ($bulkAllowed): ?>
         <div class="bulk-bar" id="bulkBar">
-            <span class="bulk-count"><span id="bulkN">0</span> da chon</span>
+            <span class="bulk-count"><span id="bulkN">0</span> đã chọn</span>
             <?php if (can('status_change')): ?>
             <select name="bulk_status" id="bulkStatus">
-                <option value="">-- Doi trang thai --</option>
+                <option value="">-- Đổi trạng thái --</option>
                 <?php foreach (config('lead_statuses') as $st): ?>
                     <option value="<?= e($st) ?>"><?= e($st) ?></option>
                 <?php endforeach; ?>
             </select>
-            <button type="submit" name="bulk_action" value="status" class="btn btn-ghost btn-sm">Ap dung status</button>
+            <button type="submit" name="bulk_action" value="status" class="btn btn-ghost btn-sm">Áp dụng status</button>
             <?php endif; ?>
             <?php if (can('soft_delete')): ?>
-            <button type="submit" name="bulk_action" value="delete" class="btn btn-danger btn-sm">Xoa da chon</button>
+            <button type="submit" name="bulk_action" value="delete" class="btn btn-danger btn-sm">Xóa đã chọn</button>
             <?php endif; ?>
         </div>
         <?php endif; ?>
     <table>
         <thead>
             <tr>
-                <?php if ($bulkAllowed): ?><th style="width:34px;"><input type="checkbox" id="checkAll" title="Chon tat ca"></th><?php endif; ?>
+                <?php if ($bulkAllowed): ?><th style="width:34px;"><input type="checkbox" id="checkAll" title="Chọn tất cả"></th><?php endif; ?>
                 <th><a href="<?= e($sortLink('id')) ?>">ID<?= $arrow('id') ?></a></th>
-                <th><a href="<?= e($sortLink('full_name')) ?>">Ho ten<?= $arrow('full_name') ?></a></th>
+                <th><a href="<?= e($sortLink('full_name')) ?>">Họ tên<?= $arrow('full_name') ?></a></th>
                 <th><a href="<?= e($sortLink('email')) ?>">Email<?= $arrow('email') ?></a></th>
-                <th>SDT</th>
-                <th><a href="<?= e($sortLink('course')) ?>">Khoa hoc<?= $arrow('course') ?></a></th>
-                <th><a href="<?= e($sortLink('status')) ?>">Trang thai<?= $arrow('status') ?></a></th>
-                <th>Hanh dong</th>
+                <th>SĐT</th>
+                <th><a href="<?= e($sortLink('course')) ?>">Khóa học<?= $arrow('course') ?></a></th>
+                <th><a href="<?= e($sortLink('status')) ?>">Trạng thái<?= $arrow('status') ?></a></th>
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -113,11 +113,11 @@ if ($created_to !== '')   { $chips[] = ['Den ngay: ' . $created_to, '/leads?' . 
                 <td><span class="badge <?= e($r['status']) ?>"><?= e($r['status']) ?></span></td>
                 <td class="actions">
                     <?php if (in_array($r['status'], ['qualified', 'contacted'], true)): ?>
-                    <a href="/leads/convert?id=<?= (int)$r['id'] ?>" class="btn btn-primary btn-sm">Tao phieu thu</a>
+                    <a href="/leads/convert?id=<?= (int)$r['id'] ?>" class="btn btn-primary btn-sm">Tạo phiếu thu</a>
                     <?php endif; ?>
-                    <a href="/leads/edit?id=<?= (int)$r['id'] ?>" class="btn btn-ghost btn-sm">Sua</a>
+                    <a href="/leads/edit?id=<?= (int)$r['id'] ?>" class="btn btn-ghost btn-sm">Sửa</a>
                     <?php if (can('soft_delete')): ?>
-                    <button type="button" class="btn btn-danger btn-sm js-row-del" data-id="<?= (int)$r['id'] ?>">Xoa</button>
+                    <button type="button" class="btn btn-danger btn-sm js-row-del" data-id="<?= (int)$r['id'] ?>">Xóa</button>
                     <?php endif; ?>
                 </td>
             </tr>
@@ -135,7 +135,7 @@ if ($created_to !== '')   { $chips[] = ['Den ngay: ' . $created_to, '/leads?' . 
 
     <div class="pagination">
         <?php if ($page > 1): ?>
-            <a href="<?= e($pageLink($page - 1)) ?>">&laquo; Truoc</a>
+            <a href="<?= e($pageLink($page - 1)) ?>">&laquo; Trước</a>
         <?php endif; ?>
         <?php for ($p = 1; $p <= $totalPages; $p++): ?>
             <?php if ($p === $page): ?>
@@ -171,7 +171,7 @@ if ($created_to !== '')   { $chips[] = ['Den ngay: ' . $created_to, '/leads?' . 
 
     document.querySelectorAll('.js-row-del').forEach(function (b) {
         b.addEventListener('click', function () {
-            if (!confirm('Chuyen lead nay vao thung rac?')) return;
+            if (!confirm('Chuyển lead này vào thùng rác?')) return;
             document.getElementById('rowDelId').value = this.getAttribute('data-id');
             document.getElementById('rowDelForm').submit();
         });
@@ -179,9 +179,9 @@ if ($created_to !== '')   { $chips[] = ['Den ngay: ' . $created_to, '/leads?' . 
 })();
 function eduConfirmBulk(form) {
     var sel = form.querySelectorAll('.rowCheck:checked').length;
-    if (sel === 0) { alert('Vui long chon it nhat mot dong.'); return false; }
+    if (sel === 0) { alert('Vui lòng chọn ít nhất một dòng.'); return false; }
     var act = document.activeElement ? document.activeElement.value : '';
-    if (act === 'delete') return confirm('Xoa ' + sel + ' lead da chon vao thung rac?');
+    if (act === 'delete') return confirm('Xóa ' + sel + ' lead đã chọn vào thùng rác?');
     return true;
 }
 </script>

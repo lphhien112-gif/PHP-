@@ -54,7 +54,7 @@ class OrderController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/orders/create');
         }
 
@@ -71,10 +71,10 @@ class OrderController
             );
             if (!$result['ok']) {
                 set_old($_POST, $result['errors']);
-                flash('error', 'Khong the tao phieu tu lead. Vui long kiem tra lai.');
+                flash('error', 'Không thể tạo phiếu từ lead. Vui lòng kiểm tra lại.');
                 redirect('/leads/convert?id=' . $fromLeadId);
             }
-            flash('success', 'Da chuyen lead thanh phieu thu (lead chuyen sang trang thai converted).');
+            flash('success', 'Đã chuyển lead thành phiếu thu (lead chuyển sang trạng thái converted).');
             redirect('/orders');
         }
 
@@ -82,11 +82,11 @@ class OrderController
         $result = $this->orders->create($_POST);
         if (!$result['ok']) {
             set_old($_POST, $result['errors']);
-            flash('error', 'Khong the tao phieu. Vui long kiem tra lai.');
+            flash('error', 'Không thể tạo phiếu. Vui lòng kiểm tra lại.');
             redirect('/orders/create');
         }
 
-        flash('success', 'Da tao phieu hoc phi thanh cong.');
+        flash('success', 'Đã tạo phiếu học phí thành công.');
         redirect('/orders');
     }
 
@@ -97,7 +97,7 @@ class OrderController
         $id    = (int) ($_GET['id'] ?? 0);
         $order = $this->orders->find($id);
         if (!$order) {
-            flash('error', 'Khong tim thay phieu.');
+            flash('error', 'Không tìm thấy phiếu.');
             redirect('/orders');
         }
         echo render('orders/edit', [
@@ -113,23 +113,23 @@ class OrderController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/orders');
         }
         $id = (int) ($_POST['id'] ?? 0);
         if (!$this->orders->find($id)) {
-            flash('error', 'Khong tim thay phieu.');
+            flash('error', 'Không tìm thấy phiếu.');
             redirect('/orders');
         }
 
         $result = $this->orders->update($id, $_POST);
         if (!$result['ok']) {
             set_old($_POST, $result['errors']);
-            flash('error', 'Cap nhat that bai. Vui long kiem tra lai.');
+            flash('error', 'Cập nhật thất bại. Vui lòng kiểm tra lại.');
             redirect('/orders/edit?id=' . $id);
         }
 
-        flash('success', 'Cap nhat phieu thanh cong.');
+        flash('success', 'Cập nhật phiếu thành công.');
         redirect('/orders');
     }
 
@@ -138,13 +138,13 @@ class OrderController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/orders');
         }
         require_can('soft_delete', '/orders'); // F11: admin + manager
         $id = (int) ($_POST['id'] ?? 0);
         $this->orders->delete($id);
-        flash('success', 'Da chuyen phieu vao thung rac.');
+        flash('success', 'Đã chuyển phiếu vào thùng rác.');
         redirect('/orders');
     }
 
@@ -156,7 +156,7 @@ class OrderController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/orders');
         }
 
@@ -164,25 +164,25 @@ class OrderController
         $action = (string) ($_POST['bulk_action'] ?? '');
 
         if (empty($ids)) {
-            flash('error', 'Chua chon dong nao.');
+            flash('error', 'Chưa chọn dòng nào.');
             redirect('/orders');
         }
 
         if ($action === 'delete') {
             require_can('soft_delete', '/orders'); // F11
             $n = $this->orders->bulkDelete($ids);
-            flash('success', 'Da chuyen ' . $n . ' phieu vao thung rac.');
+            flash('success', 'Đã chuyển ' . $n . ' phiếu vào thùng rác.');
         } elseif ($action === 'status') {
             require_can('status_change', '/orders'); // F11: admin + manager
             $status = (string) ($_POST['bulk_status'] ?? '');
             $n = $this->orders->bulkStatus($ids, $status);
             if ($n > 0) {
-                flash('success', 'Da doi trang thai ' . $n . ' phieu -> ' . $status . '.');
+                flash('success', 'Đã đổi trạng thái ' . $n . ' phiếu -> ' . $status . '.');
             } else {
-                flash('error', 'Trang thai khong hop le hoac khong co dong nao thay doi.');
+                flash('error', 'Trạng thái không hợp lệ hoặc không có dòng nào thay đổi.');
             }
         } else {
-            flash('error', 'Hanh dong hang loat khong hop le.');
+            flash('error', 'Hành động hàng loạt không hợp lệ.');
         }
         redirect('/orders');
     }
@@ -204,16 +204,16 @@ class OrderController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/orders/trash');
         }
         require_can('restore', '/orders'); // F11: admin + manager
         $id = (int) ($_POST['id'] ?? 0);
         if ($this->orders->findWithTrashed($id)) {
             $this->orders->restore($id);
-            flash('success', 'Da khoi phuc phieu.');
+            flash('success', 'Đã khôi phục phiếu.');
         } else {
-            flash('error', 'Khong tim thay phieu can khoi phuc.');
+            flash('error', 'Không tìm thấy phiếu cần khôi phục.');
         }
         redirect('/orders/trash');
     }
@@ -223,13 +223,13 @@ class OrderController
     {
         require_login();
         if (!verify_csrf()) {
-            flash('error', 'Phien lam viec khong hop le (CSRF).');
+            flash('error', 'Phiên làm việc không hợp lệ (CSRF).');
             redirect('/orders/trash');
         }
         require_can('force_delete', '/orders'); // F11: chi admin
         $id = (int) ($_POST['id'] ?? 0);
         $this->orders->forceDelete($id);
-        flash('success', 'Da xoa vinh vien phieu.');
+        flash('success', 'Đã xóa vĩnh viễn phiếu.');
         redirect('/orders/trash');
     }
 
@@ -240,7 +240,7 @@ class OrderController
         $id    = (int) ($_GET['id'] ?? 0);
         $order = $this->orders->findForInvoice($id);
         if (!$order) {
-            flash('error', 'Khong tim thay phieu de in hoa don.');
+            flash('error', 'Không tìm thấy phiếu để in hóa đơn.');
             redirect('/orders');
         }
         // Layout rieng (khong sidebar) de in sach. Khong dung layout 'main'.

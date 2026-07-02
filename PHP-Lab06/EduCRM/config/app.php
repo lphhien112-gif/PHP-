@@ -49,20 +49,22 @@ return [
     // Duong dan file log
     'log_file' => __DIR__ . '/../storage/logs/app.log',
 
-    // Danh sach khoa hoc hop le (whitelist) - dung cho form & validate
+    // Danh sach khoa hoc hop le (whitelist) - dung cho form & validate.
+    // LUU Y: cac ten nay phai KHOP courses.name trong DB (seed.sql) - dung lam
+    // gia tri so khop khi validate lead/order (course_names() doc tu DB).
     'courses' => [
         'IELTS Foundation',
         'IELTS Advanced',
-        'Lap trinh Python',
-        'Lap trinh Web',
+        'Lập trình Python',
+        'Lập trình Web',
         'Data Science',
-        'Tieng Nhat N5',
-        'Thiet ke do hoa',
+        'Tiếng Nhật N5',
+        'Thiết kế đồ họa',
         'Digital Marketing',
     ],
 
     // Module C - Khoa hoc: whitelist nhom + trinh do (dung cho form & validate)
-    'course_categories' => ['Ngoai ngu', 'Lap trinh', 'Thiet ke', 'Marketing', 'Khac'],
+    'course_categories' => ['Ngoại ngữ', 'Lập trình', 'Thiết kế', 'Marketing', 'Khác'],
     'course_levels'     => ['beginner', 'intermediate', 'advanced'],
 
     // Nguon lead hop le (whitelist)

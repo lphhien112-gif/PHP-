@@ -291,7 +291,7 @@ if (!function_exists('require_can')) {
     function require_can(string $permission, string $redirectTo = '/dashboard'): void
     {
         if (!can($permission)) {
-            flash('error', 'Ban khong co quyen thuc hien thao tac nay.');
+            flash('error', 'Bạn không có quyền thực hiện thao tác này.');
             redirect($redirectTo);
         }
     }
@@ -306,7 +306,7 @@ if (!function_exists('require_login')) {
     {
         $user = current_user();
         if (!$user) {
-            flash('error', 'Vui long dang nhap de tiep tuc.');
+            flash('error', 'Vui lòng đăng nhập để tiếp tục.');
             redirect('/login');
         }
 
@@ -322,7 +322,7 @@ if (!function_exists('require_login')) {
             }
             session_destroy();
             session_start();
-            flash('error', 'Phien lam viec da het han, vui long dang nhap lai.');
+            flash('error', 'Phiên làm việc đã hết hạn, vui lòng đăng nhập lại.');
             redirect('/login');
         }
 

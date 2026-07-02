@@ -137,51 +137,51 @@ class CourseService
 
         $name = trim((string) ($input['name'] ?? ''));
         if ($name === '') {
-            $errors['name'] = 'Vui long nhap ten khoa hoc.';
+            $errors['name'] = 'Vui lòng nhập tên khóa học.';
         } elseif (mb_strlen($name) > 80) {
-            $errors['name'] = 'Ten khoa hoc toi da 80 ky tu.';
+            $errors['name'] = 'Tên khóa học tối đa 80 ký tự.';
         }
 
         $category = trim((string) ($input['category'] ?? ''));
         if (!in_array($category, config('course_categories', []), true)) {
-            $errors['category'] = 'Vui long chon nhom khoa hoc hop le.';
+            $errors['category'] = 'Vui lòng chọn nhóm khóa học hợp lệ.';
         }
 
         $level = trim((string) ($input['level'] ?? ''));
         if (!in_array($level, config('course_levels', []), true)) {
-            $errors['level'] = 'Trinh do khong hop le.';
+            $errors['level'] = 'Trình độ không hợp lệ.';
         }
 
         $priceRaw = (string) ($input['price'] ?? '');
         if ($priceRaw === '' || !is_numeric($priceRaw)) {
-            $errors['price'] = 'Hoc phi phai la so.';
+            $errors['price'] = 'Học phí phải là số.';
         } elseif ((float) $priceRaw < 0) {
-            $errors['price'] = 'Hoc phi khong duoc am.';
+            $errors['price'] = 'Học phí không được âm.';
         } elseif ((float) $priceRaw > 999999999) {
-            $errors['price'] = 'Hoc phi vuot qua gioi han cho phep.';
+            $errors['price'] = 'Học phí vượt quá giới hạn cho phép.';
         }
 
         $weeksRaw = (string) ($input['duration_weeks'] ?? '');
         if ($weeksRaw === '' || !ctype_digit($weeksRaw)) {
-            $errors['duration_weeks'] = 'Thoi luong phai la so nguyen (tuan).';
+            $errors['duration_weeks'] = 'Thời lượng phải là số nguyên (tuần).';
         } elseif ((int) $weeksRaw < 1 || (int) $weeksRaw > 260) {
-            $errors['duration_weeks'] = 'Thoi luong tu 1 den 260 tuan.';
+            $errors['duration_weeks'] = 'Thời lượng từ 1 đến 260 tuần.';
         }
 
         // image tuy chon; neu co phai la 1 file co san trong thu muc courses/
         $image = trim((string) ($input['image'] ?? ''));
         if ($image !== '' && !in_array($image, course_images(), true)) {
-            $errors['image'] = 'Anh khong hop le (chon tu danh sach co san).';
+            $errors['image'] = 'Ảnh không hợp lệ (chọn từ danh sách có sẵn).';
         }
 
         $desc = (string) ($input['description'] ?? '');
         if (mb_strlen($desc) > 2000) {
-            $errors['description'] = 'Mo ta toi da 2000 ky tu.';
+            $errors['description'] = 'Mô tả tối đa 2000 ký tự.';
         }
 
         $outcomes = (string) ($input['outcomes'] ?? '');
         if (mb_strlen($outcomes) > 3000) {
-            $errors['outcomes'] = 'Muc "Ban se hoc duoc gi" toi da 3000 ky tu.';
+            $errors['outcomes'] = 'Mục "Bạn sẽ học được gì" tối đa 3000 ký tự.';
         }
 
         return $errors;
@@ -228,7 +228,7 @@ class CourseService
         $data = $this->sanitize($input);
         try {
             $id = $this->repo->create($data);
-            $this->audit->log('create', 'course', $id, 'Tao khoa hoc #' . $id . ' ' . $data['name']);
+            $this->audit->log('create', 'course', $id, 'Tạo khóa học #' . $id . ' ' . $data['name']);
             return ['ok' => true, 'id' => $id];
         } catch (DuplicateRecordException $e) {
             return ['ok' => false, 'errors' => [$e->field() => $e->getMessage()]];
@@ -244,7 +244,7 @@ class CourseService
         $data = $this->sanitize($input);
         try {
             $this->repo->update($id, $data);
-            $this->audit->log('update', 'course', $id, 'Cap nhat khoa hoc #' . $id);
+            $this->audit->log('update', 'course', $id, 'Cập nhật khóa học #' . $id);
             return ['ok' => true];
         } catch (DuplicateRecordException $e) {
             return ['ok' => false, 'errors' => [$e->field() => $e->getMessage()]];
@@ -254,24 +254,24 @@ class CourseService
     public function toggleActive(int $id): void
     {
         $this->repo->toggleActive($id);
-        $this->audit->log('update', 'course', $id, 'Doi trang thai hien thi khoa hoc #' . $id);
+        $this->audit->log('update', 'course', $id, 'Đổi trạng thái hiển thị khóa học #' . $id);
     }
 
     public function delete(int $id): void
     {
         $this->repo->softDelete($id);
-        $this->audit->log('delete', 'course', $id, 'Xoa mem khoa hoc #' . $id);
+        $this->audit->log('delete', 'course', $id, 'Xóa mềm khóa học #' . $id);
     }
 
     public function restore(int $id): void
     {
         $this->repo->restore($id);
-        $this->audit->log('restore', 'course', $id, 'Khoi phuc khoa hoc #' . $id);
+        $this->audit->log('restore', 'course', $id, 'Khôi phục khóa học #' . $id);
     }
 
     public function forceDelete(int $id): void
     {
         $this->repo->forceDelete($id);
-        $this->audit->log('delete', 'course', $id, 'Xoa vinh vien khoa hoc #' . $id);
+        $this->audit->log('delete', 'course', $id, 'Xóa vĩnh viễn khóa học #' . $id);
     }
 }
