@@ -133,6 +133,7 @@ $router->post('/logout', [$auth, 'logout']);
 
 // Dashboard (yeu cau login)
 $router->get('/dashboard', [$dashboard, 'index']);
+$router->get('/analytics', [$dashboard, 'analytics']); // Thong ke (tach rieng)
 
 // Form cong khai (anti-spam)
 $router->get('/public-leads/create', [$publicLd, 'create']);

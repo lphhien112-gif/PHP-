@@ -7,6 +7,7 @@ $is = fn(string $p) => str_starts_with((string)$path, $p) ? 'active' : '';
 // Inline SVG icon set (stroke = currentColor de doi mau theo active).
 $icons = [
     'dashboard' => '<path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>',
+    'analytics' => '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>',
     'leads'     => '<path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>',
     'orders'    => '<path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>',
     'courses'   => '<path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>',
@@ -28,6 +29,7 @@ $icon = fn(string $k) => '<svg viewBox="0 0 24 24" width="20" height="20" fill="
 
     <nav class="side-nav" id="sideNav">
         <a href="/dashboard" class="<?= $is('/dashboard') ?>"><?= $icon('dashboard') ?><span>Tong quan</span></a>
+        <a href="/analytics" class="<?= $is('/analytics') ?>"><?= $icon('analytics') ?><span>Thong ke</span></a>
         <a href="/leads" class="<?= $is('/leads') ?>"><?= $icon('leads') ?><span>Lead</span></a>
         <a href="/orders" class="<?= $is('/orders') ?>"><?= $icon('orders') ?><span>Phieu hoc phi</span></a>
         <a href="/courses" class="<?= $is('/courses') ?>"><?= $icon('courses') ?><span>Khoa hoc</span></a>

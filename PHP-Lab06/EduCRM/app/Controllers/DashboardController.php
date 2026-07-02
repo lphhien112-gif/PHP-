@@ -17,21 +17,29 @@ use App\Services\DashboardService;
  */
 class DashboardController
 {
+    /** GET /dashboard - Tong quan: hero + cac o KPI nhanh. */
     public function index(): void
     {
         require_login();
 
-        $leadStats   = (new LeadService())->stats();
-        $orderStats  = (new OrderService())->stats();
-        $courseStats = (new CourseService())->stats(); // Module C
-        $analytics   = (new DashboardService())->analytics(); // F5
-
         echo render('dashboard/index', [
             'title'       => 'Tong quan',
-            'leadStats'   => $leadStats,
-            'orderStats'  => $orderStats,
-            'courseStats' => $courseStats,
-            'analytics'   => $analytics,
+            'leadStats'   => (new LeadService())->stats(),
+            'orderStats'  => (new OrderService())->stats(),
+            'courseStats' => (new CourseService())->stats(),
+        ]);
+    }
+
+    /** GET /analytics - Thong ke: bieu do + bang phan tich (F5). */
+    public function analytics(): void
+    {
+        require_login();
+
+        echo render('analytics/index', [
+            'title'      => 'Thong ke',
+            'leadStats'  => (new LeadService())->stats(),
+            'orderStats' => (new OrderService())->stats(),
+            'analytics'  => (new DashboardService())->analytics(),
         ]);
     }
 }

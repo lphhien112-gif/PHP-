@@ -4,6 +4,12 @@ $levelLabels = ['beginner' => 'Co ban', 'intermediate' => 'Trung cap', 'advanced
 $money = fn($v) => number_format((float) $v, 0, ',', '.');
 $img   = trim((string) ($course['image'] ?? ''));
 $active = (int) $course['is_active'] === 1;
+$weeks  = (int) $course['duration_weeks'];
+$perWeek = $weeks > 0 ? round(((float) $course['price']) / $weeks) : 0;
+
+// "Ban se hoc duoc gi" - moi dong 1 y (bo dong trong).
+$outcomes = array_values(array_filter(array_map('trim', explode("\n", (string) ($course['outcomes'] ?? ''))), fn($s) => $s !== ''));
+$hasDesc  = trim((string) $course['description']) !== '';
 ?>
 <div class="page-head">
     <div>
@@ -38,8 +44,8 @@ $active = (int) $course['is_active'] === 1;
         <div class="cd-facts">
             <div><span class="k">Nhom</span><span class="v"><?= e($course['category']) ?></span></div>
             <div><span class="k">Trinh do</span><span class="v"><?= e($levelLabels[$course['level']] ?? $course['level']) ?></span></div>
-            <div><span class="k">Thoi luong</span><span class="v"><?= (int)$course['duration_weeks'] ?> tuan</span></div>
-            <div><span class="k">Ma (slug)</span><span class="v"><?= e($course['slug']) ?></span></div>
+            <div><span class="k">Thoi luong</span><span class="v"><?= $weeks ?> tuan</span></div>
+            <div><span class="k">Hoc phi / tuan</span><span class="v"><?= $money($perWeek) ?> d</span></div>
             <div><span class="k">Ngay tao</span><span class="v"><?= e($course['created_at']) ?></span></div>
             <div><span class="k">Trang thai</span><span class="v"><?= $active ? 'Hien tren form dang ky' : 'An khoi form' ?></span></div>
         </div>
@@ -49,14 +55,21 @@ $active = (int) $course['is_active'] === 1;
 <div class="detail-cols">
     <div class="card cd-desc">
         <h2>Gioi thieu khoa hoc</h2>
-        <?php if (trim((string) $course['description']) !== ''): ?>
-            <p><?= nl2br(e($course['description'])) ?></p>
-        <?php else: ?>
+        <?php if ($hasDesc): ?>
+            <p class="cd-lead"><?= nl2br(e($course['description'])) ?></p>
+        <?php elseif (!$outcomes): ?>
             <p class="muted">Khoa hoc nay chua co mo ta.
-                <?php if (can('manage_courses')): ?>
-                    <a href="/courses/edit?id=<?= (int)$course['id'] ?>">Them mo ta</a>.
-                <?php endif; ?>
+                <?php if (can('manage_courses')): ?><a href="/courses/edit?id=<?= (int)$course['id'] ?>">Them mo ta</a>.<?php endif; ?>
             </p>
+        <?php endif; ?>
+
+        <?php if ($outcomes): ?>
+            <h3 class="cd-sub">Ban se hoc duoc gi</h3>
+            <ul class="cd-outcomes">
+                <?php foreach ($outcomes as $o): ?>
+                    <li><?= e($o) ?></li>
+                <?php endforeach; ?>
+            </ul>
         <?php endif; ?>
     </div>
 

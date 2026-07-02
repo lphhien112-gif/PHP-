@@ -117,8 +117,8 @@ class CourseRepository
 
     public function create(array $data): int
     {
-        $sql = 'INSERT INTO courses (name, slug, category, level, price, duration_weeks, image, description, is_active)
-                VALUES (:name, :slug, :category, :level, :price, :duration_weeks, :image, :description, :is_active)';
+        $sql = 'INSERT INTO courses (name, slug, category, level, price, duration_weeks, image, description, outcomes, is_active)
+                VALUES (:name, :slug, :category, :level, :price, :duration_weeks, :image, :description, :outcomes, :is_active)';
         try {
             $stmt = $this->db()->prepare($sql);
             $stmt->execute($this->bindParams($data));
@@ -136,7 +136,7 @@ class CourseRepository
         $sql = 'UPDATE courses
                 SET name = :name, slug = :slug, category = :category, level = :level,
                     price = :price, duration_weeks = :duration_weeks, image = :image,
-                    description = :description, is_active = :is_active
+                    description = :description, outcomes = :outcomes, is_active = :is_active
                 WHERE id = :id';
         try {
             $stmt = $this->db()->prepare($sql);
@@ -160,7 +160,8 @@ class CourseRepository
             ':price'          => $data['price'],
             ':duration_weeks' => $data['duration_weeks'],
             ':image'          => $data['image'] !== '' ? $data['image'] : null,
-            ':description'    => $data['description'],
+            ':description'    => $data['description'] !== '' ? $data['description'] : null,
+            ':outcomes'       => $data['outcomes'] !== '' ? $data['outcomes'] : null,
             ':is_active'      => $data['is_active'],
         ];
     }

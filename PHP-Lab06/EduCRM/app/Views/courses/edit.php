@@ -11,6 +11,7 @@ $curPrice = old('price', (string) (int) $course['price']);
 $curWeeks = old('duration_weeks', (string) (int) $course['duration_weeks']);
 $curImage = old('image', (string) $course['image']);
 $curDesc  = old('description', (string) $course['description']);
+$curOutcomes = old('outcomes', (string) ($course['outcomes'] ?? ''));
 $curActive = old('is_active', (string) (int) $course['is_active']);
 ?>
 <div class="page-head"><h1>Sua khoa hoc</h1><a href="/courses" class="btn btn-ghost">&laquo; Quay lai</a></div>
@@ -74,9 +75,14 @@ $curActive = old('is_active', (string) (int) $course['is_active']);
                 </div>
             </div>
             <div class="form-group full">
-                <label for="description">Mo ta</label>
-                <textarea id="description" name="description" rows="3"><?= e($curDesc) ?></textarea>
+                <label for="description">Gioi thieu khoa hoc</label>
+                <textarea id="description" name="description" rows="4" placeholder="Doan van gioi thieu: khoa nay danh cho ai, hoc gi, dat duoc gi..."><?= e($curDesc) ?></textarea>
                 <?php if (error_of('description')): ?><div class="field-error"><?= e(error_of('description')) ?></div><?php endif; ?>
+            </div>
+            <div class="form-group full">
+                <label for="outcomes">Ban se hoc duoc gi <span class="muted" style="font-weight:400;">(moi dong 1 y)</span></label>
+                <textarea id="outcomes" name="outcomes" rows="5" placeholder="Nam vung ngu phap cot loi&#10;Xay dung tu vung theo chu de&#10;Tu tin lam bai thi thu"><?= e($curOutcomes) ?></textarea>
+                <?php if (error_of('outcomes')): ?><div class="field-error"><?= e(error_of('outcomes')) ?></div><?php endif; ?>
             </div>
             <div class="form-group full">
                 <label class="remember-row" style="display:flex;align-items:center;gap:8px;cursor:pointer;">

@@ -51,7 +51,8 @@ CREATE TABLE courses (
     price          DECIMAL(12,2) NOT NULL DEFAULT 0,     -- hoc phi (VND)
     duration_weeks INT UNSIGNED NOT NULL DEFAULT 8,      -- thoi luong (tuan)
     image          VARCHAR(120) NULL,                    -- file trong /assets/img/courses/
-    description    VARCHAR(500) NULL,
+    description    TEXT NULL,                            -- gioi thieu (doan van)
+    outcomes       TEXT NULL,                            -- "Ban se hoc duoc gi" - moi dong 1 y
     is_active      TINYINT(1)   NOT NULL DEFAULT 1,      -- 1 = hien tren form lead/order
     deleted_at     TIMESTAMP NULL DEFAULT NULL,          -- soft delete
     name_active    VARCHAR(80) GENERATED ALWAYS AS (IF(deleted_at IS NULL, name, NULL)) STORED,

@@ -175,8 +175,13 @@ class CourseService
         }
 
         $desc = (string) ($input['description'] ?? '');
-        if (mb_strlen($desc) > 500) {
-            $errors['description'] = 'Mo ta toi da 500 ky tu.';
+        if (mb_strlen($desc) > 2000) {
+            $errors['description'] = 'Mo ta toi da 2000 ky tu.';
+        }
+
+        $outcomes = (string) ($input['outcomes'] ?? '');
+        if (mb_strlen($outcomes) > 3000) {
+            $errors['outcomes'] = 'Muc "Ban se hoc duoc gi" toi da 3000 ky tu.';
         }
 
         return $errors;
@@ -199,6 +204,8 @@ class CourseService
             'duration_weeks' => (int) ($input['duration_weeks'] ?? 0),
             'image'          => trim((string) ($input['image'] ?? '')),
             'description'    => trim((string) ($input['description'] ?? '')),
+            // Chuan hoa xuong dong ve \n de view tach thanh cac gach dau dong.
+            'outcomes'       => str_replace(["\r\n", "\r"], "\n", trim((string) ($input['outcomes'] ?? ''))),
             'is_active'      => isset($input['is_active']) && (string) $input['is_active'] !== '0' ? 1 : 0,
         ];
     }

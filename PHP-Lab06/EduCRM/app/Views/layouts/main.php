@@ -8,6 +8,8 @@ $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 // Breadcrumb don gian theo segment dau.
 $crumb = match (true) {
     str_starts_with((string)$path, '/dashboard')     => 'Tong quan',
+    str_starts_with((string)$path, '/analytics')     => 'Thong ke',
+    str_starts_with((string)$path, '/courses')        => 'Khoa hoc',
     str_starts_with((string)$path, '/leads/trash')    => 'Lead / Thung rac',
     str_starts_with((string)$path, '/leads')          => 'Lead',
     str_starts_with((string)$path, '/orders/trash')   => 'Phieu hoc phi / Thung rac',
@@ -43,8 +45,10 @@ $crumb = match (true) {
             </div>
         </header>
         <main class="content">
-            <?php partial('flash'); ?>
-            <?= $content ?>
+            <div class="content-inner">
+                <?php partial('flash'); ?>
+                <?= $content ?>
+            </div>
         </main>
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>

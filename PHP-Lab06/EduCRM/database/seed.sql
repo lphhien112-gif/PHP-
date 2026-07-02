@@ -29,15 +29,31 @@ INSERT INTO api_tokens (token_hash, label) VALUES
   (SHA2('EDUCRM-DEMO-API-TOKEN-2026', 256), 'demo-readonly');
 
 -- ===== SEED courses (Module C) - 8 khoa hoc gan dung 8 file anh =====
-INSERT INTO courses (name, slug, category, level, price, duration_weeks, image, description, is_active) VALUES
-  ('IELTS Foundation', 'ielts-foundation', 'Ngoai ngu', 'beginner', 3500000, 10, 'ielts_foundation.png', 'Nen tang IELTS cho nguoi moi bat dau, muc tieu band 4.5-5.5.', 1),
-  ('IELTS Advanced', 'ielts-advanced', 'Ngoai ngu', 'advanced', 4200000, 12, 'ielts_advanced.png', 'Luyen chuyen sau 4 ky nang, muc tieu band 6.5+.', 1),
-  ('Lap trinh Python', 'lap-trinh-python', 'Lap trinh', 'beginner', 5000000, 10, 'python_programming.png', 'Nhap mon lap trinh voi Python: cu phap, ham, OOP co ban.', 1),
-  ('Lap trinh Web', 'lap-trinh-web', 'Lap trinh', 'intermediate', 6500000, 12, 'web_programming.png', 'HTML/CSS/JS va PHP MVC - xay dung ung dung web hoan chinh.', 1),
-  ('Data Science', 'data-science', 'Lap trinh', 'advanced', 7800000, 14, 'data_science.png', 'Phan tich du lieu, truc quan hoa va machine learning co ban.', 1),
-  ('Tieng Nhat N5', 'tieng-nhat-n5', 'Ngoai ngu', 'beginner', 4000000, 12, 'japanese_n5.png', 'Tieng Nhat so cap huong toi trinh do JLPT N5.', 1),
-  ('Thiet ke do hoa', 'thiet-ke-do-hoa', 'Thiet ke', 'beginner', 5500000, 10, 'graphic_design.png', 'Photoshop/Illustrator va nguyen ly thiet ke thi giac.', 1),
-  ('Digital Marketing', 'digital-marketing', 'Marketing', 'intermediate', 6000000, 8, 'digital_marketing.png', 'SEO, quang cao va content marketing tu co ban den thuc chien.', 1);
+INSERT INTO courses (name, slug, category, level, price, duration_weeks, image, description, outcomes, is_active) VALUES
+  ('IELTS Foundation', 'ielts-foundation', 'Ngoai ngu', 'beginner', 3500000, 10, 'ielts_foundation.png',
+   'Khoa nen tang danh cho nguoi moi tiep can IELTS hoac con mat goc tieng Anh. Ban duoc cung co ngu phap loi, mo rong tu vung theo chu de va lam quen dinh dang 4 ky nang Nghe - Noi - Doc - Viet. Lo trinh huong toi band 4.5-5.5, tao ban dap vung chac truoc khi len trinh do cao hon.',
+   'Nam vung 12 chu diem ngu phap cot loi cua IELTS\nXay dung 800+ tu vung hoc thuat theo chu de\nLam quen cau truc va cach tinh diem 4 ky nang\nTu tin lam bai thi thu dat band 4.5-5.5', 1),
+  ('IELTS Advanced', 'ielts-advanced', 'Ngoai ngu', 'advanced', 4200000, 12, 'ielts_advanced.png',
+   'Danh cho hoc vien da co nen tang, muon but pha len band 6.5+. Khoa tap trung chien luoc lam bai cho tung dang cau hoi, ky thuat Writing Task 1 & 2 va phan xa Speaking. Bao gom chua bai chi tiet va thi thu dinh ky sat de that.',
+   'Chien luoc xu ly tung dang bai Reading & Listening\nViet Task 1 & Task 2 mach lac, du y, dung tu hoc thuat\nPhan xa Speaking tu nhien theo band 6.5-7.5\nThi thu dinh ky kem feedback ca nhan hoa', 1),
+  ('Lap trinh Python', 'lap-trinh-python', 'Lap trinh', 'beginner', 5000000, 10, 'python_programming.png',
+   'Nhap mon lap trinh voi Python - ngon ngu de hoc nhung manh me. Ban di tu bien, kieu du lieu, vong lap den ham va lap trinh huong doi tuong, ket hop nhieu bai tap thuc hanh. Phu hop nguoi chua tung viet dong code nao.',
+   'Hieu bien, kieu du lieu, dieu kien va vong lap\nViet ham va to chuc chuong trinh ro rang\nNam khai niem OOP co ban (class, object)\nHoan thanh 1 mini project cuoi khoa', 1),
+  ('Lap trinh Web', 'lap-trinh-web', 'Lap trinh', 'intermediate', 6500000, 12, 'web_programming.png',
+   'Xay dung ung dung web hoan chinh tu giao dien den xu ly phia may chu. Khoa day HTML/CSS/JavaScript va PHP theo mo hinh MVC, ket noi CSDL MySQL kem cac nguyen tac bao mat can ban. Ket thuc khoa ban tu lam duoc mot he thong CRUD that.',
+   'Dung giao dien voi HTML/CSS/JavaScript\nLap trinh PHP theo mo hinh MVC\nKet noi va thao tac CSDL MySQL an toan\nHoan thien 1 du an web CRUD trien khai duoc', 1),
+  ('Data Science', 'data-science', 'Lap trinh', 'advanced', 7800000, 14, 'data_science.png',
+   'Buoc vao the gioi khoa hoc du lieu: thu thap, lam sach, phan tich va truc quan hoa du lieu, tien toi machine learning co ban. Hoc qua bo du lieu that voi Python (pandas, matplotlib) va cac tinh huong kinh doanh thuc te.',
+   'Lam sach va xu ly du lieu voi pandas\nTruc quan hoa du lieu de ke chuyen bang so lieu\nXay dung mo hinh machine learning co ban\nTrinh bay ket qua phan tich cho nguoi khong chuyen', 1),
+  ('Tieng Nhat N5', 'tieng-nhat-n5', 'Ngoai ngu', 'beginner', 4000000, 12, 'japanese_n5.png',
+   'Khoa tieng Nhat so cap huong toi trinh do JLPT N5. Ban hoc bang chu Hiragana - Katakana, 100+ Kanji co ban, mau cau giao tiep hang ngay va luyen nghe co ban. Phu hop nguoi bat dau tu con so 0.',
+   'Doc viet thanh thao Hiragana va Katakana\nNho 100+ Kanji va 600+ tu vung N5\nGiao tiep cac tinh huong co ban hang ngay\nSan sang thi chung chi JLPT N5', 1),
+  ('Thiet ke do hoa', 'thiet-ke-do-hoa', 'Thiet ke', 'beginner', 5500000, 10, 'graphic_design.png',
+   'Khoa thiet ke do hoa tu nen tang: nguyen ly bo cuc, mau sac, typography va thuc hanh tren Photoshop & Illustrator. Ban se tao poster, banner va bo nhan dien thuong hieu don gian, tung buoc xay dung portfolio dau tay.',
+   'Nam nguyen ly bo cuc, mau sac va typography\nThanh thao thao tac co ban Photoshop & Illustrator\nThiet ke poster, banner, an pham mang xa hoi\nHoan thien portfolio 3-5 san pham', 1),
+  ('Digital Marketing', 'digital-marketing', 'Marketing', 'intermediate', 6000000, 8, 'digital_marketing.png',
+   'Tong quan marketing so tu chien luoc den thuc thi: SEO, quang cao Facebook/Google Ads, content va do luong hieu qua. Khoa thien thuc chien voi cac chien dich mau va cong cu phan tich pho bien.',
+   'Xay dung ke hoach marketing so co ban\nChay va toi uu quang cao Facebook/Google\nSan xuat content va lam SEO on-page\nDo luong hieu qua bang cac chi so chinh', 1);
 
 -- ===== SEED leads (25 dong) =====
 INSERT INTO leads (full_name, email, phone, course, source, status, note, created_at) VALUES
