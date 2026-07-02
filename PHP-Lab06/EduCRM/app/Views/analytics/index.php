@@ -7,11 +7,18 @@ $funnel      = $analytics['funnel'] ?? [];
 $revenue     = $analytics['revenue'] ?? [];
 $topCourses  = $analytics['topCourses'] ?? [];
 
+$bySource    = $analytics['bySource'] ?? [];
+
 $maxLeads   = max(1, $leadsPerDay ? max($leadsPerDay) : 1);
 $maxFunnel  = max(1, $funnel ? max($funnel) : 1);
 $maxRevenue = max(1, $revenue ? max($revenue) : 1);
 $maxCourse  = max(1, $topCourses ? max(array_column($topCourses, 'orders')) : 1);
 $funnelLabels = ['new' => 'Moi', 'contacted' => 'Da lien he', 'qualified' => 'Tiem nang', 'converted' => 'Chuyen doi'];
+$sourceLabels = ['website' => 'Website', 'facebook' => 'Facebook', 'zalo' => 'Zalo', 'referral' => 'Gioi thieu', 'hotline' => 'Hotline'];
+
+// Empty-state: tong cac gia tri = 0 -> chart trong (tranh day cot 0 trong nhu loi).
+$leadsTotal   = array_sum($leadsPerDay);
+$revenueTotal = array_sum($revenue);
 ?>
 <div class="page-head">
     <div>
@@ -25,6 +32,9 @@ $funnelLabels = ['new' => 'Moi', 'contacted' => 'Da lien he', 'qualified' => 'Ti
     <!-- Lead theo ngay (14 ngay) - CSS bars -->
     <div class="card chart-card">
         <h2>Lead theo ngay <span class="chip">14 ngay</span></h2>
+        <?php if ($leadsTotal <= 0): ?>
+            <div class="chart-empty">Chua co lead trong 14 ngay gan day.</div>
+        <?php else: ?>
         <div class="bar-chart">
             <?php foreach ($leadsPerDay as $day => $count): ?>
                 <div class="bar-col" title="<?= e($day) ?>: <?= (int)$count ?> lead">
@@ -36,6 +46,7 @@ $funnelLabels = ['new' => 'Moi', 'contacted' => 'Da lien he', 'qualified' => 'Ti
                 </div>
             <?php endforeach; ?>
         </div>
+        <?php endif; ?>
     </div>
 
     <!-- Phieu chuyen doi (funnel) -->
@@ -60,6 +71,9 @@ $funnelLabels = ['new' => 'Moi', 'contacted' => 'Da lien he', 'qualified' => 'Ti
     <!-- Doanh thu 6 thang -->
     <div class="card chart-card">
         <h2>Doanh thu (paid) <span class="chip">6 thang</span></h2>
+        <?php if ($revenueTotal <= 0): ?>
+            <div class="chart-empty">Chua co doanh thu da thu trong 6 thang gan day.</div>
+        <?php else: ?>
         <div class="revenue-bars">
             <?php foreach ($revenue as $ym => $amount): ?>
                 <div class="rev-col" title="<?= e($ym) ?>: <?= $fmt($amount) ?> d">
@@ -71,6 +85,7 @@ $funnelLabels = ['new' => 'Moi', 'contacted' => 'Da lien he', 'qualified' => 'Ti
                 </div>
             <?php endforeach; ?>
         </div>
+        <?php endif; ?>
     </div>
 
     <!-- Top 5 khoa hoc -->
@@ -110,6 +125,17 @@ $funnelLabels = ['new' => 'Moi', 'contacted' => 'Da lien he', 'qualified' => 'Ti
         <div class="status-pills">
             <?php foreach (config('order_statuses') as $st): ?>
                 <span class="sp"><span class="badge <?= e($st) ?>"><?= e($st) ?></span><b><?= $fmt($orderStats['byStatus'][$st] ?? 0) ?></b></span>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
+
+<div class="analytics-grid">
+    <div class="card">
+        <h2 class="stat-h">Lead theo nguon</h2>
+        <div class="status-pills">
+            <?php foreach (config('lead_sources') as $src): ?>
+                <span class="sp"><span class="badge src-<?= e($src) ?>"><?= e($sourceLabels[$src] ?? $src) ?></span><b><?= $fmt($bySource[$src] ?? 0) ?></b></span>
             <?php endforeach; ?>
         </div>
     </div>

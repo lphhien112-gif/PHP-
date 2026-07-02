@@ -366,6 +366,19 @@ class LeadRepository
         return $out;
     }
 
+    /** Dem theo nguon (source) - dung cho thong ke "Lead theo nguon". */
+    public function countBySource(): array
+    {
+        $rows = $this->db()->query(
+            'SELECT source, COUNT(*) AS total FROM leads WHERE deleted_at IS NULL GROUP BY source'
+        )->fetchAll();
+        $out = [];
+        foreach ($rows as $r) {
+            $out[$r['source']] = (int) $r['total'];
+        }
+        return $out;
+    }
+
     public function total(): int
     {
         return (int) $this->db()->query(

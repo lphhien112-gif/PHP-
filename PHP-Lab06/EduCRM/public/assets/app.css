@@ -227,6 +227,12 @@ tbody tr:last-child td { border-bottom: none; }
 .badge.converted, .badge.paid { background: var(--success-soft); color: var(--success); }
 .badge.lost, .badge.cancelled { background: #f1f5f9; color: var(--muted); }
 .badge.refunded { background: var(--danger-soft); color: var(--danger); }
+/* Lead theo nguon (source) */
+.badge.src-website  { background: var(--info-soft);    color: var(--info); }
+.badge.src-facebook { background: #e6ecf6;             color: #3b5998; }
+.badge.src-zalo     { background: #e4f0fb;             color: #1673c9; }
+.badge.src-referral { background: var(--success-soft); color: var(--success); }
+.badge.src-hotline  { background: var(--warn-soft);    color: var(--warn); }
 
 /* ---------- Forms ---------- */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
@@ -268,6 +274,11 @@ input.has-error:focus, select.has-error:focus, textarea.has-error:focus { box-sh
 
 /* ---------- Empty states ---------- */
 .empty { text-align: center; color: var(--muted); padding: 40px 20px; }
+.chart-empty {
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  height: 116px; color: var(--muted); font-size: 13.5px;
+  background: var(--bg); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 0 16px;
+}
 
 /* ============================================================
    AUTH / PUBLIC

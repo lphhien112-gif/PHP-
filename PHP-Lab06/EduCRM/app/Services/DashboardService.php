@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\StatsRepository;
+use App\Repositories\LeadRepository;
 
 /**
  * EduCRM - DashboardService (F5 - Dashboard Analytics)
@@ -15,10 +16,12 @@ use App\Repositories\StatsRepository;
 class DashboardService
 {
     private StatsRepository $stats;
+    private LeadRepository $leads;
 
-    public function __construct(?StatsRepository $stats = null)
+    public function __construct(?StatsRepository $stats = null, ?LeadRepository $leads = null)
     {
         $this->stats = $stats ?? new StatsRepository();
+        $this->leads = $leads ?? new LeadRepository();
     }
 
     public function analytics(): array
@@ -28,6 +31,7 @@ class DashboardService
             'funnel'      => $this->stats->conversionFunnel(),
             'revenue'     => $this->stats->revenueLastMonths(6),
             'topCourses'  => $this->stats->topCourses(5),
+            'bySource'    => $this->leads->countBySource(),
         ];
     }
 }

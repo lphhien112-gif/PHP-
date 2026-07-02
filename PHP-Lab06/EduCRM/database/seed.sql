@@ -111,6 +111,32 @@ INSERT INTO orders (order_code, lead_id, course, amount, status, paid_at, note, 
   ('ORD-2026-0024', 24, 'Digital Marketing', 15000000, 'cancelled', NULL, 'Phieu hoc phi Digital Marketing', '2026-04-24 13:30:00'),
   ('ORD-2026-0025', 25, 'IELTS Foundation', 3500000, 'pending', NULL, 'Phieu hoc phi IELTS Foundation', '2026-05-25 10:30:00');
 
+-- ===== SEED du lieu GAN DAY (ngay dong theo NOW()) =====
+-- Muc dich: bieu do "Lead theo ngay" (14 ngay) va "Doanh thu" (thang nay/thang
+-- truoc) luon co du lieu bat ke hom nay la ngay nao -> khong trong nhu loi.
+-- Lead rai deu trong 14 ngay gan nhat, nhieu nguon khac nhau (cho "Lead theo nguon").
+INSERT INTO leads (full_name, email, phone, course, source, status, note, created_at) VALUES
+  ('Vu Gan Day 01', 'recent01@educrm.vn', '0921000001', 'IELTS Foundation', 'website',  'new',       'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 0 DAY)),
+  ('Vu Gan Day 02', 'recent02@educrm.vn', '0921000002', 'Lap trinh Python', 'facebook', 'contacted', 'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 1 DAY)),
+  ('Vu Gan Day 03', 'recent03@educrm.vn', '0921000003', 'Digital Marketing', 'zalo',     'new',       'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 2 DAY)),
+  ('Vu Gan Day 04', 'recent04@educrm.vn', '0921000004', 'Lap trinh Web',     'website',  'qualified', 'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 3 DAY)),
+  ('Vu Gan Day 05', 'recent05@educrm.vn', '0921000005', 'Data Science',      'referral', 'new',       'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 4 DAY)),
+  ('Vu Gan Day 06', 'recent06@educrm.vn', '0921000006', 'Tieng Nhat N5',     'facebook', 'contacted', 'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 5 DAY)),
+  ('Vu Gan Day 07', 'recent07@educrm.vn', '0921000007', 'IELTS Advanced',    'hotline',  'new',       'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 7 DAY)),
+  ('Vu Gan Day 08', 'recent08@educrm.vn', '0921000008', 'Thiet ke do hoa',   'website',  'converted', 'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 8 DAY)),
+  ('Vu Gan Day 09', 'recent09@educrm.vn', '0921000009', 'Lap trinh Python',  'zalo',     'new',       'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 10 DAY)),
+  ('Vu Gan Day 10', 'recent10@educrm.vn', '0921000010', 'Digital Marketing', 'referral', 'contacted', 'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 11 DAY)),
+  ('Vu Gan Day 11', 'recent11@educrm.vn', '0921000011', 'IELTS Foundation',  'facebook', 'new',       'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 12 DAY)),
+  ('Vu Gan Day 12', 'recent12@educrm.vn', '0921000012', 'Lap trinh Web',     'website',  'qualified', 'Lead moi trong tuan', DATE_SUB(NOW(), INTERVAL 13 DAY));
+
+-- Phieu da thu (paid) thang nay & thang truoc -> bieu do doanh thu + delta MoM.
+INSERT INTO orders (order_code, lead_id, course, amount, status, paid_at, note, created_at) VALUES
+  ('ORD-2026-9001', 1,  'IELTS Foundation', 3500000, 'paid', CURRENT_DATE, 'Doanh thu thang nay',   CURRENT_DATE),
+  ('ORD-2026-9002', 6,  'Tieng Nhat N5',    9000000, 'paid', CURRENT_DATE, 'Doanh thu thang nay',   CURRENT_DATE),
+  ('ORD-2026-9003', 9,  'Lap trinh Web',    6500000, 'paid', CURRENT_DATE, 'Doanh thu thang nay',   CURRENT_DATE),
+  ('ORD-2026-9004', 2,  'IELTS Advanced',   4200000, 'paid', LAST_DAY(CURRENT_DATE - INTERVAL 1 MONTH), 'Doanh thu thang truoc', LAST_DAY(CURRENT_DATE - INTERVAL 1 MONTH)),
+  ('ORD-2026-9005', 14, 'Data Science',     7800000, 'paid', LAST_DAY(CURRENT_DATE - INTERVAL 1 MONTH), 'Doanh thu thang truoc', LAST_DAY(CURRENT_DATE - INTERVAL 1 MONTH));
+
 -- ===== SEED activity_logs (F3 - vai dong demo nhat ky) =====
 INSERT INTO activity_logs (user_id, action, entity, entity_id, summary, ip, created_at) VALUES
   (1, 'login',   'auth',  NULL, 'admin dang nhap he thong',                 '127.0.0.1', '2026-06-01 08:00:00'),
