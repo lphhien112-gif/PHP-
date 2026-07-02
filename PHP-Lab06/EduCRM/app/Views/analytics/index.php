@@ -97,32 +97,20 @@ $funnelLabels = ['new' => 'Moi', 'contacted' => 'Da lien he', 'qualified' => 'Ti
 
 <div class="analytics-grid">
     <div class="card">
-        <h2 style="margin-top:0;font-size:18px;">Lead theo trang thai</h2>
-        <table>
-            <thead><tr><th>Trang thai</th><th>So luong</th></tr></thead>
-            <tbody>
+        <h2 class="stat-h">Lead theo trang thai</h2>
+        <div class="status-pills">
             <?php foreach (config('lead_statuses') as $st): ?>
-                <tr>
-                    <td><span class="badge <?= e($st) ?>"><?= e($st) ?></span></td>
-                    <td><?= $fmt($leadStats['byStatus'][$st] ?? 0) ?></td>
-                </tr>
+                <span class="sp"><span class="badge <?= e($st) ?>"><?= e($st) ?></span><b><?= $fmt($leadStats['byStatus'][$st] ?? 0) ?></b></span>
             <?php endforeach; ?>
-            </tbody>
-        </table>
+        </div>
     </div>
 
     <div class="card">
-        <h2 style="margin-top:0;font-size:18px;">Phieu hoc phi theo trang thai</h2>
-        <table>
-            <thead><tr><th>Trang thai</th><th>So luong</th></tr></thead>
-            <tbody>
+        <h2 class="stat-h">Phieu hoc phi theo trang thai</h2>
+        <div class="status-pills">
             <?php foreach (config('order_statuses') as $st): ?>
-                <tr>
-                    <td><span class="badge <?= e($st) ?>"><?= e($st) ?></span></td>
-                    <td><?= $fmt($orderStats['byStatus'][$st] ?? 0) ?></td>
-                </tr>
+                <span class="sp"><span class="badge <?= e($st) ?>"><?= e($st) ?></span><b><?= $fmt($orderStats['byStatus'][$st] ?? 0) ?></b></span>
             <?php endforeach; ?>
-            </tbody>
-        </table>
+        </div>
     </div>
 </div>
