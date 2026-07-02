@@ -27,6 +27,20 @@ roi mo trinh duyet, chup cac man hinh sau (luu vao thu muc nay).
 | 20| 20-explain.png          | EXPLAIN query list trong MySQL CLI             | T29, TC25      |
 | 21| 21-vscode-tree.png      | Cay thu muc trong VS Code                      | T02            |
 | 22| 22-git-log.png          | git log (>= 6 commit)                          | T30            |
+| 23| 19-dashboard-kpi.png    | GET /dashboard - khoi "Xu huong kinh doanh" (3 KPI xu huong) | QW3   |
+| 24| 20-analytics-data.png   | GET /analytics - chart co du lieu + khoi "Lead theo nguon"   | QW1, QW2 |
+| 25| 21-ui-tieng-viet.png    | Mot man bat ky the hien UI tieng Viet CO DAU day du          | QW5   |
+| 26| 22-course-create.png    | GET /courses/create - form them khoa hoc (anh + preview)     | Module C |
+| 27| 23-course-view.png      | GET /courses/view?id=1 - chi tiet + "Muc do quan tam"        | Module C |
+| 28| 24-course-trash.png     | GET /courses/trash - thung rac khoa hoc (soft delete)        | Module C |
+| 29| 25-explain.png          | EXPLAIN chay that trong MariaDB CLI (3 query index)          | T29, TC25 |
+| 30| 26-env.png              | Terminal: php -v + mysql SELECT 1 + cay thu muc + run server | T01, T02 |
+| 31| 27-code.png             | Code that: public/index.php (routes) + Router.php dispatch   | T03      |
+| 32| 28-schema.png           | MariaDB: SHOW TABLES + DESCRIBE leads + SELECT COUNT(*)      | T13, T14 |
+
+Ghi chu Quick Wins: 3 anh 19/20/21 duoc tham chieu trong .tex qua macro `\figauto`
+(tu nhung anh that neu file ton tai, nguoc lai ve placeholder de PDF van bien dich).
+Ten file dat dung: `19-dashboard-kpi.png`, `20-analytics-data.png`, `21-ui-tieng-viet.png`.
 
 Ghi chu: trong bao cao LaTeX, cac anh GUI duoc bieu dien bang macro `\screenshot{...}`
 (khung placeholder) de PDF van bien dich duoc khi chua chup. Cac output dang text

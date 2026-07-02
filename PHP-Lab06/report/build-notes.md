@@ -183,3 +183,66 @@ C:/xampp/mysql/bin/mysql.exe -u root training_center_crm < database/seed.sql
 # Chay server (tu trong EduCRM/)
 C:/xampp/php/php.exe -S 127.0.0.1:8106 -t public
 ```
+
+## 10. Quick Wins (bo sung sau review - da code + verify live)
+
+Commit lien quan: b36d7e7, 35bde30, fbd187a, 68df2d4.
+
+- QW1 - Empty-state chart + seed ngay dong:
+  - View analytics/index.php: array_sum(leadsPerDay/revenue) <= 0 -> hien empty-state
+    thay vi cot 0 trong.
+  - StatsRepository: leadsPerDay dung `created_at >= CURRENT_DATE - INTERVAL :days DAY`;
+    revenueLastMonths dung `DATE_FORMAT(CURRENT_DATE,'%Y-%m-01') - INTERVAL :m MONTH`.
+  - seed.sql: 12 lead trong 14 ngay + 5 phieu paid thang nay/truoc theo NOW()/CURRENT_DATE/
+    LAST_DAY -> chart luon co data du chay ngay nao.
+- QW2 - Lead theo nguon:
+  - LeadRepository::countBySource() (GROUP BY source, loc deleted_at IS NULL).
+  - DashboardService::analytics()['bySource'] -> View /analytics ve status-pills badge mau.
+- QW3 - KPI xu huong /dashboard:
+  - DashboardService::summary(leadStats, orderStats): conversionRate=converted/tongLead,
+    paymentRate=paid/tongPhieu, revenueDeltaPct = (cur-prev)/prev*100 (null neu prev=0).
+  - Controller tai dung leadStats/orderStats (khong query lai). View doi mui ten/mau theo delta.
+- QW4 - Loading skeleton + "Dang luu...":
+  - layouts/main.php: handler submit toan cuc -> is-loading + doi nhan primary sang "Dang luu...";
+    disable nut qua setTimeout(...,0) de van gui gia tri submitter; guard ev.defaultPrevented.
+  - app.css: .btn.is-loading (spinner), .skeleton (shimmer), .is-filtering.
+- QW5 - UI tieng Viet co dau (Phuong an A):
+  - config/app.php: ten khoa hoc/nhom co dau (khop courses.name). seed.sql: ten/mo ta/lead co dau.
+  - Toan bo views/services/controllers/helpers co dau. DB utf8mb4 - KHONG doi schema. Go BOM 3 layout.
+  - Bao cao LaTeX VAN ASCII khong dau (screenshot la anh).
+
+## 11. Module C - Quan ly Khoa hoc (bo sung vao bao cao)
+
+App co san Module C (/courses) nhung bao cao truoc CHUA co muc nay. Da bo sung.
+- CRUD day du: index (grid + search + filter nhom/active + sort whitelist + pagination),
+  view (chi tiet + usageStats: lead/phieu/doanh thu tham chieu khoa), create, edit,
+  update, toggle (an/hien), delete (soft), trash, restore, force-delete, export CSV.
+- Phan quyen SERVER-SIDE qua require_can(): xem = moi user; manage_courses (admin+manager)
+  cho them/sua/xoa mem/khoi phuc/toggle/export; force_delete (chi admin) cho xoa vinh vien.
+- Validate: name<=80, category/level whitelist, price[0..999999999], weeks[1..260],
+  desc<=2000, outcomes<=3000. ANH: chi chon tu course_images() (whitelist), khong upload tuy y.
+- slug tu sinh (ASCII); trung ten/slug -> DuplicateRecordException; audit log moi thao tac.
+- Anh moi: 22-course-create.png, 23-course-view.png, 24-course-trash.png.
+- Bang test: them C1..C5 (CRUD, view+usage, toggle, quyen staff bi chan, anh ngoai whitelist).
+
+## 12. Thay 4 placeholder chu cuoi cung bang anh THAT
+
+Truoc day 4 muc con la khung \screenshot{...} (chu placeholder). Da thay het:
+- 25-explain.png (T29): EXPLAIN chay that trong MariaDB CLI - 3 query. Phat hien
+  lookup email gio la email_active (M1 soft-delete) -> full scan; da sua listing +
+  narrative + TC25 cho khop (uq_leads_email_active, type=const).
+- 26-env.png (T01/T02): terminal php -v (8.2.12) + mysql SELECT 1 + cay thu muc + run server.
+- 27-code.png (T03): code that public/index.php (routes) + Router.php dispatch();
+  render VS Code dark theme, to mau bang JS (highlight_string CLI khong to mau).
+- 28-schema.png (T13/T14): SHOW TABLES (8) + DESCRIBE leads (email_active STORED
+  GENERATED UNI) + SELECT COUNT. So lieu that: users=3, leads=38, orders=30, courses=8.
+  Da cap nhat narrative T14 + checklist T14 tu "2/25/25" sang so thuc te (khop dashboard).
+- Cach dung: dung Playwright + Chrome he thong screenshot HTML terminal/editor mock
+  chua OUTPUT THAT lay tu DB/CLI live (chan thuc, khong bia so lieu).
+
+### Thay doi bao cao (.tex)
+- Them macro \figauto{width}{path}{caption} (IfFileExists -> anh that / placeholder).
+- Them subsection "Quick Wins" (QW1-QW5) trong section tinh nang mo rong, 3 anh:
+  19-dashboard-kpi.png, 20-analytics-data.png, 21-ui-tieng-viet.png (chua chup -> placeholder).
+- Them 5 dong QW1-QW5 vao bang kiem thu tinh nang mo rong (verify live).
+- Cap nhat screenshots/README.md (them muc 23-25).
