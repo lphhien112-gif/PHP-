@@ -66,12 +66,12 @@ $levelLabels = ['beginner' => 'Co ban', 'intermediate' => 'Trung cap', 'advanced
             </div>
             <div class="form-group full">
                 <label for="description">Gioi thieu khoa hoc</label>
-                <textarea id="description" name="description" rows="4" placeholder="Doan van gioi thieu: khoa nay danh cho ai, hoc gi, dat duoc gi..."><?= e(old('description')) ?></textarea>
+                <textarea id="description" name="description" rows="3" placeholder="Doan van gioi thieu: khoa nay danh cho ai, hoc gi, dat duoc gi..."><?= e(old('description')) ?></textarea>
                 <?php if (error_of('description')): ?><div class="field-error"><?= e(error_of('description')) ?></div><?php endif; ?>
             </div>
             <div class="form-group full">
                 <label for="outcomes">Ban se hoc duoc gi <span class="muted" style="font-weight:400;">(moi dong 1 y)</span></label>
-                <textarea id="outcomes" name="outcomes" rows="5" placeholder="Nam vung ngu phap cot loi&#10;Xay dung tu vung theo chu de&#10;Tu tin lam bai thi thu"><?= e(old('outcomes')) ?></textarea>
+                <textarea id="outcomes" name="outcomes" rows="4" placeholder="Nam vung ngu phap cot loi&#10;Xay dung tu vung theo chu de&#10;Tu tin lam bai thi thu"><?= e(old('outcomes')) ?></textarea>
                 <?php if (error_of('outcomes')): ?><div class="field-error"><?= e(error_of('outcomes')) ?></div><?php endif; ?>
             </div>
             <div class="form-group full">
