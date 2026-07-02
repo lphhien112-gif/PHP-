@@ -64,6 +64,35 @@ $crumb = match (true) {
         if (tb) tb.addEventListener('click', toggle);
         if (bd) bd.addEventListener('click', close);
     })();
+
+    // Trang thai "dang xu ly" khi submit form: khoa nut bam + spinner
+    // -> phan hoi truc quan + chong double-submit (tao trung lead/phieu).
+    (function () {
+        document.addEventListener('submit', function (ev) {
+            var form = ev.target;
+            // Bo qua neu submit da bi huy (vd: onsubmit confirm() tra false) -> tranh ket nut.
+            if (ev.defaultPrevented) return;
+            if (!(form instanceof HTMLFormElement) || form.hasAttribute('data-no-loading')) return;
+            // Nut da kich hoat submit (event.submitter) hoac nut submit dau tien.
+            var btn = ev.submitter || form.querySelector('button[type="submit"], input[type="submit"]');
+            if (!btn || btn.classList.contains('is-loading')) return;
+
+            // Doi nhan cho nut primary (create/edit) sang "Dang luu..." (hoac data-loading).
+            if (btn.classList.contains('btn-primary') && btn.tagName === 'BUTTON') {
+                btn.dataset.origLabel = btn.textContent;
+                btn.textContent = btn.getAttribute('data-loading') || 'Dang luu...';
+            }
+            btn.classList.add('is-loading');
+            // Khoa nut SAU khi submit da khoi chay -> gia tri nut van duoc gui di.
+            setTimeout(function () { btn.disabled = true; }, 0);
+
+            // Loc/tim (form GET): mo noi dung trong luc tai lai trang -> co cam giac "dang loc".
+            if ((form.getAttribute('method') || 'get').toLowerCase() === 'get') {
+                var inner = document.querySelector('.content-inner');
+                if (inner) inner.classList.add('is-filtering');
+            }
+        });
+    })();
     </script>
 </body>
 </html>
