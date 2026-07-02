@@ -34,4 +34,38 @@ class DashboardService
             'bySource'    => $this->leads->countBySource(),
         ];
     }
+
+    /**
+     * KPI co xu huong cho trang Tong quan (khong chi so tinh):
+     *   - Ty le chuyen doi = converted / tong lead
+     *   - Ty le thanh toan = paid / tong phieu
+     *   - Doanh thu thang nay vs thang truoc (delta %)
+     * Nhan san leadStats/orderStats (Controller da lay) de khong query lai.
+     */
+    public function summary(array $leadStats, array $orderStats): array
+    {
+        $leadTotal  = (int) ($leadStats['total'] ?? 0);
+        $converted  = (int) ($leadStats['byStatus']['converted'] ?? 0);
+        $orderTotal = (int) ($orderStats['total'] ?? 0);
+        $paid       = (int) ($orderStats['byStatus']['paid'] ?? 0);
+
+        // revenueLastMonths(2) tra [thang_truoc => x, thang_nay => y] (thu tu tang dan).
+        $rev  = array_values($this->stats->revenueLastMonths(2));
+        $prev = (float) ($rev[0] ?? 0);
+        $cur  = (float) ($rev[1] ?? 0);
+        // Delta %: chi so sanh duoc khi thang truoc > 0; nguoc lai tra null.
+        $deltaPct = $prev > 0 ? (($cur - $prev) / $prev * 100) : null;
+
+        return [
+            'conversionRate'   => $leadTotal  > 0 ? $converted / $leadTotal * 100 : 0.0,
+            'convertedCount'   => $converted,
+            'leadTotal'        => $leadTotal,
+            'paymentRate'      => $orderTotal > 0 ? $paid / $orderTotal * 100 : 0.0,
+            'paidCount'        => $paid,
+            'orderTotal'       => $orderTotal,
+            'revenueThisMonth' => $cur,
+            'revenueLastMonth' => $prev,
+            'revenueDeltaPct'  => $deltaPct,
+        ];
+    }
 }

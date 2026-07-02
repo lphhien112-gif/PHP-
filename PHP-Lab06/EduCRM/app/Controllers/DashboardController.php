@@ -22,11 +22,15 @@ class DashboardController
     {
         require_login();
 
+        $leadStats  = (new LeadService())->stats();
+        $orderStats = (new OrderService())->stats();
+
         echo render('dashboard/index', [
             'title'       => 'Tong quan',
-            'leadStats'   => (new LeadService())->stats(),
-            'orderStats'  => (new OrderService())->stats(),
+            'leadStats'   => $leadStats,
+            'orderStats'  => $orderStats,
             'courseStats' => (new CourseService())->stats(),
+            'summary'     => (new DashboardService())->summary($leadStats, $orderStats),
         ]);
     }
 

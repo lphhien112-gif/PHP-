@@ -1,6 +1,13 @@
 <?php
 /** EduCRM - Tong quan: hero + cac o KPI nhanh (bieu do o trang /analytics). */
 $fmt = fn($n) => number_format((float)$n, 0, ',', '.');
+$pct = fn($n) => number_format((float)$n, 1, ',', '.');
+
+$delta = $summary['revenueDeltaPct'] ?? null;   // null = thang truoc = 0 (khong so sanh)
+if ($delta === null)      { $deltaCls = 'flat'; $deltaTxt = 'Chua co du lieu thang truoc'; }
+elseif ($delta > 0)       { $deltaCls = 'up';   $deltaTxt = '▲ ' . $pct($delta) . '% so voi thang truoc'; }
+elseif ($delta < 0)       { $deltaCls = 'down'; $deltaTxt = '▼ ' . $pct(abs($delta)) . '% so voi thang truoc'; }
+else                      { $deltaCls = 'flat'; $deltaTxt = 'Khong doi so voi thang truoc'; }
 ?>
 <div class="page-head">
     <div>
@@ -51,5 +58,24 @@ $fmt = fn($n) => number_format((float)$n, 0, ',', '.');
         <img class="stat-art" src="/assets/img/stat-students.png" alt="Students" loading="lazy">
         <div class="label">Hoc vien chuyen doi</div>
         <div class="value green"><?= $fmt($leadStats['byStatus']['converted'] ?? 0) ?></div>
+    </div>
+</div>
+
+<h2 class="stat-h" style="margin-bottom:12px;">Xu huong kinh doanh</h2>
+<div class="stats">
+    <div class="stat">
+        <div class="label">Ty le chuyen doi</div>
+        <div class="value"><?= $pct($summary['conversionRate']) ?>%</div>
+        <div class="kpi-sub"><?= $fmt($summary['convertedCount']) ?>/<?= $fmt($summary['leadTotal']) ?> lead da chuyen doi</div>
+    </div>
+    <div class="stat">
+        <div class="label">Ty le thanh toan</div>
+        <div class="value"><?= $pct($summary['paymentRate']) ?>%</div>
+        <div class="kpi-sub"><?= $fmt($summary['paidCount']) ?>/<?= $fmt($summary['orderTotal']) ?> phieu da thu</div>
+    </div>
+    <div class="stat">
+        <div class="label">Doanh thu thang nay</div>
+        <div class="value green"><?= $fmt($summary['revenueThisMonth']) ?></div>
+        <div class="kpi-delta <?= $deltaCls ?>"><?= $deltaTxt ?></div>
     </div>
 </div>
