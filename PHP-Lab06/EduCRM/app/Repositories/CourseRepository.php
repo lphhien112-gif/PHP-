@@ -229,6 +229,35 @@ class CourseRepository
     }
 
     /**
+     * Muc do su dung cua mot khoa hoc (theo ten) - cho trang chi tiet:
+     * so lead quan tam, so phieu da tao, doanh thu da thu (order 'paid').
+     * leads.course / orders.course tham chieu courses.name (dang chuoi).
+     */
+    public function usageStats(string $name): array
+    {
+        $leads = $this->db()->prepare('SELECT COUNT(*) FROM leads WHERE course = :n AND deleted_at IS NULL');
+        $leads->bindValue(':n', $name, PDO::PARAM_STR);
+        $leads->execute();
+
+        $orders = $this->db()->prepare('SELECT COUNT(*) FROM orders WHERE course = :n AND deleted_at IS NULL');
+        $orders->bindValue(':n', $name, PDO::PARAM_STR);
+        $orders->execute();
+
+        $rev = $this->db()->prepare(
+            "SELECT COALESCE(SUM(amount), 0) FROM orders
+             WHERE course = :n AND status = 'paid' AND deleted_at IS NULL"
+        );
+        $rev->bindValue(':n', $name, PDO::PARAM_STR);
+        $rev->execute();
+
+        return [
+            'leads'   => (int) $leads->fetchColumn(),
+            'orders'  => (int) $orders->fetchColumn(),
+            'revenue' => (float) $rev->fetchColumn(),
+        ];
+    }
+
+    /**
      * Dung thong bao trung ten phu hop (giong M1 o leads):
      *  - ten dang o ban DA XOA MEM -> goi khoi phuc
      *  - nguoc lai -> trung voi ban dang hoat dong

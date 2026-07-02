@@ -473,3 +473,64 @@ table td input[type="checkbox"], table th input[type="checkbox"] { width: 16px; 
   display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 .course-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+/* Poster (thumb) la link -> trang chi tiet */
+a.cc-thumb { text-decoration: none; cursor: pointer; overflow: hidden; }
+a.cc-thumb img { transition: transform var(--ease); }
+a.cc-thumb:hover img { transform: scale(1.05); }
+.cc-view {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(17,24,39,0), rgba(17,24,39,.82));
+  color: #fff; font-size: 12px; font-weight: 700; text-align: center;
+  padding: 18px 8px 8px; opacity: 0; transition: opacity var(--ease);
+}
+a.cc-thumb:hover .cc-view { opacity: 1; }
+.cc-name a { color: var(--ink); }
+.cc-name a:hover { color: var(--brand); }
+
+/* ============================================================
+   Trang chi tiet khoa hoc (/courses/view)
+   ============================================================ */
+.crumb { font-size: 13px; color: var(--muted); margin-bottom: 2px; }
+.crumb a { color: var(--brand); }
+.crumb span { margin: 0 4px; }
+
+.cd-hero { display: flex; gap: 24px; align-items: stretch; flex-wrap: wrap; }
+.cd-poster {
+  flex: 0 0 300px; max-width: 300px;
+  border-radius: var(--radius-sm); overflow: hidden;
+  background: var(--brand-soft);
+  display: flex; align-items: center; justify-content: center;
+  min-height: 200px;
+}
+.cd-poster img { width: 100%; height: 100%; max-height: 260px; object-fit: contain; padding: 14px; }
+.cd-poster-letter { font-size: 96px; font-weight: 800; color: #fff; background: var(--brand-grad);
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; min-height: 200px; }
+
+.cd-info { flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 14px; }
+.cd-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.cd-price { font-size: 34px; font-weight: 800; color: var(--brand-dark); }
+.cd-price small { font-size: 15px; font-weight: 600; color: var(--muted); }
+.cd-facts {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 24px; margin-top: 2px;
+}
+.cd-facts > div { display: flex; flex-direction: column; border-bottom: 1px solid var(--hairline); padding-bottom: 8px; }
+.cd-facts .k { font-size: 12px; color: var(--muted); }
+.cd-facts .v { font-weight: 600; color: var(--ink-2); }
+
+.detail-cols { display: grid; grid-template-columns: 1.6fr 1fr; gap: 18px; margin-top: 18px; }
+.cd-desc h2, .cd-usage h2 { margin: 0 0 12px; font-size: 18px; }
+.cd-desc p { color: var(--ink-2); line-height: 1.7; margin: 0; }
+.cd-usage .u-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.cd-usage .u-item {
+  background: var(--brand-soft); border: 1px solid #e4e8ff; border-radius: var(--radius-sm);
+  padding: 14px; text-align: center;
+}
+.cd-usage .u-val { font-size: 22px; font-weight: 800; color: var(--brand-dark); }
+.cd-usage .u-val.green { color: var(--success); font-size: 18px; }
+.cd-usage .u-lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+@media (max-width: 860px) {
+  .detail-cols { grid-template-columns: 1fr; }
+  .cd-poster { flex-basis: 100%; max-width: 100%; }
+}

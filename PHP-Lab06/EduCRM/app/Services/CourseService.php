@@ -32,6 +32,16 @@ class CourseService
         return $this->repo->find($id);
     }
 
+    /** Chi tiet khoa hoc + muc do su dung (cho trang doc /courses/view). */
+    public function detail(int $id): ?array
+    {
+        $course = $this->repo->find($id);
+        if (!$course) {
+            return null;
+        }
+        return ['course' => $course, 'usage' => $this->repo->usageStats($course['name'])];
+    }
+
     public function findWithTrashed(int $id): ?array
     {
         return $this->repo->findWithTrashed($id);

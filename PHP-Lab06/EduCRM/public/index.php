@@ -168,6 +168,7 @@ $router->post('/orders/force-delete', [$orders, 'forceDelete']); // F2: xoa vinh
 
 // Module C - Khoa hoc (view: moi user login; quan ly: manage_courses)
 $router->get('/courses',               [$course, 'index']);
+$router->get('/courses/view',          [$course, 'view']);    // trang chi tiet (doc)
 $router->get('/courses/create',        [$course, 'create']);
 $router->post('/courses/store',        [$course, 'store']);
 $router->get('/courses/edit',          [$course, 'edit']);

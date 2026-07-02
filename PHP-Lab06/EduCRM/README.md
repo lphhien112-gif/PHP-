@@ -113,6 +113,7 @@ curl http://127.0.0.1:8106/api/leads
 | POST   | `/orders/restore`       | OrderController@restore        | **F2** Khoi phuc phieu (admin only)       |
 | POST   | `/orders/force-delete`  | OrderController@forceDelete    | **F2** Xoa vinh vien (admin only)         |
 | GET    | `/courses`              | CourseController@index         | **Module C** Grid khoa hoc + search/filter/sort/pagination |
+| GET    | `/courses/view?id=`     | CourseController@view          | **Module C** Trang chi tiet (doc mo ta, click poster)      |
 | GET    | `/courses/create`       | CourseController@create        | **Module C** Form them (manage_courses)   |
 | POST   | `/courses/store`        | CourseController@store         | **Module C** Validate + create + PRG      |
 | GET    | `/courses/edit?id=`     | CourseController@edit          | **Module C** Form sua (manage_courses)    |
@@ -185,6 +186,10 @@ Bien "khoa hoc" tu whitelist tinh thanh **module CRUD** day du, phong phu cho ba
   migrate/DB loi -> fallback ve whitelist `config('courses')` (khong lam vo form cu).
 - **Phan quyen** (F11 mo rong): them quyen `manage_courses` cho **admin + manager**; xoa vinh vien
   van chi **admin**. Enforce SERVER-SIDE trong controller (staff POST thang vao route van bi chan).
+- **Trang chi tiet** (`/courses/view?id=`): click **poster** o grid mo trang doc - hero anh lon +
+  gioi thieu day du + bang thong tin (nhom/trinh do/thoi luong/hoc phi) + **muc do quan tam**
+  (so lead, so phieu, doanh thu da thu cho khoa hoc do). Moi user login deu xem duoc; chi
+  admin/manager thay nut "Sua". (Trong app noi bo - KHONG phai landing page cong khai.)
 
 ## 6. Cau truc thu muc
 

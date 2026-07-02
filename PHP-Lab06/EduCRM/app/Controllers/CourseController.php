@@ -35,6 +35,24 @@ class CourseController
         clear_old();
     }
 
+    /** GET /courses/view?id=.. - trang chi tiet (doc mo ta). Moi user da dang nhap. */
+    public function view(): void
+    {
+        require_login();
+        $id     = (int) ($_GET['id'] ?? 0);
+        $detail = $this->courses->detail($id);
+        if (!$detail) {
+            flash('error', 'Khong tim thay khoa hoc.');
+            redirect('/courses');
+        }
+        echo render('courses/view', [
+            'title'  => $detail['course']['name'],
+            'course' => $detail['course'],
+            'usage'  => $detail['usage'],
+        ]);
+        clear_old();
+    }
+
     /** GET /courses/create - form them khoa hoc. */
     public function create(): void
     {

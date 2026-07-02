@@ -79,7 +79,7 @@ if ($active !== '')   { $chips[] = ['Trang thai: ' . ($active === '1' ? 'Dang hi
         <?php foreach ($rows as $r): ?>
             <?php $img = trim((string) ($r['image'] ?? '')); ?>
             <div class="course-card<?= (int)$r['is_active'] === 1 ? '' : ' is-off' ?>">
-                <div class="cc-thumb">
+                <a class="cc-thumb" href="/courses/view?id=<?= (int)$r['id'] ?>" title="Xem chi tiet: <?= e($r['name']) ?>">
                     <?php if ($img !== ''): ?>
                         <img src="/assets/img/courses/<?= e($img) ?>" alt="<?= e($r['name']) ?>" loading="lazy">
                     <?php else: ?>
@@ -87,9 +87,10 @@ if ($active !== '')   { $chips[] = ['Trang thai: ' . ($active === '1' ? 'Dang hi
                     <?php endif; ?>
                     <span class="cc-cat"><?= e($r['category']) ?></span>
                     <span class="cc-state <?= (int)$r['is_active'] === 1 ? 'on' : 'off' ?>"><?= (int)$r['is_active'] === 1 ? 'Dang hien' : 'Da an' ?></span>
-                </div>
+                    <span class="cc-view">Xem chi tiet</span>
+                </a>
                 <div class="cc-body">
-                    <h3 class="cc-name"><?= e($r['name']) ?></h3>
+                    <h3 class="cc-name"><a href="/courses/view?id=<?= (int)$r['id'] ?>"><?= e($r['name']) ?></a></h3>
                     <div class="cc-meta">
                         <span class="cc-level lv-<?= e($r['level']) ?>"><?= e($levelLabels[$r['level']] ?? $r['level']) ?></span>
                         <span class="muted"><?= (int)$r['duration_weeks'] ?> tuan</span>
