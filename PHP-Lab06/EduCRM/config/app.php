@@ -12,9 +12,12 @@ return [
     'name'        => 'EduCRM',
     'tagline'     => 'Training Center CRM',
 
+    // Moi truong: 'local' (may dev) | 'production' (server that). Doc tu .env.
+    'env'         => env('APP_ENV', 'production'),
+
     // debug=false: production - khong lo SQLSTATE / path / stack trace cho user.
-    // Doi sang true khi dev de xem chi tiet loi.
-    'debug'       => false,
+    // Doc tu .env (APP_DEBUG). Mac dinh FALSE (an toan) khi khong co .env.
+    'debug'       => (bool) env('APP_DEBUG', false),
 
     // Phien dang nhmap het han sau bao nhieu giay khong hoat dong (idle timeout).
     'session_idle_timeout' => 1800, // 30 phut
@@ -57,6 +60,10 @@ return [
         'Thiet ke do hoa',
         'Digital Marketing',
     ],
+
+    // Module C - Khoa hoc: whitelist nhom + trinh do (dung cho form & validate)
+    'course_categories' => ['Ngoai ngu', 'Lap trinh', 'Thiet ke', 'Marketing', 'Khac'],
+    'course_levels'     => ['beginner', 'intermediate', 'advanced'],
 
     // Nguon lead hop le (whitelist)
     'lead_sources' => ['website', 'facebook', 'zalo', 'referral', 'hotline'],

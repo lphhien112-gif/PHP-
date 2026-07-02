@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Services\LeadService;
 use App\Services\OrderService;
+use App\Services\CourseService;
 use App\Services\DashboardService;
 
 /**
@@ -20,15 +21,17 @@ class DashboardController
     {
         require_login();
 
-        $leadStats  = (new LeadService())->stats();
-        $orderStats = (new OrderService())->stats();
-        $analytics  = (new DashboardService())->analytics(); // F5
+        $leadStats   = (new LeadService())->stats();
+        $orderStats  = (new OrderService())->stats();
+        $courseStats = (new CourseService())->stats(); // Module C
+        $analytics   = (new DashboardService())->analytics(); // F5
 
         echo render('dashboard/index', [
-            'title'      => 'Tong quan',
-            'leadStats'  => $leadStats,
-            'orderStats' => $orderStats,
-            'analytics'  => $analytics,
+            'title'       => 'Tong quan',
+            'leadStats'   => $leadStats,
+            'orderStats'  => $orderStats,
+            'courseStats' => $courseStats,
+            'analytics'   => $analytics,
         ]);
     }
 }

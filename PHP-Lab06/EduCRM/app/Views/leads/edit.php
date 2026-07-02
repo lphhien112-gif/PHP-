@@ -40,7 +40,7 @@ $sel = fn(string $k, string $v) => old($k, $lead[$k] ?? '') === $v ? 'selected' 
                 <label for="course">Khoa hoc *</label>
                 <select id="course" name="course" class="<?= error_of('course') ? 'has-error' : '' ?>">
                     <option value="">-- Chon khoa hoc --</option>
-                    <?php foreach (config('courses') as $c): ?>
+                    <?php foreach (course_names() as $c): ?>
                         <option value="<?= e($c) ?>" <?= $sel('course', $c) ?>><?= e($c) ?></option>
                     <?php endforeach; ?>
                 </select>

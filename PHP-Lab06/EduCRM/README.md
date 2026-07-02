@@ -36,6 +36,9 @@ C:/xampp/mysql/bin/mysql.exe -u root -h 127.0.0.1 training_center_crm < database
 
 # F6-F11: role manager + login_attempts + remember_tokens + api_tokens (+ seed) - idempotent
 C:/xampp/mysql/bin/mysql.exe -u root -h 127.0.0.1 training_center_crm < database/migrations_features2.sql
+
+# Module C: bang courses (danh muc khoa hoc co hinh anh) + seed 8 khoa hoc - idempotent
+C:/xampp/mysql/bin/mysql.exe -u root -h 127.0.0.1 training_center_crm < database/migrations_courses.sql
 ```
 
 Cau hinh ket noi nam o `config/database.php` (mac dinh host `127.0.0.1`, user `root`,
@@ -109,6 +112,17 @@ curl http://127.0.0.1:8106/api/leads
 | GET    | `/orders/trash`         | OrderController@trash          | **F2** Thung rac phieu (admin only)       |
 | POST   | `/orders/restore`       | OrderController@restore        | **F2** Khoi phuc phieu (admin only)       |
 | POST   | `/orders/force-delete`  | OrderController@forceDelete    | **F2** Xoa vinh vien (admin only)         |
+| GET    | `/courses`              | CourseController@index         | **Module C** Grid khoa hoc + search/filter/sort/pagination |
+| GET    | `/courses/create`       | CourseController@create        | **Module C** Form them (manage_courses)   |
+| POST   | `/courses/store`        | CourseController@store         | **Module C** Validate + create + PRG      |
+| GET    | `/courses/edit?id=`     | CourseController@edit          | **Module C** Form sua (manage_courses)    |
+| POST   | `/courses/update`       | CourseController@update        | **Module C** Validate + update + PRG      |
+| POST   | `/courses/toggle`       | CourseController@toggle        | **Module C** Bat/tat hien thi             |
+| POST   | `/courses/delete`       | CourseController@delete        | **Module C** Xoa mem (manage_courses)     |
+| GET    | `/courses/export`       | CourseController@export        | **Module C** Xuat CSV theo filter         |
+| GET    | `/courses/trash`        | CourseController@trash         | **Module C** Thung rac (manage_courses)   |
+| POST   | `/courses/restore`      | CourseController@restore       | **Module C** Khoi phuc (manage_courses)   |
+| POST   | `/courses/force-delete` | CourseController@forceDelete   | **Module C** Xoa vinh vien (admin only)   |
 | POST   | `/leads/bulk`           | LeadController@bulk            | **F9** Hang loat: xoa mem / doi status (CSRF, role-gated) |
 | POST   | `/orders/bulk`          | OrderController@bulk           | **F9** Hang loat: xoa mem / doi status (CSRF, role-gated) |
 | GET    | `/orders/invoice?id=`   | OrderController@invoice        | **F10** Hoa don in duoc (print CSS, login) |
@@ -154,6 +168,23 @@ curl http://127.0.0.1:8106/api/leads
 | export CSV             |  ✓   |   ✓    |  ✗   |
 | force-delete           |  ✓   |   ✗    |  ✗   |
 | audit / nhat ky        |  ✓   |   ✗    |  ✗   |
+| **quan ly khoa hoc**   |  ✓   |   ✓    |  ✗   |
+
+## 5d. Module C - Quan ly Khoa hoc (co hinh anh)
+
+Bien "khoa hoc" tu whitelist tinh thanh **module CRUD** day du, phong phu cho bao cao:
+
+- **Bang `courses`**: `name` (UNIQUE tren ban con song, giong M1), `slug`, `category`, `level`
+  (beginner/intermediate/advanced), `price`, `duration_weeks`, `image`, `description`, `is_active`,
+  soft delete (`deleted_at`). Seed 8 khoa hoc gan dung 8 anh trong `public/assets/img/courses/`.
+- **Grid the co hinh anh** (`/courses`): search + loc theo nhom/trang thai + sort + phan trang; nut
+  bat/tat hien thi, sua, xoa mem; **thung rac** + khoi phuc + xoa vinh vien (giong F2); **xuat CSV**
+  (giong F4). Image picker chi chon file co san trong thu muc courses/ (**chong path traversal**).
+- **Tich hop lien module**: dropdown khoa hoc o form Lead/Phieu hoc phi va **validate server-side**
+  gio lay tu **cac khoa hoc dang MO trong DB** (`course_names()`), khong con hardcode. Neu bang chua
+  migrate/DB loi -> fallback ve whitelist `config('courses')` (khong lam vo form cu).
+- **Phan quyen** (F11 mo rong): them quyen `manage_courses` cho **admin + manager**; xoa vinh vien
+  van chi **admin**. Enforce SERVER-SIDE trong controller (staff POST thang vao route van bi chan).
 
 ## 6. Cau truc thu muc
 

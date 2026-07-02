@@ -12,6 +12,18 @@
  */
 
 use App\Core\Database;
+use App\Core\Env;
+
+if (!function_exists('env')) {
+    /**
+     * Doc bien moi truong (qua App\Core\Env): uu tien bien moi truong THAT,
+     * roi den file .env, cuoi cung la $default. Dung trong config/*.
+     */
+    function env(string $key, $default = null)
+    {
+        return Env::get($key, $default);
+    }
+}
 
 if (!function_exists('config')) {
     /**
@@ -24,6 +36,49 @@ if (!function_exists('config')) {
             $cfg = require __DIR__ . '/../../config/app.php';
         }
         return $cfg[$key] ?? $default;
+    }
+}
+
+if (!function_exists('course_names')) {
+    /**
+     * Ten cac khoa hoc dang MO (is_active=1, chua xoa mem) - dung cho dropdown
+     * form lead/order + validate. Neu bang courses chua ton tai hoac DB loi ->
+     * fallback ve whitelist tinh trong config (khong lam vo cac form cu).
+     */
+    function course_names(): array
+    {
+        static $cache = null;
+        if ($cache !== null) {
+            return $cache;
+        }
+        try {
+            $rows = Database::connection()->query(
+                'SELECT name FROM courses WHERE is_active = 1 AND deleted_at IS NULL ORDER BY name ASC'
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            $cache = $rows ?: config('courses', []);
+        } catch (\Throwable $e) {
+            $cache = config('courses', []); // bang chua migrate / DB loi -> dung config
+        }
+        return $cache;
+    }
+}
+
+if (!function_exists('course_images')) {
+    /**
+     * Danh sach file anh co san trong public/assets/img/courses/ (chi ten file).
+     * Dung cho image picker + validate (chi cho phep basename -> chong path traversal).
+     */
+    function course_images(): array
+    {
+        static $cache = null;
+        if ($cache !== null) {
+            return $cache;
+        }
+        $dir   = __DIR__ . '/../../public/assets/img/courses';
+        $files = @glob($dir . '/*.{png,jpg,jpeg,webp,svg}', GLOB_BRACE) ?: [];
+        $cache = array_map('basename', $files);
+        sort($cache);
+        return $cache;
     }
 }
 
@@ -212,11 +267,11 @@ if (!function_exists('can')) {
         $matrix = [
             'admin'   => [
                 'create', 'update', 'soft_delete', 'restore', 'trash',
-                'export', 'status_change', 'force_delete', 'audit', 'manage_users',
+                'export', 'status_change', 'manage_courses', 'force_delete', 'audit', 'manage_users',
             ],
             'manager' => [
                 'create', 'update', 'soft_delete', 'restore', 'trash',
-                'export', 'status_change',
+                'export', 'status_change', 'manage_courses',
             ],
             'staff'   => [
                 'create', 'update',

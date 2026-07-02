@@ -30,7 +30,7 @@ $sel = fn(string $k, string $v) => (string)old($k, $order[$k] ?? '') === $v ? 's
             <div class="form-group">
                 <label for="course">Khoa hoc *</label>
                 <select id="course" name="course" class="<?= error_of('course') ? 'has-error' : '' ?>">
-                    <?php foreach (config('courses') as $c): ?>
+                    <?php foreach (course_names() as $c): ?>
                         <option value="<?= e($c) ?>" <?= $sel('course', $c) ?>><?= e($c) ?></option>
                     <?php endforeach; ?>
                 </select>

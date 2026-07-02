@@ -1,0 +1,56 @@
+# EduCRM - Nginx server block MAU (production)
+# Yeu cau: php-fpm dang chay (vd: unix:/run/php/php8.2-fpm.sock)
+# DocumentRoot tro vao thu muc public/ cua du an.
+# Copy vao /etc/nginx/sites-available/educrm roi symlink sang sites-enabled.
+
+server {
+    listen 80;
+    server_name educrm.example.com;
+
+    # Sau khi co TLS: bo comment de ep HTTP -> HTTPS
+    # return 301 https://$host$request_uri;
+
+    root /var/www/educrm/public;
+    index index.php;
+
+    # Front Controller: request khong phai file that -> index.php
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_hide_header X-Powered-By;
+    }
+
+    # Chan file an + cac duoi nhay cam (phong ho - code von da nam ngoai docroot)
+    location ~ /\.(?!well-known) { deny all; }
+    location ~* \.(env|sql|log|md|lock)$ { deny all; }
+
+    # Cache tai nguyen tinh
+    location ~* \.(css|js|png|jpg|jpeg|gif|svg|ico|webp)$ {
+        expires 7d;
+        access_log off;
+        try_files $uri =404;
+    }
+
+    client_max_body_size 8m;
+}
+
+# --- HTTPS (sau khi cai chung chi, vd Let's Encrypt / certbot --nginx) ---
+# server {
+#     listen 443 ssl http2;
+#     server_name educrm.example.com;
+#     ssl_certificate     /etc/letsencrypt/live/educrm.example.com/fullchain.pem;
+#     ssl_certificate_key /etc/letsencrypt/live/educrm.example.com/privkey.pem;
+#     root /var/www/educrm/public;
+#     index index.php;
+#     location / { try_files $uri $uri/ /index.php?$query_string; }
+#     location ~ \.php$ {
+#         include fastcgi_params;
+#         fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+#         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+#     }
+# }

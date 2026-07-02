@@ -28,7 +28,7 @@
                 <label for="course">Khoa hoc *</label>
                 <select id="course" name="course" class="<?= error_of('course') ? 'has-error' : '' ?>">
                     <option value="">-- Chon khoa hoc --</option>
-                    <?php foreach (config('courses') as $c): ?>
+                    <?php foreach (course_names() as $c): ?>
                         <option value="<?= e($c) ?>" <?= old('course') === $c ? 'selected' : '' ?>><?= e($c) ?></option>
                     <?php endforeach; ?>
                 </select>

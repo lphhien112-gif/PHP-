@@ -171,7 +171,7 @@ class LeadService
         }
 
         $course = trim((string) ($input['course'] ?? ''));
-        if (!in_array($course, config('courses', []), true)) {
+        if (!in_array($course, course_names(), true)) {
             $errors['course'] = 'Vui long chon mot khoa hoc hop le.';
         }
 

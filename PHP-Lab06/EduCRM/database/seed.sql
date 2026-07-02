@@ -10,6 +10,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE activity_logs;
 TRUNCATE TABLE orders;
 TRUNCATE TABLE leads;
+TRUNCATE TABLE courses;
 TRUNCATE TABLE users;
 -- F6/F7: bang token (chi truncate neu da ton tai - bo qua loi neu chua migrate)
 DELETE FROM api_tokens;
@@ -26,6 +27,17 @@ INSERT INTO users (username, password_hash, full_name, role) VALUES
 -- Token tho (ghi trong README): EDUCRM-DEMO-API-TOKEN-2026
 INSERT INTO api_tokens (token_hash, label) VALUES
   (SHA2('EDUCRM-DEMO-API-TOKEN-2026', 256), 'demo-readonly');
+
+-- ===== SEED courses (Module C) - 8 khoa hoc gan dung 8 file anh =====
+INSERT INTO courses (name, slug, category, level, price, duration_weeks, image, description, is_active) VALUES
+  ('IELTS Foundation', 'ielts-foundation', 'Ngoai ngu', 'beginner', 3500000, 10, 'ielts_foundation.png', 'Nen tang IELTS cho nguoi moi bat dau, muc tieu band 4.5-5.5.', 1),
+  ('IELTS Advanced', 'ielts-advanced', 'Ngoai ngu', 'advanced', 4200000, 12, 'ielts_advanced.png', 'Luyen chuyen sau 4 ky nang, muc tieu band 6.5+.', 1),
+  ('Lap trinh Python', 'lap-trinh-python', 'Lap trinh', 'beginner', 5000000, 10, 'python_programming.png', 'Nhap mon lap trinh voi Python: cu phap, ham, OOP co ban.', 1),
+  ('Lap trinh Web', 'lap-trinh-web', 'Lap trinh', 'intermediate', 6500000, 12, 'web_programming.png', 'HTML/CSS/JS va PHP MVC - xay dung ung dung web hoan chinh.', 1),
+  ('Data Science', 'data-science', 'Lap trinh', 'advanced', 7800000, 14, 'data_science.png', 'Phan tich du lieu, truc quan hoa va machine learning co ban.', 1),
+  ('Tieng Nhat N5', 'tieng-nhat-n5', 'Ngoai ngu', 'beginner', 4000000, 12, 'japanese_n5.png', 'Tieng Nhat so cap huong toi trinh do JLPT N5.', 1),
+  ('Thiet ke do hoa', 'thiet-ke-do-hoa', 'Thiet ke', 'beginner', 5500000, 10, 'graphic_design.png', 'Photoshop/Illustrator va nguyen ly thiet ke thi giac.', 1),
+  ('Digital Marketing', 'digital-marketing', 'Marketing', 'intermediate', 6000000, 8, 'digital_marketing.png', 'SEO, quang cao va content marketing tu co ban den thuc chien.', 1);
 
 -- ===== SEED leads (25 dong) =====
 INSERT INTO leads (full_name, email, phone, course, source, status, note, created_at) VALUES

@@ -1,0 +1,23 @@
+# EduCRM - Apache config cho thu muc public/
+# Cach chuan (khuyen nghi): dat DocumentRoot cua vhost = <du an>/public
+# de code (app/, config/, .env...) nam NGOAI docroot -> khong bao gio bi tai ve.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # File that (css/js/anh) -> phuc vu truc tiep
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Con lai -> dua het qua Front Controller
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Chan file an (.env, .git...) neu vo tinh nam trong docroot
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Tat directory listing
+Options -Indexes

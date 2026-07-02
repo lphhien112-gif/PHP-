@@ -41,9 +41,10 @@ Thumbs.db
 .DS_Store
 
 # ============================================
-#  Logs
+#  Logs & runtime
 # ============================================
 storage/logs/*.log
+storage/logs/ratelimit/
 
 # Screenshot tooling (puppeteer helper, not part of labs)
 .shotkit/

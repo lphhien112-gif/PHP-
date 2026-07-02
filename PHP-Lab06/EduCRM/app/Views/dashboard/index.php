@@ -39,6 +39,16 @@ $fmt = fn($n) => number_format((float)$n, 0, ',', '.');
         <div class="label">Doanh thu da thu (VND)</div>
         <div class="value green"><?= $fmt($orderStats['revenue']) ?></div>
     </div>
+    <div class="stat">
+        <img class="stat-art" src="/assets/img/stat-courses.png" alt="Courses" loading="lazy">
+        <div class="label">Tong khoa hoc (<?= $fmt($courseStats['active'] ?? 0) ?> dang mo)</div>
+        <div class="value"><?= $fmt($courseStats['total'] ?? 0) ?></div>
+    </div>
+    <div class="stat">
+        <img class="stat-art" src="/assets/img/stat-students.png" alt="Students" loading="lazy">
+        <div class="label">Hoc vien chuyen doi</div>
+        <div class="value green"><?= $fmt($leadStats['byStatus']['converted'] ?? 0) ?></div>
+    </div>
 </div>
 
 <?php

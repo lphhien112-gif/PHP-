@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS login_attempts;
 DROP TABLE IF EXISTS activity_logs;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS leads;
+DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS users;
 
 -- ---------------------------------------------------------------------
@@ -35,6 +36,33 @@ CREATE TABLE users (
     updated_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_users_username (username)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------------------------------------------------------------------
+-- Bang courses (Module C): danh muc khoa hoc co hinh anh
+-- Ghi chu: leads.course / orders.course tham chieu courses.name (dang chuoi).
+-- ---------------------------------------------------------------------
+CREATE TABLE courses (
+    id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name           VARCHAR(80)  NOT NULL,
+    slug           VARCHAR(100) NOT NULL,
+    category       VARCHAR(40)  NOT NULL DEFAULT 'Khac',
+    level          ENUM('beginner','intermediate','advanced') NOT NULL DEFAULT 'beginner',
+    price          DECIMAL(12,2) NOT NULL DEFAULT 0,     -- hoc phi (VND)
+    duration_weeks INT UNSIGNED NOT NULL DEFAULT 8,      -- thoi luong (tuan)
+    image          VARCHAR(120) NULL,                    -- file trong /assets/img/courses/
+    description    VARCHAR(500) NULL,
+    is_active      TINYINT(1)   NOT NULL DEFAULT 1,      -- 1 = hien tren form lead/order
+    deleted_at     TIMESTAMP NULL DEFAULT NULL,          -- soft delete
+    name_active    VARCHAR(80) GENERATED ALWAYS AS (IF(deleted_at IS NULL, name, NULL)) STORED,
+    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_courses_name_active (name_active),     -- chong trung ten (ban con song)
+    KEY idx_courses_category (category),
+    KEY idx_courses_active (is_active),
+    KEY idx_courses_deleted (deleted_at),
+    KEY idx_courses_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------------------------------------------

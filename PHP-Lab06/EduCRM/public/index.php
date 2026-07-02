@@ -27,6 +27,10 @@ if ($uri !== '/' && is_file(__DIR__ . $uri)) {
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../app/Core/helpers.php';
 
+// Nap .env (neu co) TRUOC khi doc config. Bien moi truong THAT (Docker/PaaS)
+// van duoc uu tien hon file .env.
+\App\Core\Env::load(__DIR__ . '/../.env');
+
 $appConfig = require __DIR__ . '/../config/app.php';
 $debug     = (bool) ($appConfig['debug'] ?? false);
 
@@ -44,6 +48,9 @@ session_set_cookie_params([
 ]);
 session_start();
 
+// ---- 3b. HTTP security headers (portable, khong phu thuoc web server) ----
+send_security_headers($isHttps);
+
 use App\Core\Router;
 use App\Services\AuthService;
 use App\Controllers\AuthController;
@@ -51,6 +58,7 @@ use App\Controllers\DashboardController;
 use App\Controllers\PublicLeadController;
 use App\Controllers\LeadController;
 use App\Controllers\OrderController;
+use App\Controllers\CourseController;
 use App\Controllers\AuditController;
 use App\Controllers\HealthController;
 use App\Controllers\ApiController;
@@ -62,6 +70,36 @@ function render_error(int $code, string $view, array $data = []): void
 {
     http_response_code($code);
     echo render('errors/' . $view, $data, 'layouts/error');
+}
+
+/**
+ * Gui HTTP security headers (an toan, portable qua moi web server).
+ * Bat/tat qua .env APP_SECURITY_HEADERS (mac dinh: bat).
+ * CSP cho phep inline script/style (dashboard bars, nut in hoa don) de khong
+ * vo layout, nhung chan moi tai nguyen ngoai (default-src 'self').
+ */
+function send_security_headers(bool $isHttps): void
+{
+    if (!\App\Core\Env::get('APP_SECURITY_HEADERS', true)) {
+        return;
+    }
+
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header('X-Permitted-Cross-Domain-Policies: none');
+    header(
+        "Content-Security-Policy: default-src 'self'; "
+        . "img-src 'self' data:; "
+        . "style-src 'self' 'unsafe-inline'; "
+        . "script-src 'self' 'unsafe-inline'; "
+        . "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+    );
+
+    // HSTS chi khi da chay HTTPS (tranh khoa nham khi con HTTP)
+    if ($isHttps) {
+        header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+    }
 }
 
 // ---- 3b. F6b: thu auto-login bang remember-me cookie (truoc khi dispatch) ----
@@ -76,6 +114,7 @@ $dashboard = new DashboardController();
 $publicLd  = new PublicLeadController();
 $leads     = new LeadController();
 $orders    = new OrderController();
+$course    = new CourseController();
 $audit     = new AuditController();
 $health    = new HealthController();
 $api       = new ApiController();
@@ -126,6 +165,19 @@ $router->get('/orders/invoice',       [$orders, 'invoice']);     // F10: hoa don
 $router->get('/orders/trash',        [$orders, 'trash']);       // F2: thung rac (admin)
 $router->post('/orders/restore',     [$orders, 'restore']);     // F2: khoi phuc (admin)
 $router->post('/orders/force-delete', [$orders, 'forceDelete']); // F2: xoa vinh vien (admin)
+
+// Module C - Khoa hoc (view: moi user login; quan ly: manage_courses)
+$router->get('/courses',               [$course, 'index']);
+$router->get('/courses/create',        [$course, 'create']);
+$router->post('/courses/store',        [$course, 'store']);
+$router->get('/courses/edit',          [$course, 'edit']);
+$router->post('/courses/update',       [$course, 'update']);
+$router->post('/courses/toggle',       [$course, 'toggle']);   // bat/tat hien thi
+$router->post('/courses/delete',       [$course, 'delete']);   // F2: xoa mem
+$router->get('/courses/export',        [$course, 'export']);   // F4: CSV
+$router->get('/courses/trash',         [$course, 'trash']);    // F2: thung rac
+$router->post('/courses/restore',      [$course, 'restore']);  // F2: khoi phuc
+$router->post('/courses/force-delete', [$course, 'forceDelete']); // F2: xoa vinh vien (admin)
 
 // F3 - Audit log (admin only, enforce trong controller)
 $router->get('/audit', [$audit, 'index']);
